@@ -1,0 +1,40 @@
+Player
+	Fields
+	string color
+  (int, int) position
+  [Tiles] tiles_owned
+  Boolean dragon_held
+	(int, int) board_position
+
+  Methods
+  Void update_position((new_x, new_y))
+  Void draw_tile([Tiles])
+  Void play_tile(Owned, tile)
+
+Board
+	Fields
+	[Player] all_players
+	[[Tile]] tiles // None if no tile in spot, otherwise the tile object 6*6
+	[Players] eliminated
+
+	Methods
+	Void add_to_pile([Tile])
+	Void remove_from_pile()
+	Void play_tile(Tile tile, (int, int))
+	[Tiles] get_surrounding_tiles(int)
+
+Tile
+	Fields
+	int identifier
+	[(int, int)] paths
+	(int, int) position
+
+	Methods
+	Void rotate_tile()
+
+
+Game Variables:
+	players
+	board
+	pile of tiles 	[Tile] draw_pile
+	where to create all the tiles?????
