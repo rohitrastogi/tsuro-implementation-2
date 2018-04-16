@@ -4,7 +4,7 @@ class Tile:
     def __init__(self, identifier, paths):
         self.identifier = identifier
         self.paths = paths
-        self.position = (-1, -1)
+        # self.position = (-1, -1)
 
     def rotate_tile():
         for path in self.paths:

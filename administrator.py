@@ -39,8 +39,49 @@ def legal_play(player, board, curr_tile):
 
     return legal
 
-def play_a_turn(draw_pile, players, eliminated, board, tile):
-    
+def play_a_turn(draw_pile, players, eliminated, board, place_tile):
+    curr_player = players.pop(0)
+    players.append(curr_player)
+    new_board_position = get_next_board_position(curr_player.position, curr_player.board_position)
+    board.tiles[new_board_position[0]][new_board_position[1]] = place_tile
+    coordinates = get_coordinates(new_board_position)
+    for player in players:
+        # add while to complete the turn
+        if player.position in coordinates:
+            for i, coor in enumerate(coordinates):
+                if coor == player.position:
+                    start_path = i
+            for path in place_tile.paths:
+                if path[0] == start_path:
+                    end_path = path[1]
+                if path[1] == start_path:
+                    end_path = path[0]
+            player.position = coordinates[end_path]
+            # check if this is another player's position
+            # TODO play the entire turn!!!!!
+            # TODO if another player here, eliminate both!
+
+    for i, player in enumerate(players):
+        if player.position[0] == 0 or player.position[1] == 0 or player.position[0] == 18 or player.position[1] == 18:
+            del players[i]
+            eliminated.append(player)
+            player.lose_tiles(draw_pile)
+            # TODO create a draw pile
+    dragon_already_held = False
+    while draw_pile:
+        for i, player in enumerate(players):
+            if player.dragon_held:
+                player.draw_tile(draw_pile)
+                player.dragon_held = False
+                if len(players[(i+1)%len(players)].owned_tiles) != 3:
+                    players[(i+1)%len(players)].dragon_held = True
+                dragon_already_held = True
+        if !dragon_already_held:
+            player[len(players)-1].draw_tile(draw_pile)
+            break
+
+    if !dragon_already_held:
+        player[len(players)-1].dragon_held = True
 
 def get_coordinates(board_position):
     return [(board_position(0)*3+1, board_position(1)*3+3), \
@@ -64,3 +105,64 @@ def get_next_board_position(position, board_position):
             return (board_position[0], board_position[1]-1)
         else:
             return (board_position[0], board_position[1]+1)
+
+def game_initialization():
+
+    draw_pile = create_draw_pile()
+    # shuffle the draw_pile
+    player_1 = Player('blue', (0, 1))
+    player_2 = Player('red', (11, 0))
+    player_3 = Player('green', (18, 8))
+    players = [player_1, player_2, player_3]
+
+    for player in players:
+        for i in range(3):
+            player.draw_tile(draw_pile)
+
+    board = Board(players)
+
+
+
+def create_draw_pile():
+    draw_pile = []
+
+    unique_tiles = [((0, 1), (2, 3), (4, 5), (6, 7)), \
+                    ((0, 1), (2, 4), (3, 6), (5, 7)), \
+                    ((0, 6), (1, 5), (2, 4), (3, 7)), \
+                    ((0, 5), (1, 4), (2, 7), (3, 6)), \
+                    ((0, 2), (1, 4), (3, 7), (5, 6)), \
+                    ((0, 4), (1, 7), (2, 3), (5, 6)), \
+                    ((0, 1), (2, 6), (3, 7), (4, 5)), \
+                    ((0, 2), (1, 6), (3, 7), (4, 5)), \
+                    ((0, 4), (1, 5), (2, 6), (3, 7)), \
+                    ((0, 1), (2, 7), (3, 4), (5, 6)), \
+                    ((0, 2), (1, 7), (3, 4), (5, 6)), \
+                    ((0, 3), (1, 5), (2, 7), (4, 6)), \
+                    ((0, 4), (1, 3), (2, 7), (5, 6)), \
+                    ((0, 3), (1, 7), (2, 6), (4, 5)), \
+                    ((0, 1), (2, 5), (3, 6), (4, 7)), \
+                    ((0, 3), (1, 6), (2, 5), (4, 7)), \
+                    ((0, 1), (2, 7), (3, 5), (4, 6)), \
+                    ((0, 7), (1, 6), (2, 3), (4, 5)), \
+                    ((0, 7), (1, 2), (3, 4), (5, 6)), \
+                    ((0, 2), (1, 4), (3, 6), (5, 7)), \
+                    ((0, 7), (1, 3), (2, 5), (4, 6)), \
+                    ((0, 7), (1, 5), (2, 6), (3, 4)), \
+                    ((0, 4), (1, 5), (2, 7), (3, 6)), \
+                    ((0, 1), (2, 4), (3, 5), (6, 7)), \
+                    ((0, 2), (1, 7), (3, 5), (4, 6)), \
+                    ((0, 7), (1, 5), (2, 3), (4, 6)), \
+                    ((0, 4), (1, 3), (2, 6), (5, 7)), \
+                    ((0, 6), (1, 3), (2, 5), (4, 7)), \
+                    ((0, 1), (2, 7), (3, 6), (4, 5)), \
+                    ((0, 3), (1, 2), (4, 6), (5, 7)), \
+                    ((0, 3), (1, 5), (2, 6), (4, 7)), \
+                    ((0, 7), (1, 6), (2, 5), (3, 4)), \
+                    ((0, 2), (1, 3), (4, 6), (5, 7)), \
+                    ((0, 5), (1, 6), (2, 7), (3, 4)), \
+                    ((0, 5), (1, 3), (2, 6), (4, 7))]
+
+    for i, paths in enumerate(unique_tiles):
+        draw_pile.append(Tile(i, paths))
+
+    return draw_pile

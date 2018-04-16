@@ -8,6 +8,14 @@ class Player:
         self.dragon_held = False
         self.tiles_owned = []
 
+    def lose_tiles(piles_of_tiles):
+        for tile in self.tiles_owned:
+            piles_of_tiles.append(tile)
+        self.tiles_owned = []
+
+    def draw_tile(piles_of_tiles):
+        self.tiles_owned.append(piles_of_tiles.pop(0))
+
     # def get_next_board_position():
     #
     #     if position[0]%3 == 0:
