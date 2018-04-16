@@ -7,9 +7,6 @@ from tile import Tile
 
 def legal_play(player, board, curr_tile):
     # TODO: write description
-
-
-    # is the tile in the player's hand?
     legal = False
     new_board_position = get_next_board_position(player.position, player.board_position)
     curr_position = player.position
@@ -32,6 +29,7 @@ def legal_play(player, board, curr_tile):
             return False
         if board.tiles[new_board_position[0]][new_board_position[1]] == None:
             break
+        curr_tile = board.tiles[new_board_position[0], new_board_position[1]]
 
     for a_tile in player.owned_tiles:
         if a_tile.identifier == curr_tile.identifier:
@@ -42,20 +40,39 @@ def legal_play(player, board, curr_tile):
 def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     curr_player = players.pop(0)
     players.append(curr_player)
-    new_board_position = get_next_board_position(curr_player.position, curr_player.board_position)
+    original_board_position = get_next_board_position(curr_player.position, curr_player.board_position)
     board.tiles[new_board_position[0]][new_board_position[1]] = place_tile
-    coordinates = get_coordinates(new_board_position)
+    original_coordinates = get_coordinates(original_board_position)
+
     for player in players:
-        # add while to complete the turn
-        if player.position in coordinates:
-            for i, coor in enumerate(coordinates):
-                if coor == player.position:
-                    start_path = i
-            for path in place_tile.paths:
-                if path[0] == start_path:
-                    end_path = path[1]
-                if path[1] == start_path:
-                    end_path = path[0]
+        if player.position in original_coordinates:
+            curr_position = player.position
+            while True:
+                coordinates = get_coordinates(new_board_position)
+                for i, coor in enumerate(coordinates):
+                    if coor == curr_position:
+                        start_path = i
+                for path in board.tiles[new_board_position[0], new_board_position[1]].paths:
+                    if path[0] == start_path:
+                        end_path = path[1]
+                    if path[1] == start_path:
+                        end_path = path[0]
+                curr_position = coordinates[end_path]
+                new_board_position = get_next_board_position(curr_position, new_board_position)
+                if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
+                    break
+                if board.tiles[new_board_position[0]][new_board_position[1]] == None:
+                    break
+
+
+            # for i, coor in enumerate(coordinates):
+            #     if coor == player.position:
+            #         start_path = i
+            # for path in place_tile.paths:
+            #     if path[0] == start_path:
+            #         end_path = path[1]
+            #     if path[1] == start_path:
+            #         end_path = path[0]
             player.position = coordinates[end_path]
             # check if this is another player's position
             # TODO play the entire turn!!!!!
@@ -66,7 +83,7 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
             del players[i]
             eliminated.append(player)
             player.lose_tiles(draw_pile)
-            # TODO create a draw pile
+
     dragon_already_held = False
     while draw_pile:
         for i, player in enumerate(players):
