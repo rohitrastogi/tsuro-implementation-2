@@ -45,41 +45,35 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     original_coordinates = get_coordinates(original_board_position)
 
     for player in players:
-        if player.position in original_coordinates:
-            curr_position = player.position
-            while True:
-                coordinates = get_coordinates(new_board_position)
-                for i, coor in enumerate(coordinates):
-                    if coor == curr_position:
-                        start_path = i
-                for path in board.tiles[new_board_position[0], new_board_position[1]].paths:
-                    if path[0] == start_path:
-                        end_path = path[1]
-                    if path[1] == start_path:
-                        end_path = path[0]
-                curr_position = coordinates[end_path]
-                new_board_position = get_next_board_position(curr_position, new_board_position)
-                if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
-                    break
-                if board.tiles[new_board_position[0]][new_board_position[1]] == None:
-                    break
+        if !player.eliminated:
+            if player.position in original_coordinates:
+                new_board_position = original_board_position
+                curr_position = player.position
+                while True:
+                    coordinates = get_coordinates(new_board_position)
+                    for i, coor in enumerate(coordinates):
+                        if coor == curr_position:
+                            start_path = i
+                    for path in board.tiles[new_board_position[0], new_board_position[1]].paths:
+                        if path[0] == start_path:
+                            end_path = path[1]
+                        if path[1] == start_path:
+                            end_path = path[0]
+                    curr_position = coordinates[end_path]
+                    new_board_position = get_next_board_position(curr_position, new_board_position)
+                    player.position = curr_position
+                    for p in players:
+                        if p.position == player.position:
+                            p.eliminated = True
+                            player.eliminated = True
 
-
-            # for i, coor in enumerate(coordinates):
-            #     if coor == player.position:
-            #         start_path = i
-            # for path in place_tile.paths:
-            #     if path[0] == start_path:
-            #         end_path = path[1]
-            #     if path[1] == start_path:
-            #         end_path = path[0]
-            player.position = coordinates[end_path]
-            # check if this is another player's position
-            # TODO play the entire turn!!!!!
-            # TODO if another player here, eliminate both!
+                    if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
+                        break
+                    if board.tiles[new_board_position[0]][new_board_position[1]] == None:
+                        break
 
     for i, player in enumerate(players):
-        if player.position[0] == 0 or player.position[1] == 0 or player.position[0] == 18 or player.position[1] == 18:
+        if player.position[0] == 0 or player.position[1] == 0 or player.position[0] == 18 or player.position[1] == 18 or player.eliminated:
             del players[i]
             eliminated.append(player)
             player.lose_tiles(draw_pile)
@@ -99,6 +93,12 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
 
     if !dragon_already_held:
         player[len(players)-1].dragon_held = True
+
+    game_over = False
+    if len(players) == 1:
+        game_over = players[0]
+
+    return draw_pile, players, eliminated, board, game_over
 
 def get_coordinates(board_position):
     return [(board_position(0)*3+1, board_position(1)*3+3), \

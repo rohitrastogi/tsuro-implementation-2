@@ -7,6 +7,7 @@ class Player:
         self.board_position = (-1, -1)
         self.dragon_held = False
         self.tiles_owned = []
+        self.eliminated = False
 
     def lose_tiles(piles_of_tiles):
         for tile in self.tiles_owned:
