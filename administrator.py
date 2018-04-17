@@ -24,6 +24,10 @@ def legal_play(player, board, curr_tile):
         new_board_position = get_next_board_position(curr_position, new_board_position)
         if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
             return False
+        for p in board.all_players:
+                    	if p.color != player.color:
+	                        if p.position == player.position:
+	                            return False
         if board.tiles[new_board_position[0]][new_board_position[1]] == None:
             break
         curr_tile = board.tiles[new_board_position[0], new_board_position[1]]
