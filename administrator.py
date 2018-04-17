@@ -74,11 +74,12 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
 
     for i, player in enumerate(players):
         if player.position[0] == 0 or player.position[1] == 0 or player.position[0] == 18 or player.position[1] == 18 or player.eliminated:
-            del players[i]
             # TODO pass on this player's dragon tile
             eliminated.append(player)
             player.lose_tiles(draw_pile)
-
+            if player.dragon_held:
+            	players[(i+1)%len(players)].dragon_held = True
+            del players[i]
     dragon_already_held = False
     while draw_pile:
         for i, player in enumerate(players):
@@ -99,8 +100,9 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     if len(players) == 1:
         game_over = players[0]
 
-    # TODO if all tiles are done, the players on the board win
-    # TODO if the last 2 players get eliminated in the same turn they win
+    # TODO if all tiles are done, the players on the board win 
+    	# maybe do it by incrementing everytime you add a tile and flag True when it equals 35
+    # TODO if the last 2 or more players get eliminated in the same turn they win
 
     return draw_pile, players, eliminated, board, game_over
 
