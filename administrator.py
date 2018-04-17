@@ -95,7 +95,6 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     if not dragon_already_held:
         player[len(players)-1].dragon_held = True
 
-
     if len(players) == 1:
         game_over = players[0]
     elif not players:
