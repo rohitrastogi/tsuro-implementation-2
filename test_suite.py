@@ -13,3 +13,8 @@ def test_getNextBoardPosition():
     assert administrator.get_next_board_position((18,4), (6,1)) == (5,1)
     assert administrator.get_next_board_position((0,8), (-1,2)) == (0,2)
     assert administrator.get_next_board_position((11,18), (3,6)) == (3,5)
+
+def test_gameInitialization():
+    player_1 = Player('blue', (0, 1))
+    player_2 = Player('red', (11, 0))
+    player_3 = Player('green', (18, 8))

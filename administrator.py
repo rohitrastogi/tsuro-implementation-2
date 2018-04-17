@@ -140,6 +140,7 @@ def game_initialization():
 
     board = Board(players)
 
+    return board, draw_pile
 
 def create_draw_pile():
     draw_pile = []
