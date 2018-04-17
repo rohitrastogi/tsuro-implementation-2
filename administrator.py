@@ -133,10 +133,8 @@ def game_initialization(players):
 
     draw_pile = create_draw_pile()
     # shuffle the draw_pile
-
     for player in players:
-        for i in range(3):
-            player.draw_tile(draw_pile)
+        player.initialize_hand(draw_pile)
 
     board = Board(players)
 
