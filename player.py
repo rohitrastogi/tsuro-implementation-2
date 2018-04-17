@@ -4,7 +4,16 @@ class Player:
     def __init__(self, color, position):
         self.color = color
         self.position = position
-        self.board_position = (-1, -1)
+        if self.position[0] == 0:
+            self.board_position = (-1, self.position[1]//3)
+        elif self.position[0] == 18:
+            self.board_position = (6, self.position[1]//3)
+        elif self.position[1] == 0:
+            self.board_position = (self.position[0]//3, -1)
+        elif self.position[1] == 18:
+            self.board_position = (self.position[0]//3, 6)
+        else:
+            throw "This is not a valid starting position."
         self.dragon_held = False
         self.tiles_owned = []
         self.eliminated = False
