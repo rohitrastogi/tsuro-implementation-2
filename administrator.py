@@ -133,10 +133,6 @@ def game_initialization():
 
     draw_pile = create_draw_pile()
     # shuffle the draw_pile
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (11, 0))
-    player_3 = Player('green', (18, 8))
-    players = [player_1, player_2, player_3]
 
     for player in players:
         for i in range(3):
