@@ -33,7 +33,11 @@ class Player:
 
     def draw_tile(piles_of_tiles):
         self.tiles_owned.append(piles_of_tiles.pop(0))
-
+        
+    def play_tile(tile):
+            for i, tiles in enumerate(self.tiles_owned):
+                if tile.identifier == tiles.identifier:
+                    del self.tiles_owned[i]
     # def get_next_board_position():
     #
     #     if position[0]%3 == 0:
