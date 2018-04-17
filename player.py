@@ -8,12 +8,9 @@ class Player:
         self.tiles_owned = []
         self.eliminated = False
 
-        if (self.position[0] + self.position[1]) % 3 == 0:
+        if self.position[0]%3 == 0 or self.position[1]%3 == 0:
                 raise Exception( 'This is not a valid starting position.')
-
-        if self.position[0] < 0 or self.position[0] > 18 or self.position[1] < 0 or self.position[1] > 18:
-                raise Exception( 'This is not a valid starting position.')
-
+                
         if self.position[0] == 0:
             self.board_position = (-1, self.position[1]//3)
         elif self.position[0] == 18:
@@ -33,6 +30,14 @@ class Player:
 
     def draw_tile(piles_of_tiles):
         self.tiles_owned.append(piles_of_tiles.pop(0))
+
+    def play_tile(tile):
+        for i, tiles in enumerate(self.tiles_owned):
+            if tile.identifier == tiles.identifier:
+                del self.tiles_owned[i]
+
+
+
 
     # def get_next_board_position():
     #
