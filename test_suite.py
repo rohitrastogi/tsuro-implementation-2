@@ -54,9 +54,11 @@ def test_loseTiles():
     player_2 = Player('green', (11, 0))
     player_2.initialize_hand(draw_pile)
     assert len(draw_pile) == 29
+
     player_1.lose_tiles(draw_pile)
     assert len(player_1.tiles_owned) == 0
     assert len(draw_pile) == 32
+
     player_2.lose_tiles(draw_pile)
     assert len(player_2.tiles_owned) == 0
     assert len(draw_pile) == 35
@@ -78,3 +80,26 @@ def test_rotateTile():
     assert tile_1.paths == [[4, 7], [3, 5], [2, 6], [0, 1]]
     tile_2.rotate_tile()
     assert tile_2.paths == [[2, 3], [1, 4], [5, 7], [0, 6]]
+
+def test_legalPlay():
+    # eliminates itself: by either getting out of the board, or by colliding with a player
+    # tile not in your card?
+    # one that is legal
+    player_1 = Player('blue', (0, 1))
+    player_1.tiles_owned = [Tile(12, [[0, 7], [1, 2], [3, 4], [5, 6]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])]
+    tile_1 = Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])
+    board = Board([player_1])
+
+    assert not administrator.legal_play(player_1, board, tile_1)
+    player_1.tiles_owned = [Tile(12, [[0, 7], [1, 2], [3, 4], [5, 6]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])]
+    tile_2 = Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])
+    assert not administrator.legal_play(player_1, board, tile_2)
+
+    player_1.tiles_owned = [Tile(12, [[0, 7], [1, 2], [3, 4], [5, 6]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])]
+    tile_3 = Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])
+    assert administrator.legal_play(player_1, board, tile_3)
+
+    player_2 = Player('red', (11,0))
+    player_2.position = (3,2)
+    board.add_player(player_2)
+    assert not administrator.legal_play(player_1, board, tile_3)

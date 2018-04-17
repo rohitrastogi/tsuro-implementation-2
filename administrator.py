@@ -28,7 +28,7 @@ def legal_play(player, board, curr_tile):
             break
         curr_tile = board.tiles[new_board_position[0], new_board_position[1]]
 
-    for a_tile in player.owned_tiles:
+    for a_tile in player.tiles_owned:
         if a_tile.identifier == curr_tile.identifier:
             return True
     return False
@@ -72,7 +72,6 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
 
     for i, player in enumerate(players):
         if player.position[0] == 0 or player.position[1] == 0 or player.position[0] == 18 or player.position[1] == 18 or player.eliminated:
-            # TODO pass on this player's dragon tile
             eliminated.append(player)
             player.lose_tiles(draw_pile)
             if player.dragon_held:
@@ -85,7 +84,7 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
             if player.dragon_held:
                 player.draw_tile(draw_pile)
                 player.dragon_held = False
-                if len(players[(i+1)%len(players)].owned_tiles) != 3:
+                if len(players[(i+1)%len(players)].tiles_owned) != 3:
                     players[(i+1)%len(players)].dragon_held = True
                 dragon_already_held = True
         if not dragon_already_held:
