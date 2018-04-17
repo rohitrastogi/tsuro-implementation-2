@@ -42,8 +42,9 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     players.append(curr_player)
     original_board_position = get_next_board_position(curr_player.position, curr_player.board_position)
     board.tiles[new_board_position[0]][new_board_position[1]] = place_tile
+    board.num_tiles += 1
     original_coordinates = get_coordinates(original_board_position)
-
+    original_players = players
     for player in players:
         if not player.eliminated:
             if player.position in original_coordinates:
@@ -63,9 +64,10 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
                     new_board_position = get_next_board_position(curr_position, new_board_position)
                     player.position = curr_position
                     for p in players:
-                        if p.position == player.position:
-                            p.eliminated = True
-                            player.eliminated = True
+                    	if p.color != player.color:
+	                        if p.position == player.position:
+	                            p.eliminated = True
+	                            player.eliminated = True
 
                     if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
                         break
@@ -79,6 +81,7 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
             player.lose_tiles(draw_pile)
             if player.dragon_held:
             	players[(i+1)%len(players)].dragon_held = True
+            	player.dragon_held = False
             del players[i]
     dragon_already_held = False
     while draw_pile:
@@ -96,9 +99,16 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     if not dragon_already_held:
         player[len(players)-1].dragon_held = True
 
-    game_over = False
+   
     if len(players) == 1:
         game_over = players[0]
+    elif not players:
+    	game_over = original_players
+    elif board.num_tiles == 35:
+    	game_over = players
+    else:
+    	game_over = False
+
 
     # TODO if all tiles are done, the players on the board win 
     	# maybe do it by incrementing everytime you add a tile and flag True when it equals 35
