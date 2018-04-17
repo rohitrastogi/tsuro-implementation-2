@@ -99,7 +99,7 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     if not dragon_already_held:
         player[len(players)-1].dragon_held = True
 
-   
+
     if len(players) == 1:
         game_over = players[0]
     elif not players:
@@ -110,21 +110,21 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     	game_over = False
 
 
-    # TODO if all tiles are done, the players on the board win 
+    # TODO if all tiles are done, the players on the board win
     	# maybe do it by incrementing everytime you add a tile and flag True when it equals 35
     # TODO if the last 2 or more players get eliminated in the same turn they win
 
     return draw_pile, players, eliminated, board, game_over
 
 def get_coordinates(board_position):
-    return [(board_position(0)*3+1, board_position(1)*3+3), \
-    (board_position(0)*3+2, board_position(1)*3+3), \
-    (board_position(0)*3+3, board_position(1)*3+2), \
-    (board_position(0)*3+3, board_position(1)*3+1), \
-    (board_position(0)*3+2, board_position(1)*3), \
-    (board_position(0)*3+1, board_position(1)*3), \
-    (board_position(0)*3, board_position(1)*3+1), \
-    (board_position(0)*3, board_position(1)*3+2)]
+    return [(board_position[0]*3+1, board_position[1]*3+3), \
+    (board_position[0]*3+2, board_position[1]*3+3), \
+    (board_position[0]*3+3, board_position[1]*3+2), \
+    (board_position[0]*3+3, board_position[1]*3+1), \
+    (board_position[0]*3+2, board_position[1]*3), \
+    (board_position[0]*3+1, board_position[1]*3), \
+    (board_position[0]*3, board_position[1]*3+1), \
+    (board_position[0]*3, board_position[1]*3+2)]
 
 def get_next_board_position(position, board_position):
 
