@@ -45,7 +45,7 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     original_coordinates = get_coordinates(original_board_position)
 
     for player in players:
-        if !player.eliminated:
+        if not player.eliminated:
             if player.position in original_coordinates:
                 new_board_position = original_board_position
                 curr_position = player.position
@@ -89,11 +89,11 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
                 if len(players[(i+1)%len(players)].owned_tiles) != 3:
                     players[(i+1)%len(players)].dragon_held = True
                 dragon_already_held = True
-        if !dragon_already_held:
+        if not dragon_already_held:
             player[len(players)-1].draw_tile(draw_pile)
             break
 
-    if !dragon_already_held:
+    if not dragon_already_held:
         player[len(players)-1].dragon_held = True
 
     game_over = False
