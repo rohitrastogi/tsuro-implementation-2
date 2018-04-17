@@ -25,9 +25,9 @@ def legal_play(player, board, curr_tile):
         if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
             return False
         for p in board.all_players:
-                    	if p.color != player.color:
-	                        if p.position == player.position:
-	                            return False
+            if p.color != player.color:
+                if p.position == curr_position:
+                    return False
         if board.tiles[new_board_position[0]][new_board_position[1]] == None:
             break
         curr_tile = board.tiles[new_board_position[0], new_board_position[1]]
@@ -41,7 +41,7 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     curr_player = players.pop(0)
     players.append(curr_player)
     original_board_position = get_next_board_position(curr_player.position, curr_player.board_position)
-    board.tiles[new_board_position[0]][new_board_position[1]] = place_tile
+    board.tiles[original_board_position[0]][original_board_position[1]] = place_tile
     board.num_tiles += 1
     original_coordinates = get_coordinates(original_board_position)
     original_players = copy.deepcopy(players)
@@ -55,7 +55,7 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
                     for i, coor in enumerate(coordinates):
                         if coor == curr_position:
                             start_path = i
-                    for path in board.tiles[new_board_position[0], new_board_position[1]].paths:
+                    for path in board.tiles[new_board_position[0]][new_board_position[1]].paths:
                         if path[0] == start_path:
                             end_path = path[1]
                         if path[1] == start_path:
@@ -92,11 +92,11 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
                     players[(i+1)%len(players)].dragon_held = True
                 dragon_already_held = True
         if not dragon_already_held:
-            player[len(players)-1].draw_tile(draw_pile)
+            players[len(players)-1].draw_tile(draw_pile)
             break
 
     if not dragon_already_held:
-        player[len(players)-1].dragon_held = True
+        players[len(players)-1].dragon_held = True
 
     if len(players) == 1:
         game_over = players[0]
