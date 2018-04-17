@@ -2,6 +2,7 @@ from player import Player
 from board import Board
 from tile import Tile
 import administrator
+import pytest
 
 def test_getCoordinates():
     assert administrator.get_coordinates((3,2)) == [(10,9),(11,9),(12,8),(12,7),(11,6),(10,6),(9,7),(9,8)]
@@ -17,4 +18,7 @@ def test_getNextBoardPosition():
 def test_gameInitialization():
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
-    player_3 = Player('green', (18, 8))
+    with pytest.raises(Exception):
+        player_3 = Player('green', (19, 8))
+    with pytest.raises(Exception):
+        player_4 = Player('orange', (12, 0))

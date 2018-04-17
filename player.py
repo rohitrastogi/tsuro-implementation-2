@@ -8,9 +8,12 @@ class Player:
         self.tiles_owned = []
         self.eliminated = False
 
-        if self.position[0]%3 == 0 or self.position[1]%3 == 0:
+        if (self.position[0] + self.position[1]) % 3 == 0:
                 raise Exception( 'This is not a valid starting position.')
-                
+
+        if self.position[0] < 0 or self.position[0] > 18 or self.position[1] < 0 or self.position[1] > 18:
+                raise Exception( 'This is not a valid starting position.')
+
         if self.position[0] == 0:
             self.board_position = (-1, self.position[1]//3)
         elif self.position[0] == 18:
