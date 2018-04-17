@@ -129,7 +129,7 @@ def get_next_board_position(position, board_position):
         else:
             return (board_position[0], board_position[1]+1)
 
-def game_initialization():
+def game_initialization(players):
 
     draw_pile = create_draw_pile()
     # shuffle the draw_pile
@@ -141,6 +141,19 @@ def game_initialization():
     board = Board(players)
 
     return board, draw_pile
+
+
+def play_game(players):
+	board, draw_pile = game_initialization(players)
+	curr_tile = players[0].tiles_owned[0] 
+	if legal_play(players[0], board, curr_tile):
+		players[0].play_tile(curr_tile)
+		eliminated = []
+		draw_pile, players, eliminated, board, game_over = play_a_turn(draw_pile,players,eliminated,board,curr_tile)
+		if not game_over:
+			play_game(players)
+		else:
+			return game_over
 
 def create_draw_pile():
     draw_pile = []
