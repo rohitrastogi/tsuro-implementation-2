@@ -142,10 +142,9 @@ def game_initialization(players):
 
     return board, draw_pile
 
-
 def play_game(players):
 	board, draw_pile = game_initialization(players)
-	curr_tile = players[0].tiles_owned[0] 
+	curr_tile = players[0].tiles_owned[0]
 	if legal_play(players[0], board, curr_tile):
 		players[0].play_tile(curr_tile)
 		eliminated = []
