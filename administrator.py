@@ -1,18 +1,15 @@
 from player import Player
 from board import Board
 from tile import Tile
+import copy
 
 # The admin registers players, creates the board, and initializes the pile of tiles
 # starts game play
 
 def legal_play(player, board, curr_tile):
     # TODO: write description
-    legal = False
     new_board_position = get_next_board_position(player.position, player.board_position)
     curr_position = player.position
-    start_path = -1
-    end_path = -1
-
     while True:
         coordinates = get_coordinates(new_board_position)
         for i, coor in enumerate(coordinates):
@@ -34,8 +31,7 @@ def legal_play(player, board, curr_tile):
     for a_tile in player.owned_tiles:
         if a_tile.identifier == curr_tile.identifier:
             return True
-
-    return legal
+    return False
 
 def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     curr_player = players.pop(0)
@@ -44,7 +40,7 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     board.tiles[new_board_position[0]][new_board_position[1]] = place_tile
     board.num_tiles += 1
     original_coordinates = get_coordinates(original_board_position)
-    original_players = players
+    original_players = copy.deepcopy(players)
     for player in players:
         if not player.eliminated:
             if player.position in original_coordinates:
@@ -108,12 +104,6 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
     	game_over = players
     else:
     	game_over = False
-
-
-    # TODO if all tiles are done, the players on the board win 
-    	# maybe do it by incrementing everytime you add a tile and flag True when it equals 35
-    # TODO if the last 2 or more players get eliminated in the same turn they win
-
     return draw_pile, players, eliminated, board, game_over
 
 def get_coordinates(board_position):
@@ -153,7 +143,6 @@ def game_initialization():
             player.draw_tile(draw_pile)
 
     board = Board(players)
-
 
 
 def create_draw_pile():
