@@ -6,7 +6,9 @@ class Tile:
         self.paths = paths
         # self.position = (-1, -1)
 
-    def rotate_tile():
+    def rotate_tile(self):
         for path in self.paths:
             path[0] = (path[0] + 2)%8
             path[1] = (path[1] + 2)%8
+            if path[0] > path[1]:
+                path[0], path[1] = path[1], path[0]
