@@ -107,7 +107,9 @@ def test_legalPlay():
     assert not administrator.legal_play(player_1, board, tile_3)
 
 def test_playTurn_one():
-    # Test 1
+    '''
+    Player one is eliminated because they play a tile that eliminates them, all player's one tiles are added back to the draw pile.
+    '''
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
     player_3 = Player('orange', (18, 8))
@@ -130,7 +132,11 @@ def test_playTurn_one():
     assert not game_over
 
 def test_playTurn_two():
-    # Test 2
+    '''
+    Test case where player one is eliminated and player three has dragon tile. 
+    Expected behavior is that player 3 and 4 will draw cards from the draw_pile.
+    No one at the end will have a dragon tile. 
+    '''
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
     player_3 = Player('orange', (18, 8))
@@ -156,7 +162,10 @@ def test_playTurn_two():
     assert not game_over
 
 def test_playTurn_three():
-    # Test 3
+    '''
+    Player one is eliminated so two tiles are added to the draw pile. 
+    Player three and four each get a tile and dragon tile is passed on to two.
+    '''
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
     player_3 = Player('orange', (18, 8))
@@ -164,14 +173,13 @@ def test_playTurn_three():
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = administrator.create_draw_pile()
 
-    player_1.initialize_hand(draw_pile)
     player_2.tiles_owned = [Tile(34, [[0, 5], [1, 6], [2, 7], [3, 4]]), Tile(31, [[0, 5], [1, 6], [2, 7], [3, 4]])]
     player_3.tiles_owned = [Tile(34, [[0, 5], [1, 6], [2, 7], [3, 4]])]
     player_4.tiles_owned = [Tile(4, [[0, 2], [1, 4], [3, 7], [5, 6]])]
     player_3.dragon_held = True
 
-    draw_pile = [Tile(35, [[0, 5], [1, 3], [2, 6], [4, 7]])]
-    player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]])]
+    draw_pile = []
+    player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(35, [[0, 5], [1, 3], [2, 6], [4, 7]])]
     tile_1 = Tile(0, [[0, 1], [2, 3], [4, 5], [6, 7]])
     draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile_1)
     assert len(eliminated) == 1
@@ -182,7 +190,11 @@ def test_playTurn_three():
     assert player_2.dragon_held
 
 def test_playTurn_four():
-    # Test 4
+    '''
+    If there are no cards in the draw pile, and dragon tile is not currently held, 
+    the player who played will receive the dragon tile. 
+    '''
+
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
     player_3 = Player('orange', (18, 8))
@@ -194,8 +206,6 @@ def test_playTurn_four():
     player_2.initialize_hand(draw_pile)
     player_3.initialize_hand(draw_pile)
     player_4.tiles_owned = [Tile(4, [[0, 2], [1, 4], [3, 7], [5, 6]]), Tile(34, [[0, 5], [1, 6], [2, 7], [3, 4]])]
-    player_4.dragon_held = True
-
     draw_pile = []
     tile_1 = Tile(0, [[0, 5], [1, 4], [2, 7], [3, 6]])
     draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile_1)
