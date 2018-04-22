@@ -4,4 +4,14 @@ class Board:
     def __init__(self, players):
         self.all_players = players
         self.eliminated = []
-        self.tiles = [[None]*6]*6
+        self.num_tiles = 0
+        self.tiles = []
+
+        for i in range(6):
+            temp = []
+            for j in range(6):
+                temp.append(None)
+            self.tiles.append(temp)
+
+    def add_player(self, player):
+        self.all_players.append(player)
