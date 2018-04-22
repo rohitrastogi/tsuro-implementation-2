@@ -106,7 +106,7 @@ def test_legalPlay():
     board.tiles[1][0] = tile_4
     assert not administrator.legal_play(player_1, board, tile_3)
 
-def test_playTurn():
+def test_playTurn_one():
     # Test 1
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
@@ -129,6 +129,7 @@ def test_playTurn():
     assert board.tiles[0][0] == tile_1
     assert not game_over
 
+def test_playTurn_two():
     # Test 2
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
@@ -154,6 +155,7 @@ def test_playTurn():
     assert board.tiles[0][0] == tile_1
     assert not game_over
 
+def test_playTurn_three():
     # Test 3
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
@@ -179,6 +181,7 @@ def test_playTurn():
     assert not game_over
     assert player_2.dragon_held
 
+def test_playTurn_four():
     # Test 4
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
@@ -203,6 +206,7 @@ def test_playTurn():
     assert not game_over
     assert player_4.dragon_held
 
+def test_playTurn_five():
     # Test 5
     print ("Test 5")
     player_1 = Player('blue', (0, 1))
@@ -230,6 +234,7 @@ def test_playTurn():
     for player in players:
         assert not player.dragon_held
 
+def test_playTurn_six():
     # Test 6
     print ("Test 6")
     player_1 = Player('blue', (0, 1))
@@ -252,6 +257,7 @@ def test_playTurn():
     assert board.tiles[0][0] == tile_1
     assert game_over[0].color == player_1.color
 
+def test_playTurn_seven():
     # Test 7
     print ("Test 7")
     player_1 = Player('blue', (0, 1))
@@ -274,6 +280,7 @@ def test_playTurn():
     assert board.tiles[0][0] == tile_1
     assert game_over.color == player_1.color
 
+def test_playTurn_eight():
     # Test 8
     print ("Test 8")
     player_1 = Player('blue', (0, 1))
@@ -290,6 +297,7 @@ def test_playTurn():
     assert game_over[0].color == player_2.color
     assert game_over[1].color == player_1.color
 
+def test_playTurn_nine():
     # Test 9
     print ("Test 9")
     player_1 = Player('blue', (0, 1))
