@@ -3,10 +3,6 @@ from board import Board
 from tile import Tile
 import copy
 
-# The admin registers players, creates the board, and initializes the pile of tiles
-# starts game play
-
-
 
 def legal_play(player, board, curr_tile):
 	flag = False
@@ -18,10 +14,12 @@ def legal_play(player, board, curr_tile):
 	if flag:
 		return legal_play_helper(player,board,curr_tile)
 	else:
-		return True
+		for a_tile in player.tiles_owned:
+			if a_tile.identifier == curr_tile.identifier:
+				return True 
+		return False
 
 def legal_play_helper(player, board, curr_tile):
-	# TODO: write description
 	new_board_position = get_next_board_position(player.position, player.board_position)
 	curr_position = player.position
 	while True:
@@ -140,6 +138,9 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
 	return draw_pile, players, eliminated, board, game_over
 
 def get_coordinates(board_position):
+	'''
+	given a board position, returns all possible postions a player can be on starting from top-left and moving clockwise
+	'''
 	return [(board_position[0]*3+1, board_position[1]*3+3), \
 	(board_position[0]*3+2, board_position[1]*3+3), \
 	(board_position[0]*3+3, board_position[1]*3+2), \
@@ -150,6 +151,9 @@ def get_coordinates(board_position):
 	(board_position[0]*3, board_position[1]*3+2)]
 
 def get_next_board_position(position, board_position):
+	'''
+	given a player position, find board position that player will play next tile or move through
+	'''
 
 	if position[0]%3 == 0:
 		if position[0] == board_position[0]*3:
@@ -162,28 +166,29 @@ def get_next_board_position(position, board_position):
 		else:
 			return (board_position[0], board_position[1]+1)
 
-def game_initialization(players):
+# def game_initialization(players):
 
-	draw_pile = create_draw_pile()
-	# shuffle the draw_pile
-	for player in players:
-		player.initialize_hand(draw_pile)
+# 	draw_pile = create_draw_pile()
+# 	# shuffle the draw_pile
+# 	for player in players:
+# 		player.initialize_hand(draw_pile)
 
-	board = Board(players)
+# 	board = Board(players)
 
-	return board, draw_pile
+# 	return board, draw_pile
 
-def play_game(players):
-	board, draw_pile = game_initialization(players)
-	curr_tile = players[0].tiles_owned[0]
-	if legal_play(players[0], board, curr_tile):
-		players[0].play_tile(curr_tile)
-		eliminated = []
-		draw_pile, players, eliminated, board, game_over = play_a_turn(draw_pile,players,eliminated,board,curr_tile)
-		if not game_over:
-			play_game(players)
-		else:
-			return game_over
+# def play_game(players):
+# 	board, draw_pile = game_initialization(players)
+# 	curr_tile = players[0].tiles_owned[0]
+# 	if legal_play(players[0], board, curr_tile):
+# 		players[0].play_tile(curr_tile)
+# 		eliminated = []
+# 		draw_pile, players, eliminated, board, game_over = play_a_turn(draw_pile,players,eliminated,board,curr_tile)
+# 		if not game_over:
+# 			play_game(players)
+# 		else:
+# 			return game_over
+
 
 def create_draw_pile():
 	draw_pile = []

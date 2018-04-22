@@ -6,7 +6,7 @@ class Board:
         self.eliminated = []
         self.num_tiles = 0
         self.tiles = []
-
+        # creates board tile spaces
         for i in range(6):
             temp = []
             for j in range(6):

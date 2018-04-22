@@ -7,7 +7,7 @@ class Player:
         self.dragon_held = False
         self.tiles_owned = []
         self.eliminated = False
-
+        # following statments check to make sure that position selected is valid
         if (self.position[0] + self.position[1]) % 3 == 0:
                 raise Exception( 'This is not a valid starting position.')
 

@@ -92,9 +92,9 @@ def test_legalPlay():
     assert not administrator.legal_play(player_1, board, tile_1)
 
     #card not held so return false
-    #player_1.tiles_owned = [Tile(12, [[0, 7], [1, 2], [3, 4], [5, 6]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])]
-    #tile_2 = Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])
-    #assert not administrator.legal_play(player_1, board, tile_2)
+    player_1.tiles_owned = [Tile(12, [[0, 7], [1, 2], [3, 4], [5, 6]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])]
+    tile_2 = Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])
+    assert not administrator.legal_play(player_1, board, tile_2)
 
     #card is a legal play
     player_1.tiles_owned = [Tile(12, [[0, 7], [1, 2], [3, 4], [5, 6]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])]
