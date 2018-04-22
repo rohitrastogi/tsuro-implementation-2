@@ -299,6 +299,7 @@ def test_playTurn_eight():
     '''
     Two players eliminated each other, 
     since there are no other players game-over is True and returns these two players.
+    // also tests making a move where multiple players are eliminated
     '''
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (0, 2))
@@ -356,6 +357,66 @@ def test_playTurn_ten():
     assert len(eliminated) == 0
     assert len(players) == 1
     assert player_1.position == (3,2)
+
+def test_playTurn_eleven():
+    '''
+    making a move that causes a token to cross multiple tiles
+
+    '''
+
+    player_1 = Player('blue', (0, 1))
+    board = Board([player_1])
+    draw_pile = administrator.create_draw_pile()
+    tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
+    board.tiles[1][0] = Tile(2, [[0,3],[1,4],[2,7],[5,6]])
+    draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile)
+    assert len(eliminated) == 0
+    assert len(players) == 1
+    assert player_1.position == (6,2)
+
+def test_playTurn_12():
+    '''
+    making a move where multiple players move at once
+
+    '''
+
+    player_1 = Player('blue', (0, 1))
+    player_2 = Player('red', (0,2))
+    board = Board([player_1, player_2])
+    draw_pile = administrator.create_draw_pile()
+    tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
+    board.tiles[1][0] = Tile(2, [[0,3],[1,4],[2,7],[5,6]])
+    draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile)
+    assert len(eliminated) == 0
+    assert len(players) == 2
+    assert player_1.position == (6,2)
+    assert player_2.position == (2,3)
     assert game_over == False
 
-def test_playTurn_eleven()
+def test_playTurn_13():
+    '''
+    making a move where multiple players move at once
+
+    '''
+    player_1 = Player('blue', (0, 1))
+    player_2 = Player('red', (0,2))
+    board = Board([player_1, player_2])
+    draw_pile = administrator.create_draw_pile()
+    tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
+    board.tiles[1][0] = Tile(2, [[0,3],[1,4],[2,7],[5,6]])
+    draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile)
+    assert len(eliminated) == 0
+    assert len(players) == 2
+    assert player_1.position == (6,2)
+    assert player_2.position == (2,3)
+    assert game_over == False
+
+#def test_playTurn_14():
+    '''
+    making an illegal move, specifically where the move is an elimination move, 
+    but there are non-elimination moves available
+
+    '''
+    
+
+
