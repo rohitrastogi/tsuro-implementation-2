@@ -8,6 +8,7 @@
   "test_suite.py::test_playTile", 
   "test_suite.py::test_rotateTile", 
   "test_suite.py::test_legalPlay", 
+  "test_suite.py::test_legalPlay_2", 
   "test_suite.py::test_playTurn_one", 
   "test_suite.py::test_playTurn_two", 
   "test_suite.py::test_playTurn_three", 
@@ -20,5 +21,8 @@
   "test_suite.py::test_playTurn_ten", 
   "test_suite.py::test_playTurn_eleven", 
   "test_suite.py::test_playTurn_12", 
-  "test_suite.py::test_playTurn_13"
+  "test_suite.py::test_playTurn_13", 
+  "test_suite.py::test_playTurn_14", 
+  "test_suite.py::test_playTurn_15", 
+  "test_suite.py::test_playTurn_16"
 ]

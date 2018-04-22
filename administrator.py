@@ -6,7 +6,21 @@ import copy
 # The admin registers players, creates the board, and initializes the pile of tiles
 # starts game play
 
+
+
 def legal_play(player, board, curr_tile):
+	flag = False
+	for tile in player.tiles_owned:
+		for i in range(4):
+			tile.rotate_tile()
+			if legal_play_helper(player, board, tile):
+				flag = True
+	if flag:
+		return legal_play_helper(player,board,curr_tile)
+	else:
+		return True
+
+def legal_play_helper(player, board, curr_tile):
 	# TODO: write description
 	new_board_position = get_next_board_position(player.position, player.board_position)
 	curr_position = player.position
@@ -34,8 +48,9 @@ def legal_play(player, board, curr_tile):
 
 	for a_tile in player.tiles_owned:
 		if a_tile.identifier == curr_tile.identifier:
-			return True
+			return True 
 	return False
+
 
 def play_a_turn(draw_pile, players, eliminated, board, place_tile):
 	for p in eliminated:
@@ -68,7 +83,6 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
 					for p in players:
 						if p.color != player.color:
 							if p.position == player.position:
-								print ("should get here!")
 								p.eliminated = True
 								player.eliminated = True
 								break
@@ -76,35 +90,38 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
 					if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
 						player.eliminated = True
 						break
-					print (board.tiles[new_board_position[0]][new_board_position[1]])
 					if board.tiles[new_board_position[0]][new_board_position[1]] == None:
 						break
-
+	if players[len(players)-1].eliminated and players[len(players)-1].dragon_held:
+		players[len(players)-1].dragon_held = False
+		players[0].dragon_held = True
 	for i in range(len(players)):
 		if players[i].eliminated:
 			eliminated.append(player)
 			players[i].lose_tiles(draw_pile)
 			if players[i].dragon_held:
-				players[(i+1)%len(players)].dragon_held = True
+				if len(players[(i+1)%len(players)].tiles_owned) != 3:
+					players[(i+1)%len(players)].dragon_held = True
 				players[i].dragon_held = False
 
 	players = [x for x in players if not x.eliminated]
-
 	dragon_already_held = False
 	while draw_pile:
 		dragon_already_held = False
 		for i in range(len(players)):
-			if players[i].dragon_held:
-				players[i].draw_tile(draw_pile)
-				players[i].dragon_held = False
-				if len(players[(i+1)%len(players)].tiles_owned) != 3:
-					players[(i+1)%len(players)].dragon_held = True
-				dragon_already_held = True
-		if not dragon_already_held:
-			if not curr_player.eliminated:
-				players[len(players)-1].draw_tile(draw_pile)
+			if draw_pile:
+				if players[i].dragon_held:
+					players[i].draw_tile(draw_pile)
+					players[i].dragon_held = False
+					if len(players[(i+1)%len(players)].tiles_owned) != 3:
+						players[(i+1)%len(players)].dragon_held = True
+					dragon_already_held = True
+		if draw_pile:
+			if not dragon_already_held:
+				if not curr_player.eliminated:
+					players[len(players)-1].draw_tile(draw_pile)
+					break
 				break
-			break
 
 	if not dragon_already_held:
 		if len(players)!= 0 and len(players[len(players)-1].tiles_owned) < 3:
