@@ -217,8 +217,10 @@ def test_playTurn_four():
     assert player_4.dragon_held
 
 def test_playTurn_five():
-    # Test 5
-    print ("Test 5")
+    '''
+    Player one is eliminated and Player 4 has dragon tile.
+    Player 4 draws a tile and no one is given a dragon tile.
+    '''
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
     player_3 = Player('orange', (18, 8))
@@ -245,8 +247,10 @@ def test_playTurn_five():
         assert not player.dragon_held
 
 def test_playTurn_six():
-    # Test 6
-    print ("Test 6")
+    '''
+    Player one is eliminated. 
+    Since they are the last player, game_over is set to player one.
+    '''
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
     player_3 = Player('orange', (18, 8))
@@ -268,8 +272,9 @@ def test_playTurn_six():
     assert game_over[0].color == player_1.color
 
 def test_playTurn_seven():
-    # Test 7
-    print ("Test 7")
+    '''
+    There is only one player in the game so game_over returns the player.
+    '''
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
     player_3 = Player('orange', (18, 8))
@@ -291,8 +296,10 @@ def test_playTurn_seven():
     assert game_over.color == player_1.color
 
 def test_playTurn_eight():
-    # Test 8
-    print ("Test 8")
+    '''
+    Two players eliminated each other, 
+    since there are no other players game-over is True and returns these two players.
+    '''
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (0, 2))
     board = Board([player_1, player_2])
@@ -308,8 +315,10 @@ def test_playTurn_eight():
     assert game_over[1].color == player_1.color
 
 def test_playTurn_nine():
-    # Test 9
-    print ("Test 9")
+    '''
+    35 tiles are played on the board and there are still players alive. 
+    Game-over is true and returns the remaining players.
+    '''
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (0, 8))
     board = Board([player_1, player_2])
@@ -332,3 +341,21 @@ def test_playTurn_nine():
     assert board.tiles[0][0] == tile_1
     assert game_over[0].color == player_2.color
     assert game_over[1].color == player_1.color
+
+
+def test_playTurn_ten():
+    '''
+    making a move from the edge
+
+    '''
+    player_1 = Player('blue', (0, 1))
+    board = Board([player_1])
+    draw_pile = administrator.create_draw_pile()
+    tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
+    draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile)
+    assert len(eliminated) == 0
+    assert len(players) == 1
+    assert player_1.position == (3,2)
+    assert game_over == False
+
+def test_playTurn_eleven()
