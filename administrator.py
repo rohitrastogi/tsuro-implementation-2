@@ -16,7 +16,7 @@ def legal_play(player, board, curr_tile):
 	else:
 		for a_tile in player.tiles_owned:
 			if a_tile.identifier == curr_tile.identifier:
-				return True 
+				return True
 		return False
 
 def legal_play_helper(player, board, curr_tile):
@@ -37,16 +37,17 @@ def legal_play_helper(player, board, curr_tile):
 		if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
 			return False
 		for p in board.all_players:
-			if p.color != player.color:
-				if p.position == curr_position:
-					return False
+			if not p.eliminated:
+				if p.color != player.color:
+					if p.position == curr_position:
+						return False
 		if board.tiles[new_board_position[0]][new_board_position[1]] == None:
 			break
 		curr_tile = board.tiles[new_board_position[0], new_board_position[1]]
 
 	for a_tile in player.tiles_owned:
 		if a_tile.identifier == curr_tile.identifier:
-			return True 
+			return True
 	return False
 
 
