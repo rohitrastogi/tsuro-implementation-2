@@ -91,9 +91,12 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
 						break
 					if board.tiles[new_board_position[0]][new_board_position[1]] == None:
 						break
+
 	if players[len(players)-1].eliminated and players[len(players)-1].dragon_held:
 		players[len(players)-1].dragon_held = False
+		# TODO: only if player at index 0 doesn't have three tiles?
 		players[0].dragon_held = True
+
 	for i in range(len(players)):
 		if players[i].eliminated:
 			eliminated.append(player)
