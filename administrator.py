@@ -90,7 +90,7 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 	# 			if len(players[(i+1)%len(players)].tiles_owned) < 3:
 	# 				players[(i+1)%len(players)].dragon_held = True
 	# 			players[i].dragon_held = False
-	
+
 	for i in range(len(players)):
 		if players[i].dragon_held and players[i].eliminated:
 			j = (i+1)%len(players)
@@ -111,7 +111,6 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 			eliminated.append(player)
 			players[i].lose_tiles(draw_pile)
 			players[i].dragon_held = False
-
 
 	players = [x for x in players if not x.eliminated]
 
