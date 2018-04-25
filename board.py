@@ -3,6 +3,7 @@ class Board:
 
     def __init__(self, players):
         self.all_players = players
+        self.alive = []
         self.eliminated = []
         self.num_tiles = 0
         self.tiles = []

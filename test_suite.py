@@ -81,6 +81,22 @@ def test_rotateTile():
     tile_2.rotate_tile()
     assert tile_2.paths == [[2, 3], [1, 4], [5, 7], [0, 6]]
 
+def test_moveAlongPath():
+    tile_1 = Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])
+    tile_2 = Tile(3, [[0, 1], [2, 7], [3, 5], [4, 6]])
+
+    board_position = (3,2)
+    start = (9,8)
+    coordinates = administrator.get_coordinates(board_position)
+    end = tile_1.move_along_path(start, coordinates)
+    assert end == (11,9)
+
+    board_position = (2,4)
+    start = (9,13)
+    coordinates = administrator.get_coordinates(board_position)
+    end = tile_2.move_along_path(start, coordinates)
+    assert end == (7,12)
+
 def test_legalPlay():
 
     #card causes elimination so return false
@@ -104,6 +120,7 @@ def test_legalPlay():
     #player hits another player so not legal play
     player_2 = Player('red', (11,0))
     player_2.position = (3,2)
+    board.tiles[1][0] = Tile(10, [[0,3],[1,2],[4,7],[5,6]])
     board.add_player(player_2)
     assert not administrator.legal_play(player_1, board, tile_3)
 
@@ -112,6 +129,7 @@ def test_legalPlay():
     tile_4 = Tile(20, [[0,6], [1,2], [3,5], [4,7]])
     board.tiles[1][0] = tile_4
     assert not administrator.legal_play(player_1, board, tile_3)
+
 def test_legalPlay_2():
     '''
     if all moves are elimination moves, allows player to play current tile
@@ -123,14 +141,13 @@ def test_legalPlay_2():
     tile_1 = Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])
     assert administrator.legal_play(player_1, board, tile_1)
 
-
     player_1 = Player('blue', (0, 1))
     board = Board([player_1])
     player_1.tiles_owned = [Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(3, [[0, 5], [1, 4], [2, 7], [3, 6]])]
     tile_1 = Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])
     assert not administrator.legal_play(player_1, board, tile_1)
 
-def test_playTurn_one():
+def test_playTurn_1():
     '''
     Player one is eliminated because they play a tile that eliminates them, all player's one tiles are added back to the draw pile.
     '''
@@ -155,11 +172,11 @@ def test_playTurn_one():
     assert board.tiles[0][0] == tile_1
     assert not game_over
 
-def test_playTurn_two():
+def test_playTurn_2():
     '''
-    Test case where player one is eliminated and player three has dragon tile. 
+    Test case where player one is eliminated and player three has dragon tile.
     Expected behavior is that player 3 and 4 will draw cards from the draw_pile.
-    No one at the end will have a dragon tile. 
+    No one at the end will have a dragon tile.
     '''
     player_1 = Player('blue', (0, 1))
     player_2 = Player('red', (11, 0))
@@ -185,9 +202,9 @@ def test_playTurn_two():
     assert board.tiles[0][0] == tile_1
     assert not game_over
 
-def test_playTurn_three():
+def test_playTurn_3():
     '''
-    Player one is eliminated so two tiles are added to the draw pile. 
+    Player one is eliminated so two tiles are added to the draw pile.
     Player three and four each get a tile and dragon tile is passed on to two.
     '''
     player_1 = Player('blue', (0, 1))
@@ -213,10 +230,10 @@ def test_playTurn_three():
     assert not game_over
     assert player_2.dragon_held
 
-def test_playTurn_four():
+def test_playTurn_4():
     '''
-    If there are no cards in the draw pile, and dragon tile is not currently held, 
-    the player who played will receive the dragon tile. 
+    If there are no cards in the draw pile, and dragon tile is not currently held,
+    the player who played will receive the dragon tile.
     '''
 
     player_1 = Player('blue', (0, 1))
@@ -240,7 +257,7 @@ def test_playTurn_four():
     assert not game_over
     assert player_4.dragon_held
 
-def test_playTurn_five():
+def test_playTurn_5():
     '''
     Player one is eliminated and Player 4 has dragon tile.
     Player 4 draws a tile and no one is given a dragon tile.
@@ -270,9 +287,9 @@ def test_playTurn_five():
     for player in players:
         assert not player.dragon_held
 
-def test_playTurn_six():
+def test_playTurn_6():
     '''
-    Player one is eliminated. 
+    Player one is eliminated.
     Since they are the last player, game_over is set to player one.
     '''
     player_1 = Player('blue', (0, 1))
@@ -295,7 +312,7 @@ def test_playTurn_six():
     assert board.tiles[0][0] == tile_1
     assert game_over[0].color == player_1.color
 
-def test_playTurn_seven():
+def test_playTurn_7():
     '''
     There is only one player in the game so game_over returns the player.
     '''
@@ -321,7 +338,7 @@ def test_playTurn_seven():
 
 def test_playTurn_eight():
     '''
-    Two players eliminated each other, 
+    Two players eliminated each other,
     since there are no other players game-over is True and returns these two players.
     // also tests making a move where multiple players are eliminated
     '''
@@ -341,7 +358,7 @@ def test_playTurn_eight():
 
 def test_playTurn_nine():
     '''
-    35 tiles are played on the board and there are still players alive. 
+    35 tiles are played on the board and there are still players alive.
     Game-over is true and returns the remaining players.
     '''
     player_1 = Player('blue', (0, 1))

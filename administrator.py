@@ -3,15 +3,15 @@ from board import Board
 from tile import Tile
 import copy
 
-
 def legal_play(player, board, curr_tile):
-	flag = False
+	another_legal = False
 	for tile in player.tiles_owned:
 		for i in range(4):
 			tile.rotate_tile()
 			if legal_play_helper(player, board, tile):
-				flag = True
-	if flag:
+				another_legal = True
+
+	if another_legal:
 		return legal_play_helper(player,board,curr_tile)
 	else:
 		for a_tile in player.tiles_owned:
@@ -24,26 +24,13 @@ def legal_play_helper(player, board, curr_tile):
 	curr_position = player.position
 	while True:
 		coordinates = get_coordinates(new_board_position)
-		for i, coor in enumerate(coordinates):
-			if coor == curr_position:
-				start_path = i
-		for path in curr_tile.paths:
-			if path[0] == start_path:
-				end_path = path[1]
-			if path[1] == start_path:
-				end_path = path[0]
-		curr_position = coordinates[end_path]
+		curr_position = curr_tile.move_along_path(curr_position, coordinates)
 		new_board_position = get_next_board_position(curr_position, new_board_position)
 		if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
 			return False
-		for p in board.all_players:
-			if not p.eliminated:
-				if p.color != player.color:
-					if p.position == curr_position:
-						return False
 		if board.tiles[new_board_position[0]][new_board_position[1]] == None:
 			break
-		curr_tile = board.tiles[new_board_position[0], new_board_position[1]]
+		curr_tile = board.tiles[new_board_position[0]][new_board_position[1]]
 
 	for a_tile in player.tiles_owned:
 		if a_tile.identifier == curr_tile.identifier:
@@ -51,16 +38,28 @@ def legal_play_helper(player, board, curr_tile):
 	return False
 
 
-def play_a_turn(draw_pile, players, eliminated, board, place_tile):
+def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
+	'''
+	The function consumes five arguments and returns five results. The first argument is the list of tiles on the draw pile. The second argument is the list of players still in the game in the order of play and the third argument is the list of eliminated players in no particular order. The fourth argument is the board before the turn and the last argument is the tile to be placed on that board. Note that the tile to be placed on the board should have been removed from the list of tiles of the active player before calling the function. For example, before the first call of play-a-turn in a game, the first player in the second argument of the call (the players still in the game) should have 2 tiles, while all of the other players in that list should have 3 tiles.
+	The first result of play-a-turn is the draw pile after the turn. The second result is the list of players that are still in the game after the turn, in order of play for the next turn. For example, if no players gets eliminated in a turn, this result list is the one you get by taking the second input (the list of players that are still in the game) and moving the first player to the end of the list. The third result is the list of players that are eliminated after the turn in no particular order (including those that were already eliminated before the turn). The fourth result is the board after the turn and the last result is false when the game is not over or the list of players that, if the game is over.
+	'''
+	# TODO modify board fields for alive and eliminated
+
+	# Remove later once whole game is implemented
 	for p in eliminated:
 		p.eliminated = True
+
 	curr_player = players.pop(0)
 	players.append(curr_player)
+	curr_player_color = curr_player.color
+
 	original_board_position = get_next_board_position(curr_player.position, curr_player.board_position)
-	board.tiles[original_board_position[0]][original_board_position[1]] = place_tile
-	board.num_tiles += 1
 	original_coordinates = get_coordinates(original_board_position)
 	original_players = copy.deepcopy(players)
+
+	board.tiles[original_board_position[0]][original_board_position[1]] = curr_tile
+	board.num_tiles += 1
+
 	for player in players:
 		if not player.eliminated:
 			if player.position in original_coordinates:
@@ -68,23 +67,9 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
 				curr_position = player.position
 				while True:
 					coordinates = get_coordinates(new_board_position)
-					for i, coor in enumerate(coordinates):
-						if coor == curr_position:
-							start_path = i
-					for path in board.tiles[new_board_position[0]][new_board_position[1]].paths:
-						if path[0] == start_path:
-							end_path = path[1]
-						if path[1] == start_path:
-							end_path = path[0]
-					curr_position = coordinates[end_path]
+					curr_position = board.tiles[new_board_position[0]][new_board_position[1]].move_along_path(curr_position, coordinates)
 					new_board_position = get_next_board_position(curr_position, new_board_position)
 					player.position = curr_position
-					for p in players:
-						if p.color != player.color:
-							if p.position == player.position:
-								p.eliminated = True
-								player.eliminated = True
-								break
 
 					if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
 						player.eliminated = True
@@ -92,42 +77,79 @@ def play_a_turn(draw_pile, players, eliminated, board, place_tile):
 					if board.tiles[new_board_position[0]][new_board_position[1]] == None:
 						break
 
-	if players[len(players)-1].eliminated and players[len(players)-1].dragon_held:
-		players[len(players)-1].dragon_held = False
-		# TODO: only if player at index 0 doesn't have three tiles?
-		players[0].dragon_held = True
+	# if players[len(players)-1].eliminated and players[len(players)-1].dragon_held:
+	# 	players[len(players)-1].dragon_held = False
+	# 	if len(players[0].tiles_owned) < 3:
+	# 		players[0].dragon_held = True
+	#
+	# for i in range(len(players)):
+	# 	if players[i].eliminated:
+	# 		eliminated.append(player)
+	# 		players[i].lose_tiles(draw_pile)
+	# 		if players[i].dragon_held:
+	# 			if len(players[(i+1)%len(players)].tiles_owned) < 3:
+	# 				players[(i+1)%len(players)].dragon_held = True
+	# 			players[i].dragon_held = False
+	
+	for i in range(len(players)):
+		if players[i].dragon_held and players[i].eliminated:
+			j = (i+1)%len(players)
+			count = 1
+			while count < len(players):
+				if not players[j].eliminated:
+					if len(players[j].tiles_owned) < 3:
+						players[j].dragon_held = True
+						break
+					else:
+						j = (j+1)%len(players)
+						count += 1
+
+			players[i].dragon_held = False
 
 	for i in range(len(players)):
 		if players[i].eliminated:
 			eliminated.append(player)
 			players[i].lose_tiles(draw_pile)
-			if players[i].dragon_held:
-				if len(players[(i+1)%len(players)].tiles_owned) != 3:
-					players[(i+1)%len(players)].dragon_held = True
-				players[i].dragon_held = False
+			players[i].dragon_held = False
+
 
 	players = [x for x in players if not x.eliminated]
+
+	# comment
+	# For drawing there are two cases:
+	# 	1. the dragon tile is already held:
+	# 		in this case, we find this player and if there are cards in the draw pile we give it to the
+	# 		players going clockwise and once we run out of cards, if the player who is supposed to draw has less
+	# 		than three cards, this player gets the dragon tile
+	# 	2. the dragon tile is not already held:
+	# 		give the current player a card unless the current player has been eliminated. if there is no card to give,
+	# 		give this player the dragon tile
+	# comment
+
 	dragon_already_held = False
-	while draw_pile:
-		dragon_already_held = False
-		for i in range(len(players)):
-			if draw_pile:
-				if players[i].dragon_held:
-					players[i].draw_tile(draw_pile)
-					players[i].dragon_held = False
-					if len(players[(i+1)%len(players)].tiles_owned) != 3:
-						players[(i+1)%len(players)].dragon_held = True
-					dragon_already_held = True
-		if draw_pile:
-			if not dragon_already_held:
-				if not curr_player.eliminated:
-					players[len(players)-1].draw_tile(draw_pile)
-					break
-				break
+	for i in range(len(players)):
+		if players[i].dragon_held:
+			dragon_already_held = True
+			break
+
+	while draw_pile and dragon_already_held:
+		players[i].draw_tile(draw_pile)
+		players[i].dragon_held = False
+		if len(players[(i+1)%len(players)].tiles_owned) < 3:
+			players[(i+1)%len(players)].dragon_held = True
+		else:
+			dragon_already_held = False
+
+		i = (i+1)%len(players)
 
 	if not dragon_already_held:
-		if len(players)!= 0 and len(players[len(players)-1].tiles_owned) < 3:
-			players[len(players)-1].dragon_held = True
+		for j in range(len(players)):
+			if players[j].color == curr_player_color:
+				if not players[j].eliminated:
+					if len(draw_pile) == 0:
+						players[j].dragon_held = True
+					else:
+						players[j].draw_tile(draw_pile)
 
 	#  Game over scenarios!
 	if len(players) == 1:
@@ -169,30 +191,6 @@ def get_next_board_position(position, board_position):
 			return (board_position[0], board_position[1]-1)
 		else:
 			return (board_position[0], board_position[1]+1)
-
-# def game_initialization(players):
-
-# 	draw_pile = create_draw_pile()
-# 	# shuffle the draw_pile
-# 	for player in players:
-# 		player.initialize_hand(draw_pile)
-
-# 	board = Board(players)
-
-# 	return board, draw_pile
-
-# def play_game(players):
-# 	board, draw_pile = game_initialization(players)
-# 	curr_tile = players[0].tiles_owned[0]
-# 	if legal_play(players[0], board, curr_tile):
-# 		players[0].play_tile(curr_tile)
-# 		eliminated = []
-# 		draw_pile, players, eliminated, board, game_over = play_a_turn(draw_pile,players,eliminated,board,curr_tile)
-# 		if not game_over:
-# 			play_game(players)
-# 		else:
-# 			return game_over
-
 
 def create_draw_pile():
 	draw_pile = []
