@@ -4,7 +4,7 @@ from tile import Tile
 import copy
 
 def legal_play(player, board, curr_tile):
-	another_legal = False
+	another_legal = False  # is there another legal tile that can be played?
 	for tile in player.tiles_owned:
 		for i in range(4):
 			tile.rotate_tile()
@@ -14,8 +14,8 @@ def legal_play(player, board, curr_tile):
 	if another_legal:
 		return legal_play_helper(player,board,curr_tile)
 	else:
-		for a_tile in player.tiles_owned:
-			if a_tile.identifier == curr_tile.identifier:
+		for tile in player.tiles_owned:
+			if tile.identifier == curr_tile.identifier:
 				return True
 		return False
 
@@ -32,8 +32,8 @@ def legal_play_helper(player, board, curr_tile):
 			break
 		curr_tile = board.tiles[new_board_position[0]][new_board_position[1]]
 
-	for a_tile in player.tiles_owned:
-		if a_tile.identifier == curr_tile.identifier:
+	for tile in player.tiles_owned:
+		if tile.identifier == curr_tile.identifier:
 			return True
 	return False
 
@@ -77,25 +77,11 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 					if board.tiles[new_board_position[0]][new_board_position[1]] == None:
 						break
 
-	# if players[len(players)-1].eliminated and players[len(players)-1].dragon_held:
-	# 	players[len(players)-1].dragon_held = False
-	# 	if len(players[0].tiles_owned) < 3:
-	# 		players[0].dragon_held = True
-	#
-	# for i in range(len(players)):
-	# 	if players[i].eliminated:
-	# 		eliminated.append(player)
-	# 		players[i].lose_tiles(draw_pile)
-	# 		if players[i].dragon_held:
-	# 			if len(players[(i+1)%len(players)].tiles_owned) < 3:
-	# 				players[(i+1)%len(players)].dragon_held = True
-	# 			players[i].dragon_held = False
-
 	for i in range(len(players)):
 		if players[i].dragon_held and players[i].eliminated:
-			j = (i+1)%len(players)
+			j = (i+1)%len(players) # the index of next player after i
 			count = 1
-			while count < len(players):
+			while count < len(players): #ensure we only go through all players once
 				if not players[j].eliminated:
 					if len(players[j].tiles_owned) < 3:
 						players[j].dragon_held = True
@@ -103,8 +89,8 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 					else:
 						j = (j+1)%len(players)
 						count += 1
-
 			players[i].dragon_held = False
+			break
 
 	for i in range(len(players)):
 		if players[i].eliminated:
