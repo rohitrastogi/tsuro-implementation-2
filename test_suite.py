@@ -16,42 +16,42 @@ def test_getNextBoardPosition():
     assert administrator.get_next_board_position((11,18), (3,6)) == (3,5)
 
 def test_gameInitialization():
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (11, 0))
+    player_1 = Player('Upasna', 'blue', (0, 1))
+    player_2 = Player('Amulya', 'red', (11, 0))
     with pytest.raises(Exception):
-        player_3 = Player('green', (19, 8))
+        player_3 = Player('Amulya', 'green', (19, 8))
     with pytest.raises(Exception):
-        player_4 = Player('orange', (12, 0))
+        player_4 = Player('Amulya', 'orange', (12, 0))
 
 def test_drawTile():
     draw_pile = administrator.create_draw_pile()
-    player_1 = Player('blue', (0, 1))
+    player_1 = Player('Upasna', 'blue', (0, 1))
     player_1.draw_tile(draw_pile)
     assert len(player_1.tiles_owned) == 1
     assert len(draw_pile) == 34
 
-    player_2 = Player('green', (11, 0))
+    player_2 = Player('Upasna', 'green', (11, 0))
     player_2.draw_tile(draw_pile)
     assert len(player_2.tiles_owned) == 1
     assert len(draw_pile) == 33
 
 def test_initializeHand():
     draw_pile = administrator.create_draw_pile()
-    player_1 = Player('blue', (0, 1))
+    player_1 = Player('Upasna', 'blue', (0, 1))
     player_1.initialize_hand(draw_pile)
     assert len(player_1.tiles_owned) == 3
     assert len(draw_pile) == 32
 
-    player_2 = Player('green', (11, 0))
+    player_2 = Player('Amulya', 'green', (11, 0))
     player_2.initialize_hand(draw_pile)
     assert len(player_2.tiles_owned) == 3
     assert len(draw_pile) == 29
 
 def test_loseTiles():
     draw_pile = administrator.create_draw_pile()
-    player_1 = Player('blue', (0, 1))
+    player_1 = Player('Amulya', 'blue', (0, 1))
     player_1.initialize_hand(draw_pile)
-    player_2 = Player('green', (11, 0))
+    player_2 = Player('Amulya', 'green', (11, 0))
     player_2.initialize_hand(draw_pile)
     assert len(draw_pile) == 29
 
@@ -65,7 +65,7 @@ def test_loseTiles():
 
 def test_playTile():
     tile_1 = Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])
-    player_1 = Player('blue', (0, 1))
+    player_1 = Player('Michael', 'blue', (0, 1))
     player_1.tiles_owned = [Tile(12, [[0, 7], [1, 2], [3, 4], [5, 6]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])]
     player_1.play_tile(tile_1)
     assert len(player_1.tiles_owned) == 2
@@ -75,11 +75,11 @@ def test_rotateTile():
     tile_2 = Tile(3, [[0, 1], [2, 7], [3, 5], [4, 6]])
 
     tile_1.rotate_tile()
-    assert tile_1.paths == [[2, 5], [1, 3], [0, 4], [6, 7]]
+    assert tile_1.paths == [[0, 4], [1, 3], [2, 5], [6, 7]]
     tile_1.rotate_tile()
-    assert tile_1.paths == [[4, 7], [3, 5], [2, 6], [0, 1]]
+    assert tile_1.paths == [[0, 1], [2, 6], [3, 5], [4, 7]]
     tile_2.rotate_tile()
-    assert tile_2.paths == [[2, 3], [1, 4], [5, 7], [0, 6]]
+    assert tile_2.paths == [[0, 6], [1, 4], [2, 3], [5, 7]]
 
 def test_moveAlongPath():
     tile_1 = Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])
@@ -97,10 +97,22 @@ def test_moveAlongPath():
     end = tile_2.move_along_path(start, coordinates)
     assert end == (7,12)
 
+def test_symmetry():
+    tile_1 = Tile(8, [[0, 4], [1, 5], [2, 6], [3, 7]])
+    tile_2 = Tile(6, [[0, 1], [2, 6], [3, 7], [4, 5]])
+    tile_3 = Tile(4, [[0, 2], [1, 4], [3, 7], [5, 6]])
+
+    assert tile_1.symmetry() == 1
+    assert tile_1.paths == [[0, 4], [1, 5], [2, 6], [3, 7]]
+    assert tile_2.symmetry() == 2
+    assert tile_2.paths == [[0, 1], [2, 6], [3, 7], [4, 5]]
+    assert tile_3.symmetry() == 4
+    assert tile_3.paths == [[0, 2], [1, 4], [3, 7], [5, 6]]
+
 def test_legalPlay():
 
     #card causes elimination so return false
-    player_1 = Player('blue', (0, 1))
+    player_1 = Player('Michael', 'blue', (0, 1))
     player_1.tiles_owned = [Tile(12, [[0, 7], [1, 2], [3, 4], [5, 6]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])]
     tile_1 = Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])
     board = Board([player_1])
@@ -118,7 +130,7 @@ def test_legalPlay():
     assert administrator.legal_play(player_1, board, tile_3)
 
     #player hits another player so not legal play
-    player_2 = Player('red', (11,0))
+    player_2 = Player('Michael', 'red', (11,0))
     player_2.position = (3,2)
     board.tiles[1][0] = Tile(10, [[0,3],[1,2],[4,7],[5,6]])
     board.add_player(player_2)
@@ -135,13 +147,13 @@ def test_legalPlay_2():
     if all moves are elimination moves, allows player to play current tile
 
     '''
-    player_1 = Player('blue', (0, 1))
+    player_1 = Player('Jessica', 'blue', (0, 1))
     board = Board([player_1])
     player_1.tiles_owned = [Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])]
     tile_1 = Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])
     assert administrator.legal_play(player_1, board, tile_1)
 
-    player_1 = Player('blue', (0, 1))
+    player_1 = Player('Jessica', 'blue', (0, 1))
     board = Board([player_1])
     player_1.tiles_owned = [Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(3, [[0, 5], [1, 4], [2, 7], [3, 6]])]
     tile_1 = Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])
@@ -151,10 +163,10 @@ def test_playTurn_1():
     '''
     Player one is eliminated because they play a tile that eliminates them, all player's one tiles are added back to the draw pile.
     '''
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (11, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (11, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = administrator.create_draw_pile()
 
@@ -178,10 +190,10 @@ def test_playTurn_2():
     Expected behavior is that player 3 and 4 will draw cards from the draw_pile.
     No one at the end will have a dragon tile.
     '''
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (11, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (11, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = administrator.create_draw_pile()
 
@@ -207,10 +219,10 @@ def test_playTurn_3():
     Player one is eliminated so two tiles are added to the draw pile.
     Player three and four each get a tile and dragon tile is passed on to two.
     '''
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (11, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (11, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = administrator.create_draw_pile()
 
@@ -236,10 +248,10 @@ def test_playTurn_4():
     the player who played will receive the dragon tile.
     '''
 
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (11, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (11, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     board = Board([player_4, player_2, player_3, player_1])
     draw_pile = administrator.create_draw_pile()
 
@@ -262,10 +274,10 @@ def test_playTurn_5():
     Player one is eliminated and Player 4 has dragon tile.
     Player 4 draws a tile and no one is given a dragon tile.
     '''
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (11, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (11, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = administrator.create_draw_pile()
 
@@ -292,10 +304,10 @@ def test_playTurn_6():
     Player one is eliminated.
     Since they are the last player, game_over is set to player one.
     '''
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (11, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (11, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     eliminated = [player_2, player_3, player_4]
     board = Board([player_1])
     draw_pile = administrator.create_draw_pile()
@@ -316,10 +328,10 @@ def test_playTurn_7():
     '''
     There is only one player in the game so game_over returns the player.
     '''
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (11, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (11, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     eliminated = [player_2, player_3, player_4]
     board = Board([player_1])
     draw_pile = administrator.create_draw_pile()
@@ -342,8 +354,8 @@ def test_playTurn_eight():
     since there are no other players game-over is True and returns these two players.
     // also tests making a move where multiple players are eliminated
     '''
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (0, 2))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Upasna', 'red', (0, 2))
     board = Board([player_1, player_2])
     draw_pile = administrator.create_draw_pile()
     player_2.initialize_hand(draw_pile)
@@ -361,8 +373,8 @@ def test_playTurn_nine():
     35 tiles are played on the board and there are still players alive.
     Game-over is true and returns the remaining players.
     '''
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (0, 8))
+    player_1 = Player('Amulya', 'blue', (0, 1))
+    player_2 = Player('Upasna', 'red', (0, 8))
     board = Board([player_1, player_2])
     draw_pile = administrator.create_draw_pile()
 
@@ -390,7 +402,7 @@ def test_playTurn_ten():
     making a move from the edge
 
     '''
-    player_1 = Player('blue', (0, 1))
+    player_1 = Player('Upasna', 'blue', (0, 1))
     board = Board([player_1])
     draw_pile = administrator.create_draw_pile()
     tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
@@ -405,7 +417,7 @@ def test_playTurn_eleven():
 
     '''
 
-    player_1 = Player('blue', (0, 1))
+    player_1 = Player('Amulya', 'blue', (0, 1))
     board = Board([player_1])
     draw_pile = administrator.create_draw_pile()
     tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
@@ -421,8 +433,8 @@ def test_playTurn_12():
 
     '''
 
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (0,2))
+    player_1 = Player('Allison', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (0,2))
     board = Board([player_1, player_2])
     draw_pile = administrator.create_draw_pile()
     tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
@@ -439,8 +451,8 @@ def test_playTurn_13():
     making a move where multiple players move at once
 
     '''
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (0,2))
+    player_1 = Player('John', 'blue', (0, 1))
+    player_2 = Player('Emma', 'red', (0,2))
     board = Board([player_1, player_2])
     draw_pile = administrator.create_draw_pile()
     tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
@@ -457,10 +469,10 @@ def test_playTurn_14():
     moving where no player has the dragon tile before or after
 
     '''
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (11, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (11, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = administrator.create_draw_pile()
     player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
@@ -484,10 +496,10 @@ def test_playTurn_15():
 
     '''
 
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (11, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (11, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = []
     player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]])]
@@ -515,10 +527,10 @@ def test_playTurn_16():
 
     '''
 
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (2, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (2, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = []
     player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]])]
@@ -541,11 +553,10 @@ def test_playTurn_16():
     moving where the player that has the dragon tile makes a move that causes themselves to be eliminated
 
     '''
-
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (2, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (2, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = []
     player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]])]
@@ -569,10 +580,10 @@ def test_playTurn_16():
     moving where a player that does not have the dragon tile makes a move and it causes an elimination of the player that has the dragon tile
 
     '''
-    player_1 = Player('blue', (0, 1))
-    player_2 = Player('red', (2, 0))
-    player_3 = Player('orange', (18, 8))
-    player_4 = Player('white', (0, 5))
+    player_1 = Player('Jessica', 'blue', (0, 1))
+    player_2 = Player('Michael', 'red', (2, 0))
+    player_3 = Player('Upasna', 'orange', (18, 8))
+    player_4 = Player('Amulya', 'white', (0, 5))
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = []
     player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]

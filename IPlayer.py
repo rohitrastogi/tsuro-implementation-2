@@ -16,5 +16,3 @@ class IPlayer(Interface):
 
     def end_game(self, board, colors):
         pass
-
-    

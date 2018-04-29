@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 class Tile:
 	""" data structure that contains tile metadata """
 
@@ -23,3 +25,18 @@ class Tile:
 			path[1] = (path[1] + 2)%8
 			if path[0] > path[1]:
 				path[0], path[1] = path[1], path[0]
+
+		self.paths = sorted(self.paths)
+
+	def symmetry(self):
+		original_paths = deepcopy(self.paths)
+		rotated_paths = [original_paths]
+		for i in range(3):
+			self.rotate_tile()
+			if self.paths not in rotated_paths:
+				rotated_paths.append(deepcopy(self.paths))
+
+		self.rotate_tile()
+		sym = len(rotated_paths)
+
+		return sym
