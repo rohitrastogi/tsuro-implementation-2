@@ -1,6 +1,6 @@
 from interface import implements
-import random
 from IPlayer import IPlayer
+import random
 
 class Player(implements(IPlayer)):
     """ data structure that contains player metadata """
@@ -12,7 +12,8 @@ class Player(implements(IPlayer)):
         self.dragon_held = False
         self.tiles_owned = []
         self.eliminated = False
-        self.other_players = []
+        self.other_colors = []
+        self.board_position = None
         # following statments check to make sure that position selected is valid
         if self.position:
             if (self.position[0] + self.position[1]) % 3 == 0:
@@ -55,7 +56,7 @@ class Player(implements(IPlayer)):
 
     def initialize(self, color, other_colors):
         self.color = color
-        self.other_players = other_colors
+        self.other_colors = other_colors
 
     def place_pawn(self, board):
         """
@@ -81,9 +82,17 @@ class Player(implements(IPlayer)):
                         continue
         self.position = (x,y)
 
+        if self.position[0] == 0:
+            self.board_position = (-1, self.position[1]//3)
+        elif self.position[0] == 18:
+            self.board_position = (6, self.position[1]//3)
+        elif self.position[1] == 0:
+            self.board_position = (self.position[0]//3, -1)
+        elif self.position[1] == 18:
+            self.board_position = (self.position[0]//3, 6)
 
-    def play_turn(self, board, tiles, natural):
-        self.tiles_owned = tiles
+
+    def play_turn(self, board, tiles, remaining_in_pile):
         pass
 
     def end_game(self, board, colors):

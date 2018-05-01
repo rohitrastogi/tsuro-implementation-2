@@ -1,6 +1,7 @@
 from player import Player
 from board import Board
 from tile import Tile
+from randomPlayer import RandomPlayer
 import administrator
 import pytest
 
@@ -22,6 +23,32 @@ def test_gameInitialization():
         player_3 = Player('Amulya', 'green', (19, 8))
     with pytest.raises(Exception):
         player_4 = Player('Amulya', 'orange', (12, 0))
+
+def test_initialize():
+    player_1 = Player()
+    player_1.initialize('blue', ['green', 'darkgreen'])
+
+    assert player_1.color == 'blue'
+    assert player_1.other_colors == ['green', 'darkgreen']
+
+    player_2 = Player()
+    player_2.initialize('green', ['blue', 'darkgreen'])
+
+    assert player_2.color == 'green'
+    assert player_2.other_colors == ['blue', 'darkgreen']
+
+def test_placePawn():
+    player_1 = Player()
+    board = Board([player_1])
+    assert player_1.position == None
+
+    player_1.place_pawn(board)
+
+    valid_positions = [i for i in range(19) if i%3!=0]
+    case_1 = (player_1.position[0] == 0 or player_1.position[0] == 18) and player_1.position[1] in valid_positions
+    case_2 = (player_1.position[1] == 0 or player_1.position[1] == 18) and player_1.position[0] in valid_positions
+    assert case_1 or case_2
+    assert player_1.position != (19,19)
 
 def test_drawTile():
     draw_pile = administrator.create_draw_pile()
@@ -603,3 +630,48 @@ def test_playTurn_16():
     assert not player_2.dragon_held
     assert not player_3.dragon_held
     assert not player_4.dragon_held
+
+def test_RandomPlayer_initialize():
+    """
+    Just checking to make sure that the derived class properly uses the base class
+    """
+    player_1 = RandomPlayer('Julie')
+    player_1.initialize('blue', ['green', 'darkgreen'])
+
+    assert player_1.name == 'Julie'
+    assert player_1.color == 'blue'
+    assert player_1.other_colors == ['green', 'darkgreen']
+
+def test_RandomPlayer_playTurn():
+    player_1 = RandomPlayer('Julie')
+    player_1.initialize('blue', ['green', 'red'])
+    board = Board([player_1])
+    board.tiles[0][0] = Tile(0, [[0,6],[1,2],[3,4],[5,7]])
+
+    player_1.position = (4, 0)
+    player_1.board_position = (1, -1)
+
+    # In this scenario, both these tiles cause elimination
+    tile_1 = Tile(1, [[0, 1],[2,3], [4,5], [6,7]])
+    tile_2 = Tile(2, [[0, 7],[1,2], [3,4], [5,6]])
+
+    hand = [tile_1, tile_2]
+    player_1.tiles_owned = hand
+    assert player_1.play_turn(board, hand, 33).identifier == 1 or player_1.play_turn(board, hand, 33).identifier == 2
+
+    # tile_3 in its current orientation will cause elimination, but after one rotation will be legal
+    tile_3 = Tile(3, [[0, 7],[1,2], [3,6], [4,5]])
+    hand = [tile_1, tile_2, tile_3]
+    player_1.tiles_owned = hand
+    tile_played = player_1.play_turn(board, hand, 33)
+    assert tile_played.identifier == 3
+    assert tile_played.paths == [[0,5],[1,2],[3,4],[6,7]]
+
+    # tile_3 in its current orientation will cause elimination, but after four rotations will be legal
+    tile_3 = Tile(3, [[0, 1],[2,7], [3,4], [5,6]])
+    hand = [tile_1, tile_2, tile_3]
+    player_1.tiles_owned = hand
+    tile_played = player_1.play_turn(board, hand, 33)
+    assert tile_played == tile_3
+    assert tile_played.identifier == 3
+    assert tile_played.paths == [[0,5],[1,2],[3,4],[6,7]]

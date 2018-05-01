@@ -163,7 +163,7 @@ def get_coordinates(board_position):
 
 def get_next_board_position(position, board_position):
 	'''
-	given a player position, find board position that player will play next tile or move through
+	given a player position and current board position, find board position that player will play next tile or move through
 	'''
 
 	if position[0]%3 == 0:

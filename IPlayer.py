@@ -11,7 +11,7 @@ class IPlayer(Interface):
     def place_pawn(self, board):
         pass
 
-    def play_turn(self, board, tiles, natural):
+    def play_turn(self, board, tiles, remaining_in_pile):
         pass
 
     def end_game(self, board, colors):
