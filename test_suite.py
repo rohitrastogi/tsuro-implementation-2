@@ -712,3 +712,73 @@ def test_LeastSymmetricPlayer_playTurn():
     tile_played = player_1.play_turn(board, hand, 33)
     assert tile_played == tile_3
     assert tile_played.paths == [[0, 2], [1, 5], [3, 4], [6, 7]]
+
+def test_LeastSymmetricPlayer_playTurn():
+    player_1 = LeastSymmetricPlayer('Julie')
+    player_1.initialize('blue', ['green', 'red'])
+    board = Board([player_1])
+
+    # In the current position, this player should play tile_1 in the orientation it is given in
+    # tile_1 is the least symmetric tile and will not eliminate the player
+    player_1.position = (4, 0)
+    player_1.board_position = (1, -1)
+    tile_1 = Tile(1, [[0, 3], [1, 6], [2, 5], [4, 7]])
+    tile_2 = Tile(2, [[0, 1], [2, 7], [3, 6], [4, 5]])
+    tile_3 = Tile(3, [[0, 6], [1, 2], [3, 7], [4, 5]])
+
+    hand = [tile_3, tile_1, tile_2]
+    player_1.tiles_owned = hand
+    tile_played = player_1.play_turn(board, hand, 33)
+    assert tile_played == tile_1
+    assert tile_played.paths == [[0, 3], [1, 6], [2, 5], [4, 7]]
+
+    # In the current position with there being an additional tile on the board,
+    # this player should play tile_3 after it has been rotated once
+    # tile_1 and tile_2 while less symmetric than tile_3, cause elimination
+    player_1.position = (2, 0)
+    player_1.board_position = (0, -1)
+    board.tiles[0][1] = Tile(4, [[0, 7], [1, 2], [3, 4], [5, 6]])
+    tile_1 = Tile(1, [[0, 3], [1, 6], [2, 5], [4, 7]])
+    tile_2 = Tile(2, [[0, 1], [2, 7], [3, 6], [4, 5]])
+    tile_3 = Tile(3, [[0, 6], [1, 2], [3, 7], [4, 5]])
+
+    hand = [tile_3, tile_1, tile_2]
+    player_1.tiles_owned = hand
+    tile_played = player_1.play_turn(board, hand, 33)
+    assert tile_played == tile_3
+    assert tile_played.paths == [[0, 2], [1, 5], [3, 4], [6, 7]]
+
+def test_MostSymmetricPlayer_playTurn():
+    player_1 = MostSymmetricPlayer('Julie')
+    player_1.initialize('blue', ['green', 'red'])
+    board = Board([player_1])
+
+    # In the current position, this player should play tile_3 after rotating it once
+    # tile_3 is the most symmetric tile
+    player_1.position = (4, 0)
+    player_1.board_position = (1, -1)
+    tile_1 = Tile(1, [[0, 3], [1, 6], [2, 5], [4, 7]])
+    tile_2 = Tile(2, [[0, 1], [2, 7], [3, 6], [4, 5]])
+    tile_3 = Tile(3, [[0, 6], [1, 2], [3, 7], [4, 5]])
+
+    hand = [tile_1, tile_3, tile_2]
+    player_1.tiles_owned = hand
+    tile_played = player_1.play_turn(board, hand, 33)
+    assert tile_played == tile_3
+    assert tile_played.paths == [[0, 2], [1, 5], [3, 4], [6, 7]]
+
+    # In the current position with there being an additional tile on the board,
+    # this player should play tile_1 in the orientation it is given in
+    # tile_3 and tile_2 while more symmetric than tile_1, cause elimination and cannot be played
+    player_1.position = (1, 0)
+    player_1.board_position = (0, -1)
+    board.tiles[0][1] = Tile(4, [[0, 3], [1, 2], [4, 7], [5, 6]])
+    tile_1 = Tile(1, [[0, 3], [1, 6], [2, 5], [4, 7]])
+    tile_2 = Tile(2, [[0, 1], [2, 7], [3, 6], [4, 5]])
+    tile_3 = Tile(3, [[0, 6], [1, 2], [3, 7], [4, 5]])
+
+    hand = [tile_2, tile_1, tile_3]
+    player_1.tiles_owned = hand
+    tile_played = player_1.play_turn(board, hand, 33)
+    assert tile_played == tile_1
+    assert tile_played.paths == [[0, 3], [1, 6], [2, 5], [4, 7]]
