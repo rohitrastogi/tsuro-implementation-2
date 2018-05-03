@@ -37,11 +37,21 @@ def legal_play_helper(player, board, curr_tile):
 			return True
 	return False
 
-
 def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 	'''
-	The function consumes five arguments and returns five results. The first argument is the list of tiles on the draw pile. The second argument is the list of players still in the game in the order of play and the third argument is the list of eliminated players in no particular order. The fourth argument is the board before the turn and the last argument is the tile to be placed on that board. Note that the tile to be placed on the board should have been removed from the list of tiles of the active player before calling the function. For example, before the first call of play-a-turn in a game, the first player in the second argument of the call (the players still in the game) should have 2 tiles, while all of the other players in that list should have 3 tiles.
-	The first result of play-a-turn is the draw pile after the turn. The second result is the list of players that are still in the game after the turn, in order of play for the next turn. For example, if no players gets eliminated in a turn, this result list is the one you get by taking the second input (the list of players that are still in the game) and moving the first player to the end of the list. The third result is the list of players that are eliminated after the turn in no particular order (including those that were already eliminated before the turn). The fourth result is the board after the turn and the last result is false when the game is not over or the list of players that, if the game is over.
+	The function consumes five arguments and returns five results.
+	The first argument is the list of tiles on the draw pile.
+	The second argument is the list of players still in the game in the order of play and the third argument is the list of eliminated players in no particular order.
+	The fourth argument is the board before the turn and the last argument is the tile to be placed on that board.
+	Note that the tile to be placed on the board should have been removed from the list of tiles of the active player before calling the function.
+	For example, before the first call of play-a-turn in a game, the first player in the second argument of the call (the players still in the game) should have 2 tiles,
+	while all of the other players in that list should have 3 tiles.
+	The first result of play-a-turn is the draw pile after the turn.
+	The second result is the list of players that are still in the game after the turn, in order of play for the next turn.
+	For example, if no players gets eliminated in a turn, this result list is the one you get by taking the second input
+	(the list of players that are still in the game) and moving the first player to the end of the list.
+	The third result is the list of players that are eliminated after the turn in no particular order (including those that were already eliminated before the turn).
+	The fourth result is the board after the turn and the last result is false when the game is not over or the list of players that, if the game is over.
 	'''
 	# TODO modify board fields for alive and eliminated
 
@@ -68,8 +78,9 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 				while True:
 					coordinates = get_coordinates(new_board_position)
 					curr_position = board.tiles[new_board_position[0]][new_board_position[1]].move_along_path(curr_position, coordinates)
-					new_board_position = get_next_board_position(curr_position, new_board_position)
 					player.position = curr_position
+					player.board_position = new_board_position
+					new_board_position = get_next_board_position(curr_position, new_board_position)
 
 					if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
 						player.eliminated = True
@@ -79,9 +90,9 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 
 	for i in range(len(players)):
 		if players[i].dragon_held and players[i].eliminated:
-			j = (i+1)%len(players) # the index of next player after i
+			j = (i+1)%len(players)
 			count = 1
-			while count < len(players): #ensure we only go through all players once
+			while count < len(players):
 				if not players[j].eliminated:
 					if len(players[j].tiles_owned) < 3:
 						players[j].dragon_held = True

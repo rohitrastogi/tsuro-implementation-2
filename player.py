@@ -80,6 +80,7 @@ class Player(implements(IPlayer)):
                         collision = True
                     else:
                         continue
+
         self.position = (x,y)
 
         if self.position[0] == 0:
