@@ -52,7 +52,8 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 	original_coordinates = board.get_coordinates(original_board_position)
 	original_players = copy.deepcopy(players)
 
-	board.tiles[original_board_position[0]][original_board_position[1]] = curr_tile
+	board.place_tile(original_board_position, curr_tile)
+	# board.tiles[original_board_position[0]][original_board_position[1]] = curr_tile
 	board.num_tiles += 1
 
 	for player in players:

@@ -17,8 +17,14 @@ class Board:
     def add_player(self, player):
         self.all_players.append(player)
 
-    def is_board_space_empty(self,board_space):
-        return self.tiles[board_space[0]][board_space[1]] == None
+    def is_square_vacant(self, square):
+        return self.tiles[square[0]][square[1]] == None
+
+    def place_tile(self, square, tile):
+        self.tiles[square[0]][square[1]] = tile
+
+    def get_tile(self, square):
+        return self.tiles[square[0]][square[1]]
 
     def move_across_board(self, player, curr_tile):
         '''
@@ -27,25 +33,20 @@ class Board:
         curr_position = player.position
         curr_board_position = player.board_position
         next_board_space = self.get_next_board_space(curr_position, curr_board_position)
-        while True:  #functions as a do while
+        while True:
             coordinates = self.get_coordinates(next_board_space)
             curr_position = curr_tile.move_along_path(curr_position, coordinates)
             curr_board_position = next_board_space
             next_board_space = self.get_next_board_space(curr_position, curr_board_position)
             if self.hit_a_wall(curr_position):
-                return curr_position, curr_board_position, True 
-            if self.is_board_space_empty(next_board_space):
+                return curr_position, curr_board_position, True
+            if self.is_square_vacant(next_board_space):
                 break
-            curr_tile = self.tiles[next_board_space[0]][next_board_space[1]]
+            curr_tile = self.get_tile(next_board_space)
         return curr_position, curr_board_position, False
-
-
-        # return position, board position, hit_a_wall
 
     def hit_a_wall(self, position):
         return position[0] == 0 or position[1] == 0 or position[0] == 18 or position[1] == 18
-
-
 
     def get_next_board_space(self, position, board_position):
         '''
@@ -62,15 +63,15 @@ class Board:
             else:
                 return (board_position[0], board_position[1]+1)
 
-    def get_coordinates(self, board_space):
+    def get_coordinates(self, square):
         '''
         given a board position, returns all possible postions a player can be on starting from top-left and moving clockwise
         '''
-        return [(board_space[0]*3+1, board_space[1]*3+3), \
-        (board_space[0]*3+2, board_space[1]*3+3), \
-        (board_space[0]*3+3, board_space[1]*3+2), \
-        (board_space[0]*3+3, board_space[1]*3+1), \
-        (board_space[0]*3+2, board_space[1]*3), \
-        (board_space[0]*3+1, board_space[1]*3), \
-        (board_space[0]*3, board_space[1]*3+1), \
-        (board_space[0]*3, board_space[1]*3+2)]
+        return [(square[0]*3+1, square[1]*3+3), \
+        (square[0]*3+2, square[1]*3+3), \
+        (square[0]*3+3, square[1]*3+2), \
+        (square[0]*3+3, square[1]*3+1), \
+        (square[0]*3+2, square[1]*3), \
+        (square[0]*3+1, square[1]*3), \
+        (square[0]*3, square[1]*3+1), \
+        (square[0]*3, square[1]*3+2)]
