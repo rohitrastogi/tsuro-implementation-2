@@ -727,8 +727,8 @@ def test_LeastSymmetricPlayer_playTurn():
     assert tile_played.paths == [[0, 3], [1, 6], [2, 5], [4, 7]]
 
     # In the current position with there being an additional tile on the board,
-    # this player should play tile_3 after it has been rotated once
-    # tile_1 and tile_2 while less symmetric than tile_3, cause elimination
+    # this player should play tile_2 after it has been rotated once
+    # tile_1  while less symmetric than tile_2, cause elimination
     player_1.position = (2, 0)
     player_1.board_position = (0, -1)
     board.tiles[0][1] = Tile(4, [[0, 7], [1, 2], [3, 4], [5, 6]])
@@ -739,9 +739,8 @@ def test_LeastSymmetricPlayer_playTurn():
     hand = [tile_3, tile_1, tile_2]
     player_1.tiles_owned = hand
     tile_played = player_1.play_turn(board, hand, 33)
-    assert tile_played.paths == [[0, 2], [1, 5], [3, 4], [6, 7]]
-
-    assert tile_played == tile_3
+    assert tile_played == tile_2
+    assert tile_played.paths == [[0, 5], [1, 4], [2, 3], [6, 7]]
 
 def test_MostSymmetricPlayer_playTurn():
     player_1 = MostSymmetricPlayer('Julie')

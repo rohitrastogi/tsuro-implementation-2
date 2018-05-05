@@ -29,15 +29,15 @@ class Board:
         next_board_space = self.get_next_board_space(curr_position, curr_board_position)
         while True:  #functions as a do while
             coordinates = self.get_coordinates(next_board_space)
-            new_position = curr_tile.move_along_path(curr_position, coordinates)
-            new_board_position = next_board_space
-            next_board_space = self.get_next_board_space(new_position, new_board_position)
-            if self.hit_a_wall(new_position):
-                return new_position, new_board_position, True 
+            curr_position = curr_tile.move_along_path(curr_position, coordinates)
+            curr_board_position = next_board_space
+            next_board_space = self.get_next_board_space(curr_position, curr_board_position)
+            if self.hit_a_wall(curr_position):
+                return curr_position, curr_board_position, True 
             if self.is_board_space_empty(next_board_space):
                 break
             curr_tile = self.tiles[next_board_space[0]][next_board_space[1]]
-        return new_position, new_board_position, False
+        return curr_position, curr_board_position, False
 
 
         # return position, board position, hit_a_wall

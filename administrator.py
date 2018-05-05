@@ -10,7 +10,6 @@ def legal_play(player, board, curr_tile):
 			tile.rotate_tile()
 			if legal_play_helper(player, board, tile):
 				another_legal = True
-
 	if another_legal:
 		return legal_play_helper(player,board,curr_tile)
 	else:
