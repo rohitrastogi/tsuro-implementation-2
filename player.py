@@ -98,3 +98,15 @@ class Player(implements(IPlayer)):
 
     def end_game(self, board, colors):
         pass
+
+    def is_tile_owned(self, curr_tile):
+        for tile in self.tiles_owned:
+            if tile.identifier == curr_tile.identifier:
+                return True
+        return False
+
+    def update_position(self,new_position,new_board_position):
+        self.position = new_position
+        self.board_position = new_board_position
+        
+

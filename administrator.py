@@ -14,28 +14,14 @@ def legal_play(player, board, curr_tile):
 	if another_legal:
 		return legal_play_helper(player,board,curr_tile)
 	else:
-		for tile in player.tiles_owned:
-			if tile.identifier == curr_tile.identifier:
-				return True
-		return False
+		return player.is_tile_owned(curr_tile)
 
 def legal_play_helper(player, board, curr_tile):
-	new_board_position = get_next_board_position(player.position, player.board_position)
-	curr_position = player.position
-	while True:
-		coordinates = get_coordinates(new_board_position)
-		curr_position = curr_tile.move_along_path(curr_position, coordinates)
-		new_board_position = get_next_board_position(curr_position, new_board_position)
-		if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
-			return False
-		if board.tiles[new_board_position[0]][new_board_position[1]] == None:
-			break
-		curr_tile = board.tiles[new_board_position[0]][new_board_position[1]]
+	end_position, end_board_position, hit_a_wall = board.move_across_board(player, curr_tile)
+	if hit_a_wall:
+		return False
+	return player.is_tile_owned(curr_tile)
 
-	for tile in player.tiles_owned:
-		if tile.identifier == curr_tile.identifier:
-			return True
-	return False
 
 def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 	'''
@@ -63,8 +49,8 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 	players.append(curr_player)
 	curr_player_color = curr_player.color
 
-	original_board_position = get_next_board_position(curr_player.position, curr_player.board_position)
-	original_coordinates = get_coordinates(original_board_position)
+	original_board_position = board.get_next_board_space(curr_player.position, curr_player.board_position)
+	original_coordinates = board.get_coordinates(original_board_position)
 	original_players = copy.deepcopy(players)
 
 	board.tiles[original_board_position[0]][original_board_position[1]] = curr_tile
@@ -73,20 +59,10 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 	for player in players:
 		if not player.eliminated:
 			if player.position in original_coordinates:
-				new_board_position = original_board_position
-				curr_position = player.position
-				while True:
-					coordinates = get_coordinates(new_board_position)
-					curr_position = board.tiles[new_board_position[0]][new_board_position[1]].move_along_path(curr_position, coordinates)
-					player.position = curr_position
-					player.board_position = new_board_position
-					new_board_position = get_next_board_position(curr_position, new_board_position)
-
-					if curr_position[0] == 0 or curr_position[1] == 0 or curr_position[0] == 18 or curr_position[1] == 18:
-						player.eliminated = True
-						break
-					if board.tiles[new_board_position[0]][new_board_position[1]] == None:
-						break
+				end_position, end_board_position, hit_a_wall = board.move_across_board(player, curr_tile)
+				player.update_position(end_position, end_board_position)
+				if hit_a_wall:
+					player.eliminated = True
 
 	for i in range(len(players)):
 		if players[i].dragon_held and players[i].eliminated:
@@ -159,34 +135,9 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 
 	return draw_pile, players, eliminated, board, game_over
 
-def get_coordinates(board_position):
-	'''
-	given a board position, returns all possible postions a player can be on starting from top-left and moving clockwise
-	'''
-	return [(board_position[0]*3+1, board_position[1]*3+3), \
-	(board_position[0]*3+2, board_position[1]*3+3), \
-	(board_position[0]*3+3, board_position[1]*3+2), \
-	(board_position[0]*3+3, board_position[1]*3+1), \
-	(board_position[0]*3+2, board_position[1]*3), \
-	(board_position[0]*3+1, board_position[1]*3), \
-	(board_position[0]*3, board_position[1]*3+1), \
-	(board_position[0]*3, board_position[1]*3+2)]
 
-def get_next_board_position(position, board_position):
-	'''
-	given a player position and current board position, find board position that player will play next tile or move through
-	'''
 
-	if position[0]%3 == 0:
-		if position[0] == board_position[0]*3:
-			return (board_position[0]-1, board_position[1])
-		else:
-			return (board_position[0]+1, board_position[1])
-	else:
-		if position[1] == board_position[1]*3:
-			return (board_position[0], board_position[1]-1)
-		else:
-			return (board_position[0], board_position[1]+1)
+
 
 def create_draw_pile():
 	draw_pile = []

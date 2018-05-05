@@ -8,15 +8,17 @@ import administrator
 import pytest
 
 def test_getCoordinates():
-    assert administrator.get_coordinates((3,2)) == [(10,9),(11,9),(12,8),(12,7),(11,6),(10,6),(9,7),(9,8)]
-    assert administrator.get_coordinates((1,4)) == [(4,15),(5,15),(6,14),(6,13),(5,12),(4,12),(3,13),(3,14)]
+    board = Board()
+    assert board.get_coordinates((3,2)) == [(10,9),(11,9),(12,8),(12,7),(11,6),(10,6),(9,7),(9,8)]
+    assert board.get_coordinates((1,4)) == [(4,15),(5,15),(6,14),(6,13),(5,12),(4,12),(3,13),(3,14)]
 
 def test_getNextBoardPosition():
-    assert administrator.get_next_board_position((9,7), (3,2)) == (2,2)
-    assert administrator.get_next_board_position((1,0), (0,-1)) == (0,0)
-    assert administrator.get_next_board_position((18,4), (6,1)) == (5,1)
-    assert administrator.get_next_board_position((0,8), (-1,2)) == (0,2)
-    assert administrator.get_next_board_position((11,18), (3,6)) == (3,5)
+    board = Board()
+    assert board.get_next_board_space((9,7), (3,2)) == (2,2)
+    assert board.get_next_board_space((1,0), (0,-1)) == (0,0)
+    assert board.get_next_board_space((18,4), (6,1)) == (5,1)
+    assert board.get_next_board_space((0,8), (-1,2)) == (0,2)
+    assert board.get_next_board_space((11,18), (3,6)) == (3,5)
 
 def test_gameInitialization():
     player_1 = Player('Upasna', 'blue', (0, 1))
@@ -111,18 +113,20 @@ def test_rotateTile():
     assert tile_2.paths == [[0, 6], [1, 4], [2, 3], [5, 7]]
 
 def test_moveAlongPath():
+    board = Board()
+
     tile_1 = Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])
     tile_2 = Tile(3, [[0, 1], [2, 7], [3, 5], [4, 6]])
 
     board_position = (3,2)
     start = (9,8)
-    coordinates = administrator.get_coordinates(board_position)
+    coordinates = board.get_coordinates(board_position)
     end = tile_1.move_along_path(start, coordinates)
     assert end == (11,9)
 
     board_position = (2,4)
     start = (9,13)
-    coordinates = administrator.get_coordinates(board_position)
+    coordinates = board.get_coordinates(board_position)
     end = tile_2.move_along_path(start, coordinates)
     assert end == (7,12)
 
@@ -735,8 +739,9 @@ def test_LeastSymmetricPlayer_playTurn():
     hand = [tile_3, tile_1, tile_2]
     player_1.tiles_owned = hand
     tile_played = player_1.play_turn(board, hand, 33)
-    assert tile_played == tile_3
     assert tile_played.paths == [[0, 2], [1, 5], [3, 4], [6, 7]]
+
+    assert tile_played == tile_3
 
 def test_MostSymmetricPlayer_playTurn():
     player_1 = MostSymmetricPlayer('Julie')

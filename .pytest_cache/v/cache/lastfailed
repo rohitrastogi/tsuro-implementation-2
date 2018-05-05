@@ -1,1 +1,3 @@
-{}
+{
+  "test_suite.py::test_LeastSymmetricPlayer_playTurn": true
+}
