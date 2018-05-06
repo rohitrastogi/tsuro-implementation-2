@@ -1,5 +1,6 @@
 from interface import implements
 from IPlayer import IPlayer
+from gameConstants import Colors
 import random
 
 class Player(implements(IPlayer)):
@@ -55,6 +56,12 @@ class Player(implements(IPlayer)):
         return self.name
 
     def initialize(self, color, other_colors):
+        if color not in Colors.__members__:
+            print ("Not a valid color for a player!")
+        for color in other_colors:
+            if color not in Colors.__members__:
+                print ("Not a valid color for another player!")
+                
         self.color = color
         self.other_colors = other_colors
 
@@ -108,5 +115,3 @@ class Player(implements(IPlayer)):
     def update_position(self,new_position,new_board_position):
         self.position = new_position
         self.board_position = new_board_position
-        
-
