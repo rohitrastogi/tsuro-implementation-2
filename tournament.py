@@ -7,25 +7,12 @@ from mostSymmetricPlayer import MostSymmetricPlayer
 import administrator
 import random
 
-# 1. Initialize three players:
-#     random, least, and most
-# 2. Create a board
-# 3. Create the draw pile
-# 4. Place the pawns
-# 5. Start the game
-# 6. while game not over:
-#     eliminated
-#     players in order of turn
-#     play_turn
-#     rotate players
-#
-
 if __name__ == "__main__":
     least = 0
     most = 0
     r = 0
 
-    for i in range(50):
+    for i in range(100):
         player_1 = RandomPlayer('Navin')
         player_1.initialize('blue', ['red', 'green'])
         player_2 = LeastSymmetricPlayer('Brandon')

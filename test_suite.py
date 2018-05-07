@@ -653,14 +653,14 @@ def test_playTurn_17():
     draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile_1)
     assert board.tiles[0][0] == tile_1
     assert player_1.position == (2,3)
-    assert player_1.board_position == (0,0)
+    assert player_1.square == (0,0)
 
     player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]])]
     tile_2 = Tile(2, [[0, 7], [1, 2], [3, 4], [5, 6]])
     draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile_2)
     assert board.tiles[0][1] == tile_2
     assert player_1.position == (3,4)
-    assert player_1.board_position == (0,1)
+    assert player_1.square == (0,1)
 
 
 def test_RandomPlayer_initialize():
@@ -681,7 +681,7 @@ def test_RandomPlayer_playTurn():
     board.tiles[0][0] = Tile(0, [[0,6],[1,2],[3,4],[5,7]])
     player_1.place_pawn(board)
     player_1.position = (4, 0)
-    player_1.board_position = (1, -1)
+    player_1.square = (1, -1)
 
     # In this scenario, both these tiles cause elimination
     tile_1 = Tile(1, [[0, 1],[2,3], [4,5], [6,7]])
@@ -717,7 +717,7 @@ def test_LeastSymmetricPlayer_playTurn():
     # In the current position, this player should play tile_1 in the rotation it is given in
     # tile_1 is the least symmetric tile and will not eliminate the player
     player_1.position = (4, 0)
-    player_1.board_position = (1, -1)
+    player_1.square = (1, -1)
     tile_1 = Tile(1, [[0, 3], [1, 6], [2, 5], [4, 7]])
     tile_2 = Tile(2, [[0, 1], [2, 7], [3, 6], [4, 5]])
     tile_3 = Tile(3, [[0, 6], [1, 2], [3, 7], [4, 5]])
@@ -732,7 +732,7 @@ def test_LeastSymmetricPlayer_playTurn():
     # this player should play tile_2 after it has been rotated once
     # tile_1  while less symmetric than tile_2, cause elimination
     player_1.position = (2, 0)
-    player_1.board_position = (0, -1)
+    player_1.square = (0, -1)
     board.tiles[0][1] = Tile(4, [[0, 7], [1, 2], [3, 4], [5, 6]])
     tile_1 = Tile(1, [[0, 3], [1, 6], [2, 5], [4, 7]])
     tile_2 = Tile(2, [[0, 1], [2, 7], [3, 6], [4, 5]])
@@ -752,7 +752,7 @@ def test_MostSymmetricPlayer_playTurn():
     # In the current position, this player should play tile_3 after rotating it once
     # tile_3 is the most symmetric tile
     player_1.position = (4, 0)
-    player_1.board_position = (1, -1)
+    player_1.square = (1, -1)
     tile_1 = Tile(1, [[0, 3], [1, 6], [2, 5], [4, 7]])
     tile_2 = Tile(2, [[0, 1], [2, 7], [3, 6], [4, 5]])
     tile_3 = Tile(3, [[0, 6], [1, 2], [3, 7], [4, 5]])
@@ -767,7 +767,7 @@ def test_MostSymmetricPlayer_playTurn():
     # this player should play tile_1 in the orientation it is given in
     # tile_3 and tile_2 while more symmetric than tile_1, cause elimination and cannot be played
     player_1.position = (1, 0)
-    player_1.board_position = (0, -1)
+    player_1.square = (0, -1)
     board.tiles[0][1] = Tile(4, [[0, 3], [1, 2], [4, 7], [5, 6]])
     tile_1 = Tile(1, [[0, 3], [1, 6], [2, 5], [4, 7]])
     tile_2 = Tile(2, [[0, 1], [2, 7], [3, 6], [4, 5]])

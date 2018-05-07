@@ -14,7 +14,7 @@ class Player(implements(IPlayer)):
         self.tiles_owned = []
         self.eliminated = False
         self.other_colors = []
-        self.board_position = None
+        self.square = None
         self.initialized = False
         self.placed_pawn = False
         self.played_turn = False
@@ -28,13 +28,13 @@ class Player(implements(IPlayer)):
                     raise Exception( 'This is not a valid starting position.')
 
             if self.position[0] == 0:
-                self.board_position = (-1, self.position[1]//3)
+                self.square = (-1, self.position[1]//3)
             elif self.position[0] == 18:
-                self.board_position = (6, self.position[1]//3)
+                self.square = (6, self.position[1]//3)
             elif self.position[1] == 0:
-                self.board_position = (self.position[0]//3, -1)
+                self.square = (self.position[0]//3, -1)
             elif self.position[1] == 18:
-                self.board_position = (self.position[0]//3, 6)
+                self.square = (self.position[0]//3, 6)
             else:
                 raise Exception( 'This is not a valid starting position.')
 
@@ -105,13 +105,13 @@ class Player(implements(IPlayer)):
         self.position = (x,y)
 
         if self.position[0] == 0:
-            self.board_position = (-1, self.position[1]//3)
+            self.square = (-1, self.position[1]//3)
         elif self.position[0] == 18:
-            self.board_position = (6, self.position[1]//3)
+            self.square = (6, self.position[1]//3)
         elif self.position[1] == 0:
-            self.board_position = (self.position[0]//3, -1)
+            self.square = (self.position[0]//3, -1)
         elif self.position[1] == 18:
-            self.board_position = (self.position[0]//3, 6)
+            self.square = (self.position[0]//3, 6)
 
         self.placed_pawn = True
 
@@ -132,9 +132,9 @@ class Player(implements(IPlayer)):
                 return True
         return False
 
-    def update_position(self, new_position, new_board_position):
+    def update_position(self, new_position, new_square):
         self.position = new_position
-        self.board_position = new_board_position
+        self.square = new_square
 
     def validate_hand(self, board):
         """

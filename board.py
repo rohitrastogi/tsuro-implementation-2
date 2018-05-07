@@ -31,7 +31,7 @@ class Board:
         Returns a player position coordinates, board coordinates, and hit_a_wall?
         """
         curr_position = player.position
-        curr_board_position = player.board_position
+        curr_board_position = player.square
         next_board_space = self.get_next_board_space(curr_position, curr_board_position)
         while True:
             coordinates = self.get_coordinates(next_board_space)
