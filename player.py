@@ -15,6 +15,10 @@ class Player(implements(IPlayer)):
         self.eliminated = False
         self.other_colors = []
         self.board_position = None
+        self.initialized = False
+        self.placed_pawn = False
+        self.played_turn = False
+        self.game_ended = True
         # following statments check to make sure that position selected is valid
         if self.position:
             if (self.position[0] + self.position[1]) % 3 == 0:
@@ -56,6 +60,10 @@ class Player(implements(IPlayer)):
         return self.name
 
     def initialize(self, color, other_colors):
+        if self.initialized:
+            raise RuntimeError("This player has already been initialized!")
+        if not self.game_ended:
+            raise RuntimeError("Do not reinitialize player without finishing the game!")
         if color not in Colors.__members__:
             raise ValueError("Not a valid color for a player!")
         for c in other_colors:
@@ -64,11 +72,17 @@ class Player(implements(IPlayer)):
 
         self.color = color
         self.other_colors = other_colors
+        self.game_ended = False
+        self.initialized = True
 
     def place_pawn(self, board):
         """
         For now it is randomly going to pick a location not picked by another player
         """
+        if not self.initialized:
+            raise RuntimeError("Player must be initialized first!")
+        if self.placed_pawn:
+            raise RuntimeError("The pawn has already been placed!")
 
         collision = True
         while collision:
@@ -99,11 +113,17 @@ class Player(implements(IPlayer)):
         elif self.position[1] == 18:
             self.board_position = (self.position[0]//3, 6)
 
+        self.placed_pawn = True
+
 
     def play_turn(self, board, tiles, remaining_in_pile):
         pass
 
     def end_game(self, board, colors):
+        self.game_ended = True
+        self.initialized = False
+        self.placed_pawn = False
+        self.played_turn = False
         pass
 
     def is_tile_owned(self, curr_tile):

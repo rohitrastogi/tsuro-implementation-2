@@ -43,6 +43,7 @@ def test_initialize():
 
 def test_placePawn():
     player_1 = Player()
+    player_1.initialize('blue', ['green', 'darkgreen'])
     board = Board([player_1])
     assert player_1.position == None
 
@@ -678,7 +679,7 @@ def test_RandomPlayer_playTurn():
     player_1.initialize('blue', ['green', 'red'])
     board = Board([player_1])
     board.tiles[0][0] = Tile(0, [[0,6],[1,2],[3,4],[5,7]])
-
+    player_1.place_pawn(board)
     player_1.position = (4, 0)
     player_1.board_position = (1, -1)
 
@@ -711,6 +712,7 @@ def test_LeastSymmetricPlayer_playTurn():
     player_1 = LeastSymmetricPlayer('Julie')
     player_1.initialize('blue', ['green', 'red'])
     board = Board([player_1])
+    player_1.place_pawn(board)
 
     # In the current position, this player should play tile_1 in the rotation it is given in
     # tile_1 is the least symmetric tile and will not eliminate the player
@@ -746,7 +748,7 @@ def test_MostSymmetricPlayer_playTurn():
     player_1 = MostSymmetricPlayer('Julie')
     player_1.initialize('blue', ['green', 'red'])
     board = Board([player_1])
-
+    player_1.place_pawn(board)
     # In the current position, this player should play tile_3 after rotating it once
     # tile_3 is the most symmetric tile
     player_1.position = (4, 0)

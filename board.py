@@ -7,7 +7,7 @@ class Board:
         self.eliminated = []
         self.num_tiles = 0
         self.tiles = []
-        # creates board tile spaces
+
         for i in range(6):
             temp = []
             for j in range(6):
@@ -27,9 +27,9 @@ class Board:
         return self.tiles[square[0]][square[1]]
 
     def move_across_board(self, player, curr_tile):
-        '''
+        """
         Returns a player position coordinates, board coordinates, and hit_a_wall?
-        '''
+        """
         curr_position = player.position
         curr_board_position = player.board_position
         next_board_space = self.get_next_board_space(curr_position, curr_board_position)
@@ -67,9 +67,9 @@ class Board:
 
 
     def get_next_board_space(self, position, board_position):
-        '''
+        """
         given a player position and current board position, find board position that player will play next tile or move through
-        '''
+        """
         if position[0]%3 == 0:
             if position[0] == board_position[0]*3:
                 return (board_position[0]-1, board_position[1])
@@ -82,9 +82,9 @@ class Board:
                 return (board_position[0], board_position[1]+1)
 
     def get_coordinates(self, square):
-        '''
+        """
         given a board position, returns all possible postions a player can be on starting from top-left and moving clockwise
-        '''
+        """
         return [(square[0]*3+1, square[1]*3+3), \
         (square[0]*3+2, square[1]*3+3), \
         (square[0]*3+3, square[1]*3+2), \

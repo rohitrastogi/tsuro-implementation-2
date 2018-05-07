@@ -13,6 +13,8 @@ class RandomPlayer(Player):
         """
         Random: This player picks randomly from all of the legal moves.
         """
+        if not self.placed_pawn:
+            raise RuntimeError("The pawn must be placed before the player can play a turn!")
 
         self.tiles_owned = tiles
         self.validate_hand(board)
@@ -26,4 +28,6 @@ class RandomPlayer(Player):
         index = random.randint(0,len(self.tiles_owned)-1)
         tile = self.tiles_owned[index]
         del self.tiles_owned[index]
+
+        self.played_turn = True
         return tile

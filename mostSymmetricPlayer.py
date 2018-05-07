@@ -14,6 +14,8 @@ class MostSymmetricPlayer(Player):
         MostSymmetric: This player sorts the possible moves by how symmetric each tile is (from most symmetric to least symmetric)
         and picks the first legal one.
         """
+        if not self.placed_pawn:
+            raise RuntimeError("The pawn must be placed before the player can play a turn!")
 
         self.tiles_owned = tiles
         self.validate_hand(board)
@@ -27,4 +29,6 @@ class MostSymmetricPlayer(Player):
 
         tile = self.tiles_owned[0]
         del self.tiles_owned[0]
+
+        self.played_turn = True
         return tile
