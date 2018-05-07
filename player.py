@@ -57,11 +57,11 @@ class Player(implements(IPlayer)):
 
     def initialize(self, color, other_colors):
         if color not in Colors.__members__:
-            print ("Not a valid color for a player!")
-        for color in other_colors:
-            if color not in Colors.__members__:
-                print ("Not a valid color for another player!")
-                
+            raise ValueError("Not a valid color for a player!")
+        for c in other_colors:
+            if c not in Colors.__members__:
+                raise ValueError("Not a valid color for another player!")
+
         self.color = color
         self.other_colors = other_colors
 
@@ -112,6 +112,19 @@ class Player(implements(IPlayer)):
                 return True
         return False
 
-    def update_position(self,new_position,new_board_position):
+    def update_position(self, new_position, new_board_position):
         self.position = new_position
         self.board_position = new_board_position
+
+    def validate_hand(self, board):
+        """
+        Checks to make sure the hand is valid.
+        A valid hand does not have more than 3 tiles, has tiles that are unique from each other,
+        and none of the tiles are already on the board.
+        """
+
+        if len(self.tiles_owned) > 3:
+            raise RuntimeError("A player cannot have more than 3 tiles in their hand.")
+
+        if board.check_if_tiles_on_board(self.tiles_owned):
+            raise RuntimeError("This player has a tile that is already on the board.")

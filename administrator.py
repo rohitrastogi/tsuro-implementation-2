@@ -21,25 +21,15 @@ def legal_play_helper(player, board, curr_tile):
 		return False
 	return player.is_tile_owned(curr_tile)
 
-
 def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
-	'''
-	The function consumes five arguments and returns five results.
-	The first argument is the list of tiles on the draw pile.
-	The second argument is the list of players still in the game in the order of play and the third argument is the list of eliminated players in no particular order.
-	The fourth argument is the board before the turn and the last argument is the tile to be placed on that board.
-	Note that the tile to be placed on the board should have been removed from the list of tiles of the active player before calling the function.
-	For example, before the first call of play-a-turn in a game, the first player in the second argument of the call (the players still in the game) should have 2 tiles,
-	while all of the other players in that list should have 3 tiles.
-	The first result of play-a-turn is the draw pile after the turn.
-	The second result is the list of players that are still in the game after the turn, in order of play for the next turn.
-	For example, if no players gets eliminated in a turn, this result list is the one you get by taking the second input
-	(the list of players that are still in the game) and moving the first player to the end of the list.
-	The third result is the list of players that are eliminated after the turn in no particular order (including those that were already eliminated before the turn).
-	The fourth result is the board after the turn and the last result is false when the game is not over or the list of players that, if the game is over.
-	'''
+	"""
+	plays the turn for the first player in the list of players and curr_tile is the tile to be played
+	"""
 	# TODO modify board fields for alive and eliminated
 
+	# TODO: if such a thing happens then you must boot the player and replace with random player
+	# if not legal_play(players[0], board, curr_tile):
+	# 	raise RuntimeError("This player is insisting on playing an incorrect tile.")
 	# Remove later once whole game is implemented
 	for p in eliminated:
 		p.eliminated = True
@@ -56,6 +46,7 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 	# board.tiles[original_board_position[0]][original_board_position[1]] = curr_tile
 	board.num_tiles += 1
 
+	# print ("Line 49")
 	for player in players:
 		if not player.eliminated:
 			if player.position in original_coordinates:
@@ -63,7 +54,7 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 				player.update_position(end_position, end_board_position)
 				if hit_a_wall:
 					player.eliminated = True
-
+	# print ("Line 57")
 	for i in range(len(players)):
 		if players[i].dragon_held and players[i].eliminated:
 			j = (i+1)%len(players)
@@ -75,10 +66,10 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 						break
 					else:
 						j = (j+1)%len(players)
-						count += 1
+				count += 1
 			players[i].dragon_held = False
 			break
-
+	# print ("Line 72")
 	for i in range(len(players)):
 		if players[i].eliminated:
 			eliminated.append(player)
@@ -87,23 +78,14 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 
 	players = [x for x in players if not x.eliminated]
 
-	# comment
-	# For drawing there are two cases:
-	# 	1. the dragon tile is already held:
-	# 		in this case, we find this player and if there are cards in the draw pile we give it to the
-	# 		players going clockwise and once we run out of cards, if the player who is supposed to draw has less
-	# 		than three cards, this player gets the dragon tile
-	# 	2. the dragon tile is not already held:
-	# 		give the current player a card unless the current player has been eliminated. if there is no card to give,
-	# 		give this player the dragon tile
-	# comment
-
 	dragon_already_held = False
+	# print ("Line 82")
 	for i in range(len(players)):
 		if players[i].dragon_held:
 			dragon_already_held = True
 			break
 
+	# print ("Line 88")
 	while draw_pile and dragon_already_held:
 		players[i].draw_tile(draw_pile)
 		players[i].dragon_held = False
@@ -114,6 +96,7 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 
 		i = (i+1)%len(players)
 
+	# print ("Line 99")
 	if not dragon_already_held:
 		for j in range(len(players)):
 			if players[j].color == curr_player_color:
@@ -123,6 +106,7 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 					else:
 						players[j].draw_tile(draw_pile)
 
+	# print ("Line 109")
 	#  Game over scenarios!
 	if len(players) == 1:
 		game_over = players[0]
@@ -134,10 +118,6 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 		game_over = False
 
 	return draw_pile, players, eliminated, board, game_over
-
-
-
-
 
 def create_draw_pile():
 	draw_pile = []

@@ -16,11 +16,15 @@ class MostSymmetricPlayer(Player):
         """
 
         self.tiles_owned = tiles
+        self.validate_hand(board)
         self.tiles_owned.sort(key=lambda x: x.symmetry(), reverse=True)
-        for tile in self.tiles_owned:
+        for idx, tile in enumerate(self.tiles_owned):
             for i in range(4):
                 if administrator.legal_play(self, board, tile):
+                    del self.tiles_owned[idx]
                     return tile
                 tile.rotate_tile()
 
-        return self.tiles_owned[0]
+        tile = self.tiles_owned[0]
+        del self.tiles_owned[0]
+        return tile

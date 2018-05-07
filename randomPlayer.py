@@ -15,10 +15,15 @@ class RandomPlayer(Player):
         """
 
         self.tiles_owned = tiles
-        for tile in self.tiles_owned:
+        self.validate_hand(board)
+        for idx, tile in enumerate(self.tiles_owned):
             for i in range(4):
                 if administrator.legal_play(self, board, tile):
+                    del self.tiles_owned[idx]
                     return tile
                 tile.rotate_tile()
 
-        return random.choice(self.tiles_owned)
+        index = random.randint(0,len(self.tiles_owned)-1)
+        tile = self.tiles_owned[index]
+        del self.tiles_owned[index]
+        return tile

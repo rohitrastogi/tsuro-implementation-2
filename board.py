@@ -48,6 +48,24 @@ class Board:
     def hit_a_wall(self, position):
         return position[0] == 0 or position[1] == 0 or position[0] == 18 or position[1] == 18
 
+    def check_if_tiles_on_board(self, hand):
+        """
+        checks if any of the tiles in the hand are already on the board
+        """
+
+        tile_identifiers = []
+        for tile in hand:
+            tile_identifiers.append(tile.identifier)
+
+        for i in range(6):
+            for j in range(6):
+                if self.tiles[i][j]:
+                    if self.tiles[i][j].identifier in tile_identifiers:
+                        return True
+
+        return False
+
+
     def get_next_board_space(self, position, board_position):
         '''
         given a player position and current board position, find board position that player will play next tile or move through
