@@ -12,12 +12,13 @@ if __name__ == "__main__":
     most = 0
     r = 0
 
-    for i in range(100):
-        player_1 = RandomPlayer('Navin')
+    # for i in range(1):
+    while True:
+        player_1 = RandomPlayer('Upasna')
         player_1.initialize('blue', ['red', 'green'])
-        player_2 = LeastSymmetricPlayer('Brandon')
+        player_2 = LeastSymmetricPlayer('Amulya')
         player_2.initialize('red', ['green', 'blue'])
-        player_3 = MostSymmetricPlayer('Samir')
+        player_3 = MostSymmetricPlayer('Obama')
         player_3.initialize('green', ['blue', 'red'])
 
         board = Board([player_1, player_2, player_3])
@@ -42,7 +43,8 @@ if __name__ == "__main__":
             # print ("Before a turn is played.")
             # print ("------------------------------------------------------")
             current_tile = players[0].play_turn(board, players[0].tiles_owned, len(draw_pile))
-            # print ("Current tile: ", current_tile.identifier)
+            # print ("Current player: ", players[0].name)
+            # print ("Current tile paths: ", current_tile.paths)
             # print ("Number of tiles on the board: ", board.num_tiles)
             # print ("Player's location: ", players[0].position)
             draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, players, eliminated, board, current_tile)
@@ -62,13 +64,14 @@ if __name__ == "__main__":
             # print ("")
 
         if isinstance(game_over, Player):
-            if game_over.name == 'Navin':
+            if game_over.name == 'Upasna':
                 r += 1
-            if game_over.name == 'Brandon':
+            if game_over.name == 'Amulya':
                 least += 1
-            if game_over.name == 'Samir':
+            if game_over.name == 'Obama':
                 most += 1
         print ("Who won?: ", game_over)
+        
     print ("Least: ", least)
     print ("Most: ", most)
     print ("Random: ", r)
