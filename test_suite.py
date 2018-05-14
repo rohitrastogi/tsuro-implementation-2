@@ -14,11 +14,11 @@ def test_getCoordinates():
 
 def test_getNextBoardPosition():
     board = Board()
-    assert board.get_next_board_space((9,7), (3,2)) == (2,2)
-    assert board.get_next_board_space((1,0), (0,-1)) == (0,0)
-    assert board.get_next_board_space((18,4), (6,1)) == (5,1)
-    assert board.get_next_board_space((0,8), (-1,2)) == (0,2)
-    assert board.get_next_board_space((11,18), (3,6)) == (3,5)
+    assert board.get_next_board_square((9,7), (3,2)) == (2,2)
+    assert board.get_next_board_square((1,0), (0,-1)) == (0,0)
+    assert board.get_next_board_square((18,4), (6,1)) == (5,1)
+    assert board.get_next_board_square((0,8), (-1,2)) == (0,2)
+    assert board.get_next_board_square((11,18), (3,6)) == (3,5)
 
 def test_gameInitialization():
     player_1 = Player('Upasna', 'blue', (0, 1))

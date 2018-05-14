@@ -83,7 +83,7 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 	players.append(curr_player)
 	curr_player_color = curr_player.color
 
-	original_square = board.get_next_board_space(curr_player.position, curr_player.square)
+	original_square = board.get_next_board_square(curr_player.position, curr_player.square)
 	original_coordinates = board.get_coordinates(original_square)
 	original_players = copy.deepcopy(players)
 
