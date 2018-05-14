@@ -3,8 +3,6 @@ class Board:
 
     def __init__(self, players = []):
         self.all_players = players
-        self.alive = []
-        self.eliminated = []
         self.num_tiles = 0
         self.tiles = []
 
@@ -22,6 +20,7 @@ class Board:
 
     def place_tile(self, square, tile):
         self.tiles[square[0]][square[1]] = tile
+        self.num_tiles += 1
 
     def get_tile(self, square):
         return self.tiles[square[0]][square[1]]
@@ -65,6 +64,14 @@ class Board:
 
         return False
 
+    def move_players(self, players, square_coordinates, curr_tile):
+        for player in players:
+            if not player.eliminated:
+                if player.position in square_coordinates:
+                    end_position, end_board_position, hit_a_wall = self.move_across_board(player, curr_tile)
+                    player.update_position(end_position, end_board_position)
+                    if hit_a_wall:
+                        player.eliminated = True
 
     def get_next_board_space(self, position, board_position):
         """
