@@ -213,7 +213,8 @@ def players_draw_tiles(players, draw_pile, curr_player_color):
 					if len(draw_pile) == 0:
 						players[j].dragon_held = True
 					else:
-						players[j].draw_tile(draw_pile)
+						if len(players[j].tiles_owned) < 3:
+							players[j].draw_tile(draw_pile)
 
 def create_draw_pile():
 	"""
