@@ -196,6 +196,15 @@ def players_draw_tiles(players, draw_pile, curr_player_color):
 			dragon_already_held = True
 			break
 
+	if not dragon_already_held:
+		for j in range(len(players)):
+			if players[j].color == curr_player_color:
+				if not players[j].eliminated:
+					if len(draw_pile) == 0:
+						players[j].dragon_held = True
+					else:
+						players[j].draw_tile(draw_pile)
+
 	while draw_pile and dragon_already_held:
 		players[i].draw_tile(draw_pile)
 		players[i].dragon_held = False
@@ -205,15 +214,6 @@ def players_draw_tiles(players, draw_pile, curr_player_color):
 			dragon_already_held = False
 
 		i = (i+1)%len(players)
-
-	if not dragon_already_held:
-		for j in range(len(players)):
-			if players[j].color == curr_player_color:
-				if not players[j].eliminated:
-					if len(draw_pile) == 0:
-						players[j].dragon_held = True
-					else:
-						players[j].draw_tile(draw_pile)
 
 def create_draw_pile():
 	"""
