@@ -1,0 +1,14 @@
+TODO
+* separate tests to another folder
+* add python typing
+* add position class (give it a square)
+* add tile contracts
+* add bools parameters for randomness (include shuffling)
+* define equality operator for tests (state of the board before and after, etc.)
+* define dragon tile bug exceptions (current player has no tiles, etc.)
+* way to construct a game from a failed tester (when a game fails, output the whole game_play (write to a log??))
+* function to convert player (position) to square (avoid passing around the square)
+* create a square class
+* abstraction for the three players
+* add the board constants about size and stuff to gameConstants (no more magic numbers)
+* whether movePlayers should be a board function or an admin function

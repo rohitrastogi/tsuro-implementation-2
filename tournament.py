@@ -71,7 +71,7 @@ if __name__ == "__main__":
             if game_over.name == 'Obama':
                 most += 1
         print ("Who won?: ", game_over)
-        
+
     print ("Least: ", least)
     print ("Most: ", most)
     print ("Random: ", r)
