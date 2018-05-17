@@ -12,3 +12,4 @@ TODO
 * abstraction for the three players
 * add the board constants about size and stuff to gameConstants (no more magic numbers)
 * whether movePlayers should be a board function or an admin function
+* end_game doesn't do anything right now
