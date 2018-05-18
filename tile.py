@@ -1,3 +1,4 @@
+from position import Position
 from copy import deepcopy
 
 class Tile:
@@ -7,7 +8,8 @@ class Tile:
 		self.identifier = identifier
 		self.paths = paths
 
-	def move_along_path(self, start, coordinates):
+	def move_along_path(self, start_position, square, coordinates):
+		start = start_position.get_player_coordinates()
 		for i, coor in enumerate(coordinates):
 			if coor == start:
 				start_path = i
@@ -17,7 +19,7 @@ class Tile:
 			if path[1] == start_path:
 				end_path = path[0]
 
-		return coordinates[end_path]
+		return Position(coordinates[end_path][0], coordinates[end_path][1], square)
 
 	def rotate_tile(self):
 		for path in self.paths:

@@ -1,7 +1,8 @@
 from interface import implements
+from position import Position
 from IPlayer import IPlayer
-from gameConstants import Colors
 import random
+import gameConstants as constants
 
 class Player(implements(IPlayer)):
     """ data structure that contains player metadata """
@@ -14,30 +15,14 @@ class Player(implements(IPlayer)):
         self.tiles_owned = []
         self.eliminated = False
         self.other_colors = []
-        self.square = None
+
         self.initialized = False
         self.placed_pawn = False
         self.played_turn = False
         self.game_ended = True
-        # following statments check to make sure that position selected is valid
-        if self.position:
-            if (self.position[0] + self.position[1]) % 3 == 0:
-                    raise Exception( 'This is not a valid starting position.')
 
-            if self.position[0] < 0 or self.position[0] > 18 or self.position[1] < 0 or self.position[1] > 18:
-                    raise Exception( 'This is not a valid starting position.')
-
-            if self.position[0] == 0:
-                self.square = (-1, self.position[1]//3)
-            elif self.position[0] == 18:
-                self.square = (6, self.position[1]//3)
-            elif self.position[1] == 0:
-                self.square = (self.position[0]//3, -1)
-            elif self.position[1] == 18:
-                self.square = (self.position[0]//3, 6)
-            else:
-                raise Exception( 'This is not a valid starting position.')
-
+    def get_coordinates(self):
+        return self.position.get_player_coordinates()
 
     def lose_tiles(self, pile_of_tiles):
         for tile in self.tiles_owned:
@@ -53,7 +38,7 @@ class Player(implements(IPlayer)):
                     del self.tiles_owned[i]
 
     def initialize_hand(self, pile_of_tiles):
-        for i in range(3):
+        for i in range(constants.HAND_SIZE):
             self.draw_tile(pile_of_tiles)
 
     def get_name(self):
@@ -64,10 +49,10 @@ class Player(implements(IPlayer)):
             raise RuntimeError("This player has already been initialized!")
         if not self.game_ended:
             raise RuntimeError("Do not reinitialize player without finishing the game!")
-        if color not in Colors.__members__:
+        if color not in constants.Colors.__members__:
             raise ValueError("Not a valid color for a player!")
         for c in other_colors:
-            if c not in Colors.__members__:
+            if c not in constants.Colors.__members__:
                 raise ValueError("Not a valid color for another player!")
 
         self.color = color
@@ -89,32 +74,20 @@ class Player(implements(IPlayer)):
             collision = False
             edge = random.choice(['x','y'])
             if edge == 'x':
-                x = random.choice([0, 18])
-                y = random.choice([i for i in range(19) if i%3!=0])
+                x = random.choice([constants.START_WALL, constants.END_WALL])
+                y = random.choice([i for i in range(constants.END_WALL + 1) if i%3!=0])
             else:
-                y = random.choice([0, 18])
-                x = random.choice([i for i in range(19) if i%3!=0])
+                y = random.choice([constants.START_WALL, constants.END_WALL])
+                x = random.choice([i for i in range(constants.END_WALL + 1) if i%3!=0])
 
             for a_player in board.all_players:
                 if a_player.color in self.other_colors:
-                    if (x,y) == a_player.position:
-                        collision = True
-                    else:
-                        continue
+                    if a_player.position:
+                        if (x,y) == a_player.get_coordinates():
+                            collision = True
 
-        self.position = (x,y)
-
-        if self.position[0] == 0:
-            self.square = (-1, self.position[1]//3)
-        elif self.position[0] == 18:
-            self.square = (6, self.position[1]//3)
-        elif self.position[1] == 0:
-            self.square = (self.position[0]//3, -1)
-        elif self.position[1] == 18:
-            self.square = (self.position[0]//3, 6)
-
+        self.position = Position(x, y)
         self.placed_pawn = True
-
 
     def play_turn(self, board, tiles, remaining_in_pile):
         pass
@@ -132,9 +105,8 @@ class Player(implements(IPlayer)):
                 return True
         return False
 
-    def update_position(self, new_position, new_square):
-        self.position = new_position
-        self.square = new_square
+    def update_position(self, new_position):
+        self.position.update_position(new_position)
 
     def validate_hand(self, board):
         """
@@ -143,7 +115,7 @@ class Player(implements(IPlayer)):
         and none of the tiles are already on the board.
         """
 
-        if len(self.tiles_owned) > 3:
+        if len(self.tiles_owned) > constants.HAND_SIZE:
             raise RuntimeError("A player cannot have more than 3 tiles in their hand.")
 
         if board.check_if_tiles_on_board(self.tiles_owned):

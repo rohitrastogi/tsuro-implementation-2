@@ -2,6 +2,7 @@ from player import Player
 from board import Board
 from tile import Tile
 import copy
+import gameConstants as constants
 
 def legal_play(player, board, tile):
 	"""
@@ -45,7 +46,7 @@ def legal_play_helper(player, board, tile):
 	"""
 
 	# Player position is returned by the move_across_board function, but is not updated.
-	player_final_position, player_final_square, hit_a_wall = board.move_across_board(player, tile)
+	player_final_position, hit_a_wall = board.move_across_board(player, tile)
 
 	# If player hits a wall, this tile causes elimination and is therefore, not legal.
 	if hit_a_wall:
@@ -83,12 +84,12 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 	players.append(curr_player)
 	curr_player_color = curr_player.color
 
-	original_square = board.get_next_board_square(curr_player.position, curr_player.square)
-	original_coordinates = board.get_coordinates(original_square)
+	original_square = curr_player.position.get_next_board_square()
+	original_square_coordinates = original_square.get_coordinates()
 	original_players = copy.deepcopy(players)
 
 	board.place_tile(original_square, curr_tile)
-	board.move_players(players, original_coordinates, curr_tile)
+	board.move_players(players, original_square_coordinates, curr_tile)
 	eliminated_player_pass_dragon_tile(players)
 	players = eliminated_players_cleanup(players, eliminated, draw_pile)
 	players_draw_tiles(players, draw_pile, curr_player_color)
@@ -116,7 +117,7 @@ def check_game_state(players, original_players, board):
 		game_over = players[0]
 	elif not players:
 		game_over = original_players
-	elif board.num_tiles == 35:
+	elif board.num_tiles == constants.NUMBER_OF_TILES:
 		game_over = players
 	else:
 		game_over = False

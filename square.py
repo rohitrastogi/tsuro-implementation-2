@@ -6,5 +6,19 @@ class Square:
         self.x = x
         self.y = y
 
-        if x < 0 or x > constant.BOARD_DIMENSION - 1 or y < 0 or y > constant.BOARD_DIMENSION - 1:
+        if x < -1 or x > constants.BOARD_DIMENSION or y < -1 or y > constants.BOARD_DIMENSION:
             raise RuntimeError("This square does not have the right coordinates for this board!")
+
+    def get_coordinates(self):
+        """
+        Given a square on the board, returns all coordinates of the square starting from the
+        left corner of the top edge, going clockwise
+        """
+        return [(self.x*3+1, self.y*3+3), \
+        (self.x*3+2, self.y*3+3), \
+        (self.x*3+3, self.y*3+2), \
+        (self.x*3+3, self.y*3+1), \
+        (self.x*3+2, self.y*3), \
+        (self.x*3+1, self.y*3), \
+        (self.x*3, self.y*3+1), \
+        (self.x*3, self.y*3+2)]

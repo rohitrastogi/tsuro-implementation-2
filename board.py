@@ -18,14 +18,14 @@ class Board:
         self.all_players.append(player)
 
     def is_square_vacant(self, square):
-        return self.tiles[square[0]][square[1]] == None
+        return self.tiles[square.x][square.y] == None
 
     def place_tile(self, square, tile):
-        self.tiles[square[0]][square[1]] = tile
+        self.tiles[square.x][square.y] = tile
         self.num_tiles += 1
 
     def get_tile(self, square):
-        return self.tiles[square[0]][square[1]]
+        return self.tiles[square.x][square.y]
 
     def move_across_board(self, player, curr_tile):
         """
@@ -33,25 +33,17 @@ class Board:
         Returns a player position coordinates, board coordinates, and hit_a_wall?
         """
         curr_position = player.position
-        curr_board_position = player.square
-        next_board_space = self.get_next_board_square(curr_position, curr_board_position)
+        next_board_space = player.position.get_next_board_square()
         while True:
-            coordinates = self.get_coordinates(next_board_space)
-            curr_position = curr_tile.move_along_path(curr_position, coordinates)
-            curr_board_position = next_board_space
-            next_board_space = self.get_next_board_square(curr_position, curr_board_position)
-            if self.hit_a_wall(curr_position):
-                return curr_position, curr_board_position, True
+            coordinates = next_board_space.get_coordinates()
+            curr_position = curr_tile.move_along_path(curr_position, next_board_space, coordinates)
+            next_board_space = curr_position.get_next_board_square()
+            if curr_position.hit_a_wall():
+                return curr_position, True
             if self.is_square_vacant(next_board_space):
                 break
             curr_tile = self.get_tile(next_board_space)
-        return curr_position, curr_board_position, False
-
-    def hit_a_wall(self, position):
-        """
-        Returns boolean. True, if the player has hit a wall. False, otherwise.
-        """
-        return position[0] == constants.START_WALL or position[1] == constants.START_WALL or position[0] == constants.END_WALL or position[1] == constants.END_WALL
+        return curr_position, False
 
     def check_if_tiles_on_board(self, hand):
         """
@@ -81,37 +73,8 @@ class Board:
         """
         for player in players:
             if not player.eliminated:
-                if player.position in square_coordinates:
-                    end_position, end_board_position, hit_a_wall = self.move_across_board(player, curr_tile)
-                    player.update_position(end_position, end_board_position)
+                if player.get_coordinates() in square_coordinates:
+                    end_position, hit_a_wall = self.move_across_board(player, curr_tile)
+                    player.update_position(end_position)
                     if hit_a_wall:
                         player.eliminated = True
-
-    def get_next_board_square(self, position, square):
-        """
-        Given a player's position and the square they are currently on returns the square they will next place the tile on.
-        """
-        if position[0]%3 == 0:
-            if position[0] == square[0]*3:
-                return (square[0]-1, square[1])
-            else:
-                return (square[0]+1, square[1])
-        else:
-            if position[1] == square[1]*3:
-                return (square[0], square[1]-1)
-            else:
-                return (square[0], square[1]+1)
-
-    def get_coordinates(self, square):
-        """
-        Given a square on the board, returns all coordinates of the square starting from the
-        left corner of the top edge, going clockwise
-        """
-        return [(square[0]*3+1, square[1]*3+3), \
-        (square[0]*3+2, square[1]*3+3), \
-        (square[0]*3+3, square[1]*3+2), \
-        (square[0]*3+3, square[1]*3+1), \
-        (square[0]*3+2, square[1]*3), \
-        (square[0]*3+1, square[1]*3), \
-        (square[0]*3, square[1]*3+1), \
-        (square[0]*3, square[1]*3+2)]
