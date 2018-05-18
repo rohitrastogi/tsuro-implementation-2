@@ -1,3 +1,5 @@
+import gameConstants as constants
+
 class Board:
     """ data structure that contains board metadata """
 
@@ -6,9 +8,9 @@ class Board:
         self.num_tiles = 0
         self.tiles = []
 
-        for i in range(6):
+        for i in range(constants.BOARD_DIMENSION):
             temp = []
-            for j in range(6):
+            for j in range(constants.BOARD_DIMENSION):
                 temp.append(None)
             self.tiles.append(temp)
 
@@ -49,7 +51,7 @@ class Board:
         """
         Returns boolean. True, if the player has hit a wall. False, otherwise.
         """
-        return position[0] == 0 or position[1] == 0 or position[0] == 18 or position[1] == 18
+        return position[0] == constants.START_WALL or position[1] == constants.START_WALL or position[0] == constants.END_WALL or position[1] == constants.END_WALL
 
     def check_if_tiles_on_board(self, hand):
         """
@@ -60,8 +62,8 @@ class Board:
         for tile in hand:
             tile_identifiers.append(tile.identifier)
 
-        for i in range(6):
-            for j in range(6):
+        for i in range(constants.BOARD_DIMENSION):
+            for j in range(constants.BOARD_DIMENSION):
                 if self.tiles[i][j]:
                     if self.tiles[i][j].identifier in tile_identifiers:
                         return True
