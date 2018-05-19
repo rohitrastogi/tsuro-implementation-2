@@ -522,6 +522,27 @@ def test_validate_hand2():
     with pytest.raises(Exception):
         new_draw_pile, new_players, eliminated, new_board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, to_play_tile)
     
+def test_validate_hand3():
+    """
+    server checks whether hand validation throws exception when current player owns a tile in another player's hands
+    """
+    draw_pile = administrator.create_draw_pile()
 
+    player_1 = Player('Jessica', 'blue', Position(0, 1))
+    player_2 = Player('Robby', 'sienna', Position(0, 5))
+    player_3 = Player('Christos', 'hotpink', Position(0, 11))
+    
+    player_1.tiles_owned = draw_pile[:2]
+    player_2.tiles_owned = draw_pile[1:4]
+    player_3.tiles_owned = draw_pile[4:7]
+    to_play_tile = draw_pile[7]
+
+    draw_pile = draw_pile[8:]
+
+    players = [player_1, player_2, player_3]
+    board = Board(players)
+
+    with pytest.raises(Exception):
+        new_draw_pile, new_players, eliminated, new_board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, to_play_tile)
 
     

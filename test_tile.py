@@ -9,6 +9,18 @@ from mostSymmetricPlayer import MostSymmetricPlayer
 import administrator
 import pytest
 
+def test_constructor():
+    with pytest.raises(Exception):
+        tile_1 = Tile(17, [[0, 3], [1, 7], [2, 6]])
+    
+    with pytest.raises(Exception):
+        tile_2 = Tile(17, [[0, 3], [1, 7], [2, 6], [2, 9]])
+
+    with pytest.raises(Exception):
+        tile_3 = Tile(17, [[1, 2], [3, 4], [5, 6], [7, 8]])
+
+    tile_4 = Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])
+
 def test_rotateTile():
     tile_1 = Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])
     tile_2 = Tile(3, [[0, 1], [2, 7], [3, 5], [4, 6]])

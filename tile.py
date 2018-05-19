@@ -1,5 +1,6 @@
 from position import Position
 from copy import deepcopy
+import gameConstants as constants
 
 class Tile:
 	""" data structure that contains tile metadata """
@@ -7,6 +8,14 @@ class Tile:
 	def __init__(self, identifier, paths):
 		self.identifier = identifier
 		self.paths = paths
+		if len(paths) != 4:
+			raise RuntimeError("Tile does not have 4 Paths!")
+		seen = set()
+		for path in paths:
+			seen.add(path[0])
+			seen.add(path[1])
+		if len(seen) != constants.NUMBER_OF_TICKS or seen != set(range(8)):
+			raise RuntimeError("Tile has invalid paths.")
 
 	def move_along_path(self, starting_position, square):
 		start = starting_position.get_player_coordinates()

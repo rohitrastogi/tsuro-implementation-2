@@ -116,6 +116,9 @@ class Player(implements(IPlayer)):
         and none of the tiles are already on the board.
         """
 
+        if len(self.tiles_owned) == 0:
+            raise RuntimeError("This player has no tiles to play!")
+
         if len(self.tiles_owned) > constants.HAND_SIZE:
             raise RuntimeError("A player cannot have more than 3 tiles in their hand.")
 
