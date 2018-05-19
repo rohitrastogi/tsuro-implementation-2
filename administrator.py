@@ -79,7 +79,7 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 	# TODO: if such a thing happens then you must boot the player and replace with random player
 	# if not legal_play(players[0], board, curr_tile):
 	# 	raise RuntimeError("This player is insisting on playing an incorrect tile.")
-
+	validate_hand(players, draw_pile)
 	curr_player = players.pop(0)
 	players.append(curr_player)
 	curr_player_color = curr_player.color
@@ -138,13 +138,12 @@ def eliminated_player_pass_dragon_tile(players):
 		if players[i].dragon_held and players[i].eliminated:
 			j = (i+1)%len(players)
 			count = 1
-			while count < len(players):
+			while count < len(players): 
 				if not players[j].eliminated:
 					if len(players[j].tiles_owned) < 3:
 						players[j].dragon_held = True
-						break
-					else:
-						j = (j+1)%len(players)
+					break
+				j = (j+1)%len(players)
 				count += 1
 			players[i].dragon_held = False
 			break
@@ -215,6 +214,25 @@ def players_draw_tiles(players, draw_pile, curr_player_color):
 			dragon_already_held = False
 
 		i = (i+1)%len(players)
+
+def validate_hand(players, draw_pile):
+	#check if acting player hand is in draw pile
+	acting_player_hand = players[0].tiles_owned
+	draw_pile_ids = set([tile.identifier for tile in draw_pile])
+	for tile in acting_player_hand:
+		if tile.identifier in draw_pile_ids:
+			raise RuntimeError(players[0].color + " has tiles in the draw pile!")
+
+
+	#check if acting player hand has tiles in other player hands
+	player_tile_ids = []
+	for i in range(1, len(players)):
+		player_tile_ids.extend([tile.identifier for tile in players[i].tiles_owned])
+	for idx, tile in enumerate(acting_player_hand):
+		if tile.identifier in player_tile_ids:
+			print(idx)
+			raise RuntimeError(players[0].color + " has same tiles as another player!")
+
 
 def create_draw_pile():
 	"""

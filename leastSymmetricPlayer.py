@@ -1,4 +1,5 @@
 from interface import implements
+import gameConstants as constants
 from player import Player
 import random
 import administrator
@@ -21,7 +22,7 @@ class LeastSymmetricPlayer(Player):
         self.validate_hand(board)
         self.tiles_owned.sort(key=lambda x: x.symmetry())
         for idx, tile in enumerate(self.tiles_owned):
-            for i in range(4):
+            for i in range(constants.NUMBER_OF_ROTATIONS):
                 if administrator.legal_play(self, board, tile):
                     del self.tiles_owned[idx]
                     return tile

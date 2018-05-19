@@ -108,6 +108,7 @@ class Player(implements(IPlayer)):
     def update_position(self, new_position):
         self.position.update_position(new_position)
 
+    #client check
     def validate_hand(self, board):
         """
         Checks to make sure the hand is valid.
@@ -120,3 +121,5 @@ class Player(implements(IPlayer)):
 
         if board.check_if_tiles_on_board(self.tiles_owned):
             raise RuntimeError("This player has a tile that is already on the board.")
+
+

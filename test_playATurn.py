@@ -25,7 +25,7 @@ def test_playTurn_1():
     player_4.initialize_hand(draw_pile)
 
     draw_pile = [Tile(35, [[0, 5], [1, 3], [2, 6], [4, 7]])]
-    player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_1.tiles_owned = [Tile(15, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(16, [[0, 6], [1, 5], [2, 4], [3, 7]])]
     tile_1 = Tile(0, [[0, 1], [2, 3], [4, 5], [6, 7]])
     draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile_1)
     assert len(eliminated) == 1
@@ -108,7 +108,7 @@ def test_playTurn_4():
     player_1.initialize_hand(draw_pile)
     player_2.initialize_hand(draw_pile)
     player_3.initialize_hand(draw_pile)
-    player_4.tiles_owned = [Tile(4, [[0, 2], [1, 4], [3, 7], [5, 6]]), Tile(34, [[0, 5], [1, 6], [2, 7], [3, 4]])]
+    player_4.tiles_owned = [Tile(16, [[0, 2], [1, 4], [3, 7], [5, 6]]), Tile(18, [[0, 5], [1, 6], [2, 7], [3, 4]])]
     draw_pile = []
     tile_1 = Tile(0, [[0, 5], [1, 4], [2, 7], [3, 6]])
     draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile_1)
@@ -135,8 +135,8 @@ def test_playTurn_5():
     player_3.initialize_hand(draw_pile)
 
     draw_pile = [Tile(35, [[0, 5], [1, 3], [2, 6], [4, 7]])]
-    player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
-    player_4.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_1.tiles_owned = [Tile(12, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(13, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_4.tiles_owned = [Tile(14, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(15, [[0, 6], [1, 5], [2, 4], [3, 7]])]
     player_4.dragon_held = True
     tile_1 = Tile(0, [[0, 1], [2, 3], [4, 5], [6, 7]])
     draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile_1)
@@ -209,9 +209,9 @@ def test_playTurn_8():
     board = Board([player_1, player_2])
     draw_pile = administrator.create_draw_pile()
     player_2.initialize_hand(draw_pile)
-    player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
-    tile_1 = Tile(0, [[0, 1], [2, 3], [4, 5], [6, 7]])
-    draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile_1)
+    player_1.tiles_owned = [Tile(3, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(4, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    tile_1 = Tile(7, [[0, 1], [2, 3], [4, 5], [6, 7]])
+    draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile[2:], board.all_players, [], board, tile_1)
     assert len(eliminated) == 2
     assert len(players) == 0
     assert board.tiles[0][0] == tile_1
@@ -322,21 +322,22 @@ def test_playTurn_14():
     player_4 = Player('Amulya', 'white', Position(0, 5))
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = administrator.create_draw_pile()
-    player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_1.tiles_owned = [Tile(9, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(10, [[0, 6], [1, 5], [2, 4], [3, 7]])]
     player_2.initialize_hand(draw_pile)
     player_3.initialize_hand(draw_pile)
     player_4.initialize_hand(draw_pile)
 
-    tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
+    tile = Tile(11, [[0, 3],[1,7], [2,6], [4,5]])
     for player in board.all_players:
         assert not player.dragon_held
-    draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile)
+    draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile[3:], board.all_players, [], board, tile)
     assert len(eliminated) == 0
     assert len(players) == 4
     assert board.tiles[0][0] == tile
     assert not game_over
     for player in board.all_players:
         assert not player.dragon_held
+
 def test_playTurn_15():
     '''
     moving where one player has the dragon tile before and no one gets any new tiles
@@ -349,12 +350,12 @@ def test_playTurn_15():
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = []
     player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]])]
-    player_2.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
-    player_3.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
-    player_4.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]])]
+    player_2.tiles_owned = [Tile(2, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(3, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_3.tiles_owned = [Tile(4, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(5, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_4.tiles_owned = [Tile(6, [[0, 1], [2, 4], [3, 6], [5, 7]])]
     player_4.dragon_held = True
 
-    tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
+    tile = Tile(7, [[0, 3],[1,7], [2,6], [4,5]])
     draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile)
     assert len(eliminated) == 0
     assert len(players) == 4
@@ -379,12 +380,12 @@ def test_playTurn_16():
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = []
     player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]])]
-    player_2.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
-    player_3.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
-    player_4.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_2.tiles_owned = [Tile(2, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(3, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_3.tiles_owned = [Tile(4, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(5, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_4.tiles_owned = [Tile(6, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(7, [[0, 6], [1, 5], [2, 4], [3, 7]])]
     player_1.dragon_held = True
 
-    tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
+    tile = Tile(8, [[0, 3],[1,7], [2,6], [4,5]])
     draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile)
     assert len(eliminated) == 1
     assert len(players) == 3
@@ -392,10 +393,10 @@ def test_playTurn_16():
     assert not game_over
     assert player_4.dragon_held
 
-def test_playTurn_16():
+def test_playTurn_17():
     '''
-    moving where the player that has the dragon tile makes a move that causes an elimination (of another player)
     moving where the player that has the dragon tile makes a move that causes themselves to be eliminated
+    moving where the player that has the dragon tile makes a move that causes an elimination (of another player)
 
     '''
     player_1 = Player('Jessica', 'blue', Position(0, 1))
@@ -405,9 +406,9 @@ def test_playTurn_16():
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = []
     player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]])]
-    player_2.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
-    player_3.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
-    player_4.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_2.tiles_owned = [Tile(2, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(3, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_3.tiles_owned = [Tile(4, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(5, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_4.tiles_owned = [Tile(6, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(7, [[0, 6], [1, 5], [2, 4], [3, 7]])]
     player_1.dragon_held = True
 
     tile = Tile(1, [[0, 1],[2,3], [4,5], [6,7]])
@@ -415,12 +416,13 @@ def test_playTurn_16():
     assert len(eliminated) == 2
     assert len(players) == 2
     assert len(draw_pile) == 1
+    print(board.tiles[0][0].identifier, tile.identifier)
     assert board.tiles[0][0] == tile
     assert not game_over
     for player in players:
         assert not player.dragon_held
 
-def test_playTurn_16():
+def test_playTurn_18():
     '''
     moving where a player that does not have the dragon tile makes a move and it causes an elimination of the player that has the dragon tile
 
@@ -432,9 +434,9 @@ def test_playTurn_16():
     board = Board([player_1, player_2, player_3, player_4])
     draw_pile = []
     player_1.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
-    player_2.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
-    player_3.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
-    player_4.tiles_owned = [Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(2, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_2.tiles_owned = [Tile(3, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(4, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_3.tiles_owned = [Tile(5, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(6, [[0, 6], [1, 5], [2, 4], [3, 7]])]
+    player_4.tiles_owned = [Tile(7, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(8, [[0, 6], [1, 5], [2, 4], [3, 7]])]
     player_2.dragon_held = True
 
     tile = Tile(1, [[0, 3],[1,7], [2,6], [4,5]])
@@ -449,7 +451,7 @@ def test_playTurn_16():
     assert not player_3.dragon_held
     assert not player_4.dragon_held
 
-def test_playTurn_17():
+def test_playTurn_19():
     '''
     a player plays two turns
     this is to check that all fields of the player and board are being properly updated
@@ -471,3 +473,55 @@ def test_playTurn_17():
     assert board.tiles[0][1] == tile_2
     assert player_1.get_coordinates() == (3,4)
     assert player_1.position.square == Square(0,1)
+
+
+def test_validate_hand1():
+    """
+    server checks whether hand validation does not throw exception when hands are valid
+    """
+    draw_pile = administrator.create_draw_pile()
+
+    player_1 = Player('Jessica', 'blue', Position(0, 1))
+    player_2 = Player('Robby', 'sienna', Position(0, 5))
+    player_3 = Player('Christos', 'hotpink', Position(0, 11))
+    
+    player_1.tiles_owned = draw_pile[:2]
+    player_2.tiles_owned = draw_pile[2:5]
+    player_3.tiles_owned = draw_pile[5:8]
+    to_play_tile = draw_pile[8]
+
+    draw_pile = draw_pile[9:]
+
+    players = [player_1, player_2, player_3]
+    board = Board(players)
+
+    #should not throw exception
+    new_draw_pile, new_players, eliminated, new_board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, to_play_tile)
+
+def test_validate_hand2():
+    """
+    server checks whether hand validation throws exception when current player owns a tile in the draw pile
+    """
+    draw_pile = administrator.create_draw_pile()
+
+    player_1 = Player('Jessica', 'blue', Position(0, 1))
+    player_2 = Player('Robby', 'sienna', Position(0, 5))
+    player_3 = Player('Christos', 'hotpink', Position(0, 11))
+    
+    player_1.tiles_owned = draw_pile[:2]
+    dup_tile = player_1.tiles_owned[0]
+    player_2.tiles_owned = draw_pile[2:5]
+    player_3.tiles_owned = draw_pile[5:8]
+    to_play_tile = draw_pile[8]
+
+    draw_pile = draw_pile[9:].append(dup_tile)
+
+    players = [player_1, player_2, player_3]
+    board = Board(players)
+
+    with pytest.raises(Exception):
+        new_draw_pile, new_players, eliminated, new_board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, to_play_tile)
+    
+
+
+    

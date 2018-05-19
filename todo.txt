@@ -19,3 +19,4 @@ Completed:
 * add position class (give it a square)
 * function to convert player (position) to square (avoid passing around the square)
 * add the board constants about size and stuff to gameConstants (no more magic numbers)
+
