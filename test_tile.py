@@ -1,6 +1,8 @@
 from player import Player
 from board import Board
 from tile import Tile
+from position import Position
+from square import Square
 from randomPlayer import RandomPlayer
 from leastSymmetricPlayer import LeastSymmetricPlayer
 from mostSymmetricPlayer import MostSymmetricPlayer
@@ -24,17 +26,17 @@ def test_moveAlongPath():
     tile_1 = Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])
     tile_2 = Tile(3, [[0, 1], [2, 7], [3, 5], [4, 6]])
 
-    board_position = (3,2)
-    start = (9,8)
-    coordinates = board.get_coordinates(board_position)
-    end = tile_1.move_along_path(start, coordinates)
-    assert end == (11,9)
+    start_position = Position(9, 8, Square(2, 2))
+    end_position = tile_1.move_along_path(start_position, Square(3, 2))
+    assert end_position.get_player_coordinates() == (11,9)
+    assert end_position.square.x == 3
+    assert end_position.square.y == 2
 
-    board_position = (2,4)
-    start = (9,13)
-    coordinates = board.get_coordinates(board_position)
-    end = tile_2.move_along_path(start, coordinates)
-    assert end == (7,12)
+    start_position = Position(9, 13, Square(3, 4))
+    end_position = tile_2.move_along_path(start_position, Square(2, 4))
+    assert end_position.get_player_coordinates() == (7,12)
+    assert end_position.square.x == 2
+    assert end_position.square.y == 4
 
 def test_symmetry():
     tile_1 = Tile(8, [[0, 4], [1, 5], [2, 6], [3, 7]])

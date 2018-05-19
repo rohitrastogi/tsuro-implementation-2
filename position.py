@@ -26,11 +26,16 @@ class Position:
             elif y == constants.END_WALL:
                 self.square = Square(x//3, 6)
 
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
     def get_player_coordinates(self):
         return (self.x, self.y)
 
     def update_position(self, position):
-        self = position
+        self.x = position.x
+        self.y = position.y
+        self.square = position.square
 
     def hit_a_wall(self):
         """

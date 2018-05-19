@@ -9,6 +9,9 @@ class Square:
         if x < -1 or x > constants.BOARD_DIMENSION or y < -1 or y > constants.BOARD_DIMENSION:
             raise RuntimeError("This square does not have the right coordinates for this board!")
 
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
     def get_coordinates(self):
         """
         Given a square on the board, returns all coordinates of the square starting from the

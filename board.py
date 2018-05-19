@@ -36,7 +36,7 @@ class Board:
         next_board_space = player.position.get_next_board_square()
         while True:
             coordinates = next_board_space.get_coordinates()
-            curr_position = curr_tile.move_along_path(curr_position, next_board_space, coordinates)
+            curr_position = curr_tile.move_along_path(curr_position, next_board_space)
             next_board_space = curr_position.get_next_board_square()
             if curr_position.hit_a_wall():
                 return curr_position, True

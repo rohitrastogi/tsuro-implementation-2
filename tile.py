@@ -8,8 +8,10 @@ class Tile:
 		self.identifier = identifier
 		self.paths = paths
 
-	def move_along_path(self, start_position, square, coordinates):
-		start = start_position.get_player_coordinates()
+	def move_along_path(self, starting_position, square):
+		start = starting_position.get_player_coordinates()
+		coordinates = square.get_coordinates()
+
 		for i, coor in enumerate(coordinates):
 			if coor == start:
 				start_path = i
