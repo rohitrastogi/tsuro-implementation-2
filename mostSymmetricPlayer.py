@@ -1,34 +1,12 @@
 from interface import implements
-from player import Player
+from symmetricPlayer import SymmetricPlayer
 import random
 import administrator
 
-class MostSymmetricPlayer(Player):
+class MostSymmetricPlayer(SymmetricPlayer):
     """
-    MostSymmetricPlayer is derived from Player base class
-    Implements the method play_turn
+    MostSymmetricPlayer is derived from SymmetricPlayer derived class
     """
-
-    def play_turn(self, board, tiles, remaining_in_pile):
-        """
-        MostSymmetric: This player sorts the possible moves by how symmetric each tile is (from most symmetric to least symmetric)
-        and picks the first legal one.
-        """
-        if not self.placed_pawn:
-            raise RuntimeError("The pawn must be placed before the player can play a turn!")
-
-        self.tiles_owned = tiles
-        self.validate_hand(board)
-        self.tiles_owned.sort(key=lambda x: x.symmetry(), reverse=True)
-        for idx, tile in enumerate(self.tiles_owned):
-            for i in range(4):
-                if administrator.legal_play(self, board, tile):
-                    del self.tiles_owned[idx]
-                    return tile
-                tile.rotate_tile()
-
-        tile = self.tiles_owned[0]
-        del self.tiles_owned[0]
-
-        self.played_turn = True
-        return tile
+    
+    def __init__(self, n):
+        super().__init__(n, True)
