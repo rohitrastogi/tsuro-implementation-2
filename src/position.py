@@ -1,5 +1,5 @@
-from square import Square
 import gameConstants as constants
+from square import Square
 
 class Position:
 

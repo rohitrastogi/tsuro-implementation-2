@@ -1,4 +1,4 @@
-from player import Player
+from src.player import Player
 from board import Board
 from tile import Tile
 from position import Position

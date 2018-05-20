@@ -3,7 +3,7 @@ from board import Board
 from tile import Tile
 from position import Position
 from square import Square
-import administrator
+import administrator as administrator
 import pytest
 
 def test_moveAcrossBoard_1():

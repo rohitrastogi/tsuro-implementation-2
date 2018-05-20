@@ -1,3 +1,5 @@
+.PHONY: test
+
 test:
 	@pip install --quiet --requirement=requirements.txt
-	py.test --verbose --color=yes
+	cd test; python -m pytest --verbose --color=yes

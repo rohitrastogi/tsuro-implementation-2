@@ -1,22 +1,21 @@
 TODO
-* separate tests to another folder
 * add python typing
-* add tile contracts
 * add bools parameters for randomness (include shuffling)
 * define equality operator for tests (state of the board before and after, etc.)
 * define dragon tile bug exceptions (current player has no tiles, etc.)
 * way to construct a game from a failed tester (when a game fails, output the whole game_play (write to a log??))
-* abstraction for the three players
 * end_game doesn't do anything right now
 * whether movePlayers should be a board function or an admin function
-
 
 # TODO: Contract to check if the square corresponds to the position
 # TODO: Contract for specific phantom tile in position
 
 Completed:
+* separate tests to another folder
 * create a square class
 * add position class (give it a square)
 * function to convert player (position) to square (avoid passing around the square)
 * add the board constants about size and stuff to gameConstants (no more magic numbers)
+* add tile contracts
+* abstraction for the three players
 
