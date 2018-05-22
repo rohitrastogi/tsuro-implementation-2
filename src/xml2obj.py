@@ -9,7 +9,7 @@ from square import Square
 import gameConstants as constants
 import administrator
 
-#TODO find the correct place to add paths and hashing
+#TODO find the correct place to add paths and hashing (maybe sever?)
 def create_path_hash(paths):
     path_hashes = []
     for path in paths:
