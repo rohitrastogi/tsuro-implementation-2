@@ -1,5 +1,6 @@
 from interface import implements
 from player import Player
+import gameConstants as constants
 import random
 import administrator
 
@@ -10,7 +11,7 @@ class SymmetricPlayer(Player):
     """
 
     def __init__(self, n, reverse):
-        super().__init__(name="")
+        super().__init__(name = n)
         self.reverse = reverse
 
 
@@ -26,7 +27,7 @@ class SymmetricPlayer(Player):
         self.validate_hand(board)
         self.tiles_owned.sort(key=lambda x: x.symmetry(), reverse=self.reverse)
         for idx, tile in enumerate(self.tiles_owned):
-            for i in range(4):
+            for i in range(constants.NUMBER_OF_ROTATIONS):
                 if administrator.legal_play(self, board, tile):
                     del self.tiles_owned[idx]
                     return tile
