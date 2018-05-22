@@ -27,13 +27,13 @@ class Board:
     def get_tile(self, square):
         return self.tiles[square.x][square.y]
 
-    def move_across_board(self, player, curr_tile):
+    def move_across_board(self, position, curr_tile):
         """
         Moves a player across the board after curr_tile has been places on the board.
         Returns a player position coordinates, board coordinates, and hit_a_wall?
         """
-        curr_position = player.position
-        next_board_space = player.position.get_next_board_square()
+        curr_position = position
+        next_board_space = curr_position.get_next_board_square()
         while True:
             curr_position = curr_tile.move_along_path(curr_position, next_board_space)
             next_board_space = curr_position.get_next_board_square()

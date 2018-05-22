@@ -28,7 +28,7 @@ def legal_play(player, board, tile):
 	# If there is another legal move, just check whether this tile causes elimination or not
 	# If there is not another legal move, then this tile can be played provided it belongs to the player
 	if another_legal:
-		return legal_play_helper(player, board, tile)
+		return legal_play_helper(player.position, board, tile)
 	else:
 		return player.is_tile_owned(tile)
 

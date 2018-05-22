@@ -36,7 +36,7 @@ def create_board_obj(board):
     for pawn_entry in pawn_entries:
         (color_obj, position_obj) = create_player_locs(pawn_entry)
         #TODO need to fix tile order somehow
-        board_obj.add_player(Player(color_obj, position_obj))
+        board_obj.add_player(SPlayer(color_obj, position_obj))
         
     return board_obj
 

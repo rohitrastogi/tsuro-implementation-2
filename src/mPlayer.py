@@ -8,6 +8,8 @@ class MPlayer(implements(IPlayer)):
     """ data structure that contains player metadata """
 
     def __init__(self, name=''):
+        self.position = None #TODO
+        self.color = None #TODO
         self.name = name 
         self.initialized = False
         self.placed_pawn = False
@@ -18,9 +20,6 @@ class MPlayer(implements(IPlayer)):
         return self.name
 
     def initialize(self, color, other_colors):
-        print(color)
-        print(other_colors)
-        print(constants.Colors.__members__)
         if self.initialized:
             raise RuntimeError("This player has already been initialized!")
         if not self.game_ended:
@@ -66,6 +65,7 @@ class MPlayer(implements(IPlayer)):
         self.placed_pawn = True
 
     def play_turn(self, board, tiles, remaining_in_pile):
+        #update position field
         pass
 
     def end_game(self, board, colors):
