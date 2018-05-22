@@ -92,6 +92,9 @@ def create_list_of_color_obj(list_of_color):
 def create_list_of_tile_obj(list_of_tile):
     return [create_tile_object(child) for child in list_of_tile]
 
+def construct_player_name_object(player_name):
+    return player_name.text
+
 def interpret_command(command):
     #TODO: use enum or the like to amke this modular
     if command.tag == "get-name":
