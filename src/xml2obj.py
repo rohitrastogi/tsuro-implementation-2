@@ -28,6 +28,8 @@ def create_board_obj(board):
 
     tile_entries = [child for child in board[0]]
     pawn_entries = [child for child in board[1]]
+    print(tile_entries)
+    print(pawn_entries)
 
     for tile_entry in tile_entries:
         (square_obj, tile_obj) = create_tile_obj(tile_entry)
@@ -48,10 +50,11 @@ def create_tile_obj(tile_entry):
 def create_square_obj(xy):
     x = xy[0].text
     y = xy[1].text
-    return Square(x, convert_y_representation(y))
+    print(convert_y_representation(int(y)))
+    return Square(int(x), convert_y_representation(int(y)))
 
 def convert_y_representation(y):
-    return constants.NUMBER_OF_TILES - 1 - y
+    return constants.BOARD_DIMENSION - 1 - y
 
 def create_tile_obj_helper(tile):
     connections = [child for child in tile]
@@ -68,32 +71,32 @@ def create_path_object(connection):
     return [int(connection[0].text), int(connection[1].text)]
 
 def create_player_locs(pawn_entry):
-    color_obj = create_color_object(pawn_entry[0])
+    color_obj = create_color_obj(pawn_entry[0])
     position_obj = create_position_obj(pawn_entry[1])
     return (color_obj, position_obj)
 
-def create_color_object(color):
+def create_color_obj(color):
     enum_index = [c.name for c in constants.Colors].index(color.text)
     return constants.Colors(enum_index)
 
 def create_position_obj(pawn_loc):
     # TODO is there a function that cna do this dynamically
     mapping = {0:17, 1:16, 2:14, 3:13, 4:11, 5:10, 6:8, 7:7, 8:5, 9:4, 10:2, 11:1}
-    if pawn_loc[0].tag = "v":
-        y = constants.END_WALL - pawn_loc[1]*3
-        x = mapping[pawn_loc[2]]
+    if pawn_loc[0].tag == "v":
+        y = constants.END_WALL - int(pawn_loc[1].text)*3
+        x = mapping[int(pawn_loc[2].text)]
     else:
-        y = mapping[pawn_loc[2]]
-        x = constants.END_WALL - pawn_loc[1] * 3 
+        y = mapping[int(pawn_loc[2].text)]
+        x = constants.END_WALL - int(pawn_loc[1].text) * 3 
     return Position(x, y, Square(x//3, y//3))
 
 def create_list_of_color_obj(list_of_color):
-    return [create_color_object(child) for child in list_of_color]
+    return [create_color_obj(child) for child in list_of_color]
 
 def create_list_of_tile_obj(list_of_tile):
-    return [create_tile_object(child) for child in list_of_tile]
+    return [create_tile_obj_helper(child) for child in list_of_tile]
 
-def construct_player_name_object(player_name):
+def construct_player_name_obj(player_name):
     return player_name.text
 
 def interpret_command(command):
@@ -102,16 +105,16 @@ def interpret_command(command):
         return command.tag
 
     elif command.tag == "initialize":
-        return command.tag, create_color_object(command[0]), create_list_of_color_obj(command[1])
+        return command.tag, create_color_obj(command[0]), create_list_of_color_obj(command[1])
 
-    elif command.tag = "place-pawn":
+    elif command.tag == "place-pawn":
         return command.tag, create_board_obj(command[0])
 
-    elif command.tag = "play-turn":
-        return command.tag, create_board_obj(command[0], create_list_of_tile_obj(command[1], int(command[2])))
+    elif command.tag == "play-turn":
+        return command.tag, create_board_obj(command[0]), create_list_of_tile_obj(command[1]), int(command[2])
 
-    elif command.tag = "end-game":
-        return command.tag, create_board_obj(command[1], create_list_of_color_obj(command[2]))
+    elif command.tag == "end-game":
+        return command.tag, create_board_obj(command[1]), create_list_of_color_obj(command[2])
 
     else:
         raise RuntimeError("Invalid XML Messsage!")

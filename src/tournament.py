@@ -17,9 +17,12 @@ if __name__ == "__main__":
 
     while True:
         s = Server()
-        s.register_player(RandomPlayer('Upasna'))
-        s.register_player(LeastSymmetricPlayer('Amulya'))
-        s.register_player(MostSymmetricPlayer("Rohit"))
+        player_1 = RandomPlayer('Upasna')
+        player_2 = LeastSymmetricPlayer('Amulya')
+        player_3 = MostSymmetricPlayer("Rohit")
+        s.register_player(player_1)
+        s.register_player(player_2)
+        s.register_player(player_3)
         game_over = s.play_game()
         
         if not isinstance(game_over, bool):

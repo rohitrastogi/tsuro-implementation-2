@@ -73,7 +73,7 @@ class Board:
         for player in players:
             if not player.eliminated:
                 if player.get_coordinates() in square_coordinates:
-                    end_position, hit_a_wall = self.move_across_board(player, curr_tile)
+                    end_position, hit_a_wall = self.move_across_board(player.position, curr_tile)
                     player.update_position(end_position)
                     if hit_a_wall:
                         player.eliminated = True

@@ -20,7 +20,7 @@ def legal_play(player, board, tile):
 	# First, check if there is another legal move that can be played.
 	another_legal = False
 	for a_tile in player.tiles_owned:
-		for i in range(4):
+		for i in range(constants.NUMBER_OF_ROTATIONS):
 			a_tile.rotate_tile()
 			if legal_play_helper(player, board, a_tile):
 				another_legal = True
@@ -46,7 +46,7 @@ def legal_play_helper(player, board, tile):
 	"""
 
 	# Player position is returned by the move_across_board function, but is not updated.
-	player_final_position, hit_a_wall = board.move_across_board(player, tile)
+	player_final_position, hit_a_wall = board.move_across_board(player.position, tile)
 
 	# If player hits a wall, this tile causes elimination and is therefore, not legal.
 	if hit_a_wall:
@@ -230,7 +230,6 @@ def validate_hand(players, draw_pile):
 		player_tile_ids.extend([tile.identifier for tile in players[i].tiles_owned])
 	for idx, tile in enumerate(acting_player_hand):
 		if tile.identifier in player_tile_ids:
-			print(idx)
 			raise RuntimeError(players[0].color + " has same tiles as another player!")
 
 

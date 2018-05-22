@@ -7,7 +7,7 @@ import administrator
 class NetworkedPlayer(implements(IPlayer)):
     def __init__(): 
         #networking stuff
-
+    
     def get_name(self):
         #data_out = obj2xml.create_get_name_xml()
         #socket.send(data_out.tobytes)
@@ -30,7 +30,8 @@ class NetworkedPlayer(implements(IPlayer)):
         pass
 
     def play_turn(self, board, tiles, remaining_in_pile):
-        #data_out = obj2xml.create_get_name_xml(board, tiles, remaining_in_pile)
+        self.update_player_position(board)
+        #data_out = obj2xml.create_play_turn_xml(board, tiles, remaining_in_pile)
         #socket.send(data_out.tobytes)
         #data_in = socket.recv().toxml
         #return xml2obj.construct_tile_object(data_in)
