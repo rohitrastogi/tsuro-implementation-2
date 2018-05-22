@@ -1,4 +1,4 @@
-from player import Player
+from sPlayer import SPlayer
 from board import Board
 from tile import Tile
 import copy
@@ -9,7 +9,7 @@ def legal_play(player, board, tile):
 	Returns whether the tile the player wants to play is a legal move or not, considering all the tiles the player has.
 
 	Args:
-		player: instance of Player class, the player whose turn it is
+		player: instance of SPlayer class, the player whose turn it is
 		board: instance of Board class, current state of the board
 		tile: instance of Tile class, the tile the player wants to play
 
@@ -37,7 +37,7 @@ def legal_play_helper(player, board, tile):
 	Returns whether the tile the player wants to play is a legal move or not, regardless of other tiles in the player's hand.
 
 	Args:
-		player: instance of Player class, the player whose turn it is
+		player: instance of SPlayer class, the player whose turn it is
 		board: instance of Board class, current state of the board
 		tile: instance of Tile class, the tile the player wants to play
 
@@ -61,17 +61,17 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 
 	Args:
 		draw_pile: a list of all tiles in the draw pile
-		players: a list of Player objects, players that are still in the game
-		eliminated: a list of Player objects, players that have been eliminated from the game
+		players: a list of SPlayer objects, players that are still in the game
+		eliminated: a list of SPlayer objects, players that have been eliminated from the game
 		board: an instance of the Board class, current state of the board
 		curr_tile: an instance of the Tile class, the current tile to be placed on the board
 
 	Returns:
 		draw_pile: a list of all tiles in the draw pile after the tile has been placed
 		players: an updated list of Player objects, players that are still in the game after this turn
-		eliminated: an updated list of Player objects, players that have been eliminated from the game
+		eliminated: an updated list of SPlayer objects, players that have been eliminated from the game
 		board: an instance of the Board class, current state of the board
-		game_over: boolean. False, if the game is not over. Player object if there is a single winner.
+		game_over: boolean. False, if the game is not over. SPlayer object if there is a single winner.
 				   A list of players if there are multiple winners, in the case that all tiles are played or all remaining
 				   players get eliminated in the same turn.
 	"""
@@ -103,7 +103,7 @@ def check_game_state(players, original_players, board):
 	Function that checks if the game is over or not.
 
 	Args:
-		players: a list of Player objects, players that are still in the game at this point
+		players: a list of SPlayer objects, players that are still in the game at this point
 		original_players: a list of Player objects, players that were in the game at the start of the turn.
 		board: an instance of the Board class, maintains current state of the board.
 
@@ -114,7 +114,7 @@ def check_game_state(players, original_players, board):
 
 	"""
 	if len(players) == 1:
-		game_over = players[0]
+		game_over = [players[0]]
 	elif not players:
 		game_over = original_players
 	elif board.num_tiles == constants.NUMBER_OF_TILES:
@@ -130,7 +130,7 @@ def eliminated_player_pass_dragon_tile(players):
 	the next player with less than three tiles, going clockwise.
 
 	Args:
-		players: a list of Player objects, contains both active and eliminated players (with the eliminated flag set)
+		players: a list of SPlayer objects, contains both active and eliminated players (with the eliminated flag set)
 
 	Mutates the players list with a non-eliminated player holding the dragon tile in the end, or no one has the tile.
 	"""
@@ -154,12 +154,12 @@ def eliminated_players_cleanup(players, eliminated, draw_pile):
 	Eliminated players lose their tiles to the draw pile after they have been removed.
 
 	Args:
-		players: a list of Player objects, contains both active and eliminated players (with the eliminated flag set)
-		eliminated: a list of Player objects, contains those players that were eliminated before this turn.
+		players: a list of SPlayer objects, contains both active and eliminated players (with the eliminated flag set)
+		eliminated: a list of SPlayer objects, contains those players that were eliminated before this turn.
 		draw_pile: a list of Tile objects, contains the tiles before more, if any, are added.
 
 	Returns:
-		players: a list of Player objects, all eliminated players are removed.
+		players: a list of SPlayer objects, all eliminated players are removed.
 
 	eliminated is mutated in place and not returned.
 	"""
@@ -184,7 +184,7 @@ def players_draw_tiles(players, draw_pile, curr_player_color):
 		the dragon tile and game play continues.
 
 	Args:
-		players: a list of Player objects, players that are still in the game at this point
+		players: a list of SPlayer objects, players that are still in the game at this point
 		draw_pile: a list of Tile objects, all the tiles currently in the deck
 		curr_player_color: the color of the player that played the turn
 

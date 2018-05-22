@@ -3,7 +3,7 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 import xml.dom.minidom as minidom
 from board import Board
 from tile import Tile
-from player import Player
+from sPlayer import SPlayer
 from position import Position
 from square import Square
 import gameConstants as constants
@@ -73,7 +73,8 @@ def create_player_locs(pawn_entry):
     return (color_obj, position_obj)
 
 def create_color_object(color):
-    return [c.name for cc in constants.Colors].index(color.text)
+    enum_index = [c.name for c in constants.Colors].index(color.text)
+    return constants.Colors(enum_index)
 
 def create_position_obj(pawn_loc):
     # TODO is there a function that cna do this dynamically

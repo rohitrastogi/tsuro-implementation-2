@@ -1,13 +1,16 @@
 from interface import implements
-from player import Player
+from mPlayer import MPlayer
+import gameConstants as constants
 import random
 import administrator
 
-class RandomPlayer(Player):
+class RandomPlayer(MPlayer):
     """
     RandomPlayer is derived from Player base class
     Implements the method play_turn
     """
+    def __init__(self, name):
+        super().__init__(name)
 
     def play_turn(self, board, tiles, remaining_in_pile):
         """
@@ -16,18 +19,20 @@ class RandomPlayer(Player):
         if not self.placed_pawn:
             raise RuntimeError("The pawn must be placed before the player can play a turn!")
 
-        self.tiles_owned = tiles
-        self.validate_hand(board)
-        for idx, tile in enumerate(self.tiles_owned):
-            for i in range(4):
-                if administrator.legal_play(self, board, tile):
-                    del self.tiles_owned[idx]
-                    return tile
+        legal_plays = []
+        for idx, tile in enumerate(tiles):
+            for i in range(constants.NUMBER_OF_ROTATIONS):
                 tile.rotate_tile()
-
-        index = random.randint(0,len(self.tiles_owned)-1)
-        tile = self.tiles_owned[index]
-        del self.tiles_owned[index]
+                if administrator.legal_play(self, board, tile):
+                    legal_plays.append((idx, i))
+        
+        if not legal_plays:
+             tile_index = random.randint(0,len(tiles) - 1)
+             rotation_index = random.randint(0, constants.NUMBER_OF_ROTATIONS - 1)
+        else:
+            tile_index, rotation_index = legal_plays[random.randint(0, len(legal_plays) - 1)]
 
         self.played_turn = True
-        return tile
+
+        to_play = tiles[tile_index]
+        to_play.rotate_tile_variable(rotation_index)

@@ -4,9 +4,8 @@ import gameConstants as constants
 import random
 import administrator
 
-class NetworkedPlayer(Player):
-    def __init__():
-        #call parent constructor 
+class NetworkedPlayer(implements(IPlayer)):
+    def __init__(): 
         #networking stuff
 
     def get_name(self):
@@ -14,8 +13,7 @@ class NetworkedPlayer(Player):
         #socket.send(data_out.tobytes)
         #data_in = socket.recv().toxml
         #return xml2obj.construct_name_object(data_in)
-        name = "" #get from socket
-        return name
+        pass
 
     def initialize(self, color, other_colors):
         #data_out = obj2xml.create_initialize_xml(color, other_colors)
@@ -43,3 +41,4 @@ class NetworkedPlayer(Player):
         #socket.send(data_out.tobytes)
         #data_in = socket.recv().toxml
         #return xml2obj.construct_void_obj? NOT SURE HOW TO HANDLE VOID
+        pass

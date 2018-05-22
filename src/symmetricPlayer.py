@@ -1,10 +1,10 @@
 from interface import implements
-from player import Player
+from mPlayer import MPlayer
 import gameConstants as constants
 import random
 import administrator
 
-class SymmetricPlayer(Player):
+class SymmetricPlayer(MPlayer):
     """
     MostSymmetricPlayer is derived from Player base class
     Implements the method play_turn
@@ -23,18 +23,14 @@ class SymmetricPlayer(Player):
         if not self.placed_pawn:
             raise RuntimeError("The pawn must be placed before the player can play a turn!")
 
-        self.tiles_owned = tiles
-        self.validate_hand(board)
+        #self.tiles_owned = tiles
+        #self.validate_hand(board)
         self.tiles_owned.sort(key=lambda x: x.symmetry(), reverse=self.reverse)
-        for idx, tile in enumerate(self.tiles_owned):
+        for idx, tile in enumerate(tiles):
             for i in range(constants.NUMBER_OF_ROTATIONS):
                 if administrator.legal_play(self, board, tile):
-                    del self.tiles_owned[idx]
                     return tile
                 tile.rotate_tile()
-
-        tile = self.tiles_owned[0]
-        del self.tiles_owned[0]
 
         self.played_turn = True
         return tile

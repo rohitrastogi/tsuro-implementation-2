@@ -41,6 +41,10 @@ class Tile:
 
 		self.paths = sorted(self.paths)
 
+	def rotate_tile_variable(self, num_rotations):
+		for i in range(num_rotations):
+			self.rotate_tile()
+
 	def symmetry(self):
 		original_paths = deepcopy(self.paths)
 		rotated_paths = [original_paths]

@@ -3,7 +3,7 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 import xml.dom.minidom as minidom
 from board import Board
 from tile import Tile
-from player import Player
+from sPlayer import SPlayer
 from position import Position
 from square import Square
 import gameConstants as constants

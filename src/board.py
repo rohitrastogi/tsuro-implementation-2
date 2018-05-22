@@ -35,7 +35,6 @@ class Board:
         curr_position = player.position
         next_board_space = player.position.get_next_board_square()
         while True:
-            coordinates = next_board_space.get_coordinates()
             curr_position = curr_tile.move_along_path(curr_position, next_board_space)
             next_board_space = curr_position.get_next_board_square()
             if curr_position.hit_a_wall():
@@ -78,3 +77,10 @@ class Board:
                     player.update_position(end_position)
                     if hit_a_wall:
                         player.eliminated = True
+
+    def get_eliminated_players(self):
+        return [x for x in self.all_players if x.eliminated]
+
+    def get_current_players(self):
+        return [x for x in self.all_players if not x.eliminated]
+    
