@@ -20,7 +20,6 @@ class SymmetricPlayer(MPlayer):
         MostSymmetric: This player sorts the possible moves by how symmetric each tile is (from most symmetric to least symmetric)
         and picks the first legal one.
         """
-        print ("length of hand in sym player: ", len(tiles))
 
         self.update_player_position(board)
         if not self.placed_pawn:
