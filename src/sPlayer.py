@@ -48,9 +48,9 @@ class SPlayer():
     def update_position(self, new_position):
         self.position.update_position(new_position)
 
-    def remove_tile_from_hand(self, tile):
+    def remove_tile_from_hand(self, current_tile):
         for idx, tile in enumerate(self.tiles_owned):
-            if tile.identifier == tile.identifier:
+            if tile.identifier == current_tile.identifier:
                 del self.tiles_owned[idx]
 
     #client check
@@ -69,5 +69,3 @@ class SPlayer():
 
         if board.check_if_tiles_on_board(self.tiles_owned):
             raise RuntimeError("This player has a tile that is already on the board.")
-
-

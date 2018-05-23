@@ -16,6 +16,7 @@ class RandomPlayer(MPlayer):
         """
         Random: This player picks randomly from all of the legal moves.
         """
+
         self.update_player_position(board)
         if not self.placed_pawn:
             raise RuntimeError("The pawn must be placed before the player can play a turn!")
@@ -26,7 +27,7 @@ class RandomPlayer(MPlayer):
                 tile.rotate_tile()
                 if self.legal_play(board, tile, tiles):
                     legal_plays.append((idx, i))
-        
+
         if not legal_plays:
              tile_index = random.randint(0,len(tiles) - 1)
              rotation_index = random.randint(0, constants.NUMBER_OF_ROTATIONS - 1)

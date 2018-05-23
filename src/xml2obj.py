@@ -21,7 +21,7 @@ tile_tups = [(create_path_hash(tile.paths), tile.identifier) for tile in tiles]
 path_id_map = {k:v for (k, v) in tile_tups}
 
 def get_identifier(path_hash):
-    return path_id_map[path_hash]  
+    return path_id_map[path_hash]
 
 def create_board_obj(board):
     board_obj = Board()
@@ -39,7 +39,7 @@ def create_board_obj(board):
         (color_obj, position_obj) = create_player_locs(pawn_entry)
         #TODO need to fix tile order somehow
         board_obj.add_player(SPlayer(color_obj, position_obj))
-        
+
     return board_obj
 
 def create_tile_obj(tile_entry):
@@ -87,7 +87,7 @@ def create_position_obj(pawn_loc):
         x = mapping[int(pawn_loc[2].text)]
     else:
         y = mapping[int(pawn_loc[2].text)]
-        x = constants.END_WALL - int(pawn_loc[1].text) * 3 
+        x = constants.END_WALL - int(pawn_loc[1].text) * 3
     return Position(x, y, Square(x//3, y//3))
 
 def create_list_of_color_obj(list_of_color):
@@ -118,13 +118,3 @@ def interpret_command(command):
 
     else:
         raise RuntimeError("Invalid XML Messsage!")
-    
-
-
-
-
-
-
-
-
-

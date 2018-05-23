@@ -1,4 +1,5 @@
-from src.player import Player
+from src.mPlayer import MPlayer
+from src.sPlayer import SPlayer
 from board import Board
 from tile import Tile
 from position import Position
@@ -10,8 +11,7 @@ import administrator
 import pytest
 
 def test_legalPlay():
-
-    #card causes elimination so return false
+    #tile causes elimination so return false
     player_1 = Player('Michael', 'blue', Position(0, 1))
     player_1.tiles_owned = [Tile(12, [[0, 7], [1, 2], [3, 4], [5, 6]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])]
     tile_1 = Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])

@@ -9,7 +9,7 @@ class Server:
         self.draw_pile = administrator.create_draw_pile()
         self.game_over = False
         self.num_players = 0
-        
+
     def do_networking_stuff(self):
         #setup sockets and servers somehow
         pass
@@ -24,18 +24,19 @@ class Server:
             current_tile = player.play_turn(self.board, acting_player.tiles_owned, len(self.draw_pile))
             acting_player.remove_tile_from_hand(current_tile)
             self.draw_pile, curr_players, elim_players, self.board, self.game_over = administrator.play_a_turn(self.draw_pile, curr_players, elim_players, self.board, current_tile)
+
         return self.game_over
 
     def register_player(self, player):
         if self.num_players < constants.NUMBER_OF_PLAYERS:
-            new_splayer = SPlayer(color = constants.Colors(self.num_players), player = player)
+            new_splayer = SPlayer(color = constants.Colors[self.num_players], player = player)
             self.board.add_player(new_splayer)
             self.num_players += 1
         else:
             raise RuntimeError("Tried to register too many players!")
 
     def initialize_players(self):
-        colors = [constants.Colors(i) for i in range(self.num_players)]
+        colors = [constants.Colors[i] for i in range(self.num_players)]
         for splayer in self.board.get_current_players():
             player = splayer.player
             player.initialize(splayer.color, colors[1:])
@@ -43,7 +44,3 @@ class Server:
             splayer.position = player.position
             splayer.initialize_hand(self.draw_pile)
             colors.append(colors.pop(0))
-
-
-
-        
