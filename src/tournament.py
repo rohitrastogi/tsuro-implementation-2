@@ -1,13 +1,6 @@
-from tile import Tile
-from position import Position
-from square import Square
-from sPlayer import SPlayer
-from board import Board
 from randomPlayer import RandomPlayer
 from leastSymmetricPlayer import LeastSymmetricPlayer
 from mostSymmetricPlayer import MostSymmetricPlayer
-import administrator
-import random
 from server import Server
 
 if __name__ == "__main__":
@@ -27,7 +20,7 @@ if __name__ == "__main__":
         s.register_player(player_2)
         s.register_player(player_3)
         game_over = s.play_game()
-        
+
         if not isinstance(game_over, bool):
             for player in game_over:
                 if player.get_name() == 'Upasna':

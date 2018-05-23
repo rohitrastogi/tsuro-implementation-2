@@ -16,6 +16,7 @@ class RandomPlayer(MPlayer):
         """
         Random: This player picks randomly from all of the legal moves.
         """
+
         self.update_player_position(board)
         if not self.placed_pawn:
             raise RuntimeError("The pawn must be placed before the player can play a turn!")

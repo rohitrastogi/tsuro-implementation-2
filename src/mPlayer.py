@@ -25,10 +25,10 @@ class MPlayer(implements(IPlayer)):
             raise RuntimeError("This player has already been initialized!")
         if not self.game_ended:
             raise RuntimeError("Do not reinitialize player without finishing the game!")
-        if color not in constants.Colors:
+        if color not in constants.Colors.values():
             raise ValueError("Not a valid color for a player!")
         for c in other_colors:
-            if c not in constants.Colors:
+            if c not in constants.Colors.values():
                 raise ValueError("Not a valid color for another player!")
 
         self.color = color
@@ -109,7 +109,7 @@ class MPlayer(implements(IPlayer)):
             return self.legal_play_helper(board, tile, tiles)
         else:
             return self.is_tile_owned(tile, tiles)
-    
+
     def legal_play_helper(self, board, tile, tiles):
         """
         Returns whether the tile the player wants to play is a legal move or not, regardless of other tiles in the player's hand.
@@ -136,4 +136,3 @@ class MPlayer(implements(IPlayer)):
         for splayer in board.all_players:
             if splayer.color == self.color:
                 self.position = splayer.position
-	

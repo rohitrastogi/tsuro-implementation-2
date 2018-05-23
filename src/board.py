@@ -14,7 +14,7 @@ class Board:
                 temp.append(None)
             self.tiles.append(temp)
 
-    def add_player(self, player): 
+    def add_player(self, player):
         self.all_players.append(player)
 
     def is_square_vacant(self, square):
@@ -83,4 +83,3 @@ class Board:
 
     def get_current_players(self):
         return [x for x in self.all_players if not x.eliminated]
-    
