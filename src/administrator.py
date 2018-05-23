@@ -75,14 +75,8 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 				   players get eliminated in the same turn.
 	"""
 
-	# TODO: if such a thing happens then you must boot the player and replace with random player
-	# if not legal_play(players[0], board, curr_tile):
-	# 	raise RuntimeError("This player is insisting on playing an incorrect tile.")
-	# print ("Hand before turn: ", [len(player.tiles_owned) for player in players])
-	validate_hand(players, draw_pile)
 	curr_player = players.pop(0)
 	players.append(curr_player)
-	print(len(curr_player.tiles_owned))
 	curr_player_color = curr_player.color
 
 	original_square = curr_player.position.get_next_board_square()
