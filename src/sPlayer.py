@@ -1,7 +1,6 @@
 from interface import implements
 from position import Position
 from IPlayer import IPlayer
-from randomPlayer import RandomPlayer
 import random
 import gameConstants as constants
 
@@ -28,17 +27,12 @@ class SPlayer():
     def draw_tile(self, pile_of_tiles):
         self.tiles_owned.append(pile_of_tiles.pop(0))
 
-    def play_tile(self, tile):
-            for i, tiles in enumerate(self.tiles_owned):
-                if tile.identifier == tiles.identifier:
-                    del self.tiles_owned[i]
-
     def initialize_hand(self, pile_of_tiles):
         for i in range(constants.HAND_SIZE):
             self.draw_tile(pile_of_tiles)
 
     def get_name(self):
-        return self.player.get_name()
+        return self.player.get_name
 
     def is_tile_owned(self, curr_tile):
         for tile in self.tiles_owned:
@@ -49,22 +43,24 @@ class SPlayer():
     def update_position(self, new_position):
         self.position.update_position(new_position)
 
-    def remove_tile_from_hand(self, to_remove):
-        found = False
+    def remove_tile_from_hand(self, current_tile):
         for idx, tile in enumerate(self.tiles_owned):
-            if to_remove.identifier == tile.identifier:
+            if tile.identifier == current_tile.identifier:
                 del self.tiles_owned[idx]
-                found = True
-        if not found:
-            raise RuntimeError("Tile to remove not in hand!")
-        
-    def replace_with_random_player(self):
-        old_player = self.player
-        self.player = RandomPlayer(old_player.name)
-        self.player.color = old_player.color
-        self.player.other_colors = old_player.other_colors
-        self.player.initialized = old_player.initialized
-        self.placed_pawn = old_player.placed_pawn
-        self.played_turn = old_player.played_turn
-        self.game_ended = old_player.game_ended
 
+    #client check
+    def validate_hand(self, board):
+        """
+        Checks to make sure the hand is valid.
+        A valid hand does not have more than 3 tiles, has tiles that are unique from each other,
+        and none of the tiles are already on the board.
+        """
+
+        if len(self.tiles_owned) == 0:
+            raise RuntimeError("This player has no tiles to play!")
+
+        if len(self.tiles_owned) > constants.HAND_SIZE:
+            raise RuntimeError("A player cannot have more than 3 tiles in their hand.")
+
+        if board.check_if_tiles_on_board(self.tiles_owned):
+            raise RuntimeError("This player has a tile that is already on the board.")

@@ -1,4 +1,5 @@
-from player import Player
+from src.mPlayer import MPlayer
+from src.sPlayer import SPlayer
 from board import Board
 from tile import Tile
 from position import Position
@@ -9,29 +10,29 @@ from mostSymmetricPlayer import MostSymmetricPlayer
 import administrator
 import pytest
 
-def test_playerInitialization():
-    player_1 = Player('Upasna', 'blue', Position(0, 1))
-    player_2 = Player('Amulya', 'red', Position(11, 0))
-    with pytest.raises(Exception):
-        player_3 = Player('Amulya', 'green', Position(19, 8))
-    with pytest.raises(Exception):
-        player_4 = Player('Amulya', 'orange', Position(12, 0))
+# def test_playerInitialization():
+#     player_1 = Player('Upasna', 'blue', Position(0, 1))
+#     player_2 = Player('Amulya', 'red', Position(11, 0))
+#     with pytest.raises(Exception):
+#         player_3 = Player('Amulya', 'green', Position(19, 8))
+#     with pytest.raises(Exception):
+#         player_4 = Player('Amulya', 'orange', Position(12, 0))
 
 def test_initialize():
-    player_1 = Player()
+    player_1 = MPlayer()
     player_1.initialize('blue', ['green', 'darkgreen'])
 
     assert player_1.color == 'blue'
     assert player_1.other_colors == ['green', 'darkgreen']
 
-    player_2 = Player()
+    player_2 = MPlayer()
     player_2.initialize('green', ['blue', 'darkgreen'])
 
     assert player_2.color == 'green'
     assert player_2.other_colors == ['blue', 'darkgreen']
 
 def test_placePawn():
-    player_1 = Player()
+    player_1 = MPlayer()
     player_1.initialize('blue', ['green', 'darkgreen'])
     board = Board([player_1])
     assert player_1.position == None
@@ -42,37 +43,36 @@ def test_placePawn():
     case_1 = (player_1.position.x == 0 or player_1.position.x == 18) and player_1.position.y in valid_positions
     case_2 = (player_1.position.y == 0 or player_1.position.y == 18) and player_1.position.x in valid_positions
     assert case_1 or case_2
-    assert player_1.get_coordinates() != (19,19)
 
 def test_drawTile():
     draw_pile = administrator.create_draw_pile()
-    player_1 = Player('Upasna', 'blue', Position(0, 1))
+    player_1 = SPlayer()
     player_1.draw_tile(draw_pile)
     assert len(player_1.tiles_owned) == 1
     assert len(draw_pile) == 34
 
-    player_2 = Player('Upasna', 'green', Position(11, 0))
+    player_2 = SPlayer()
     player_2.draw_tile(draw_pile)
     assert len(player_2.tiles_owned) == 1
     assert len(draw_pile) == 33
 
 def test_initializeHand():
     draw_pile = administrator.create_draw_pile()
-    player_1 = Player('Upasna', 'blue', Position(0, 1))
+    player_1 = SPlayer()
     player_1.initialize_hand(draw_pile)
     assert len(player_1.tiles_owned) == 3
     assert len(draw_pile) == 32
 
-    player_2 = Player('Amulya', 'green', Position(11, 0))
+    player_2 = SPlayer()
     player_2.initialize_hand(draw_pile)
     assert len(player_2.tiles_owned) == 3
     assert len(draw_pile) == 29
 
 def test_loseTiles():
     draw_pile = administrator.create_draw_pile()
-    player_1 = Player('Amulya', 'blue', Position(0, 1))
+    player_1 = SPlayer()
     player_1.initialize_hand(draw_pile)
-    player_2 = Player('Amulya', 'green', Position(11, 0))
+    player_2 = SPlayer()
     player_2.initialize_hand(draw_pile)
     assert len(draw_pile) == 29
 
@@ -84,11 +84,11 @@ def test_loseTiles():
     assert len(player_2.tiles_owned) == 0
     assert len(draw_pile) == 35
 
-def test_playTile():
+def test_removeTileFromHand():
     tile_1 = Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]])
-    player_1 = Player('Michael', 'blue', Position(0, 1))
+    player_1 = SPlayer()
     player_1.tiles_owned = [Tile(12, [[0, 7], [1, 2], [3, 4], [5, 6]]), Tile(3, [[0, 1], [2, 3], [4, 5], [6, 7]]), Tile(17, [[0, 3], [1, 7], [2, 6], [4, 5]])]
-    player_1.play_tile(tile_1)
+    player_1.remove_tile_from_hand(tile_1)
     assert len(player_1.tiles_owned) == 2
 
 def test_RandomPlayer_initialize():
