@@ -1,18 +1,14 @@
-from player import Player
 from board import Board
 from tile import Tile
 from position import Position
 from square import Square
-from randomPlayer import RandomPlayer
-from leastSymmetricPlayer import LeastSymmetricPlayer
-from mostSymmetricPlayer import MostSymmetricPlayer
 import administrator
 import pytest
 
 def test_constructor():
     with pytest.raises(Exception):
         tile_1 = Tile(17, [[0, 3], [1, 7], [2, 6]])
-    
+
     with pytest.raises(Exception):
         tile_2 = Tile(17, [[0, 3], [1, 7], [2, 6], [2, 9]])
 
