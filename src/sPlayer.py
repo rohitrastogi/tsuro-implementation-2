@@ -32,7 +32,7 @@ class SPlayer():
             self.draw_tile(pile_of_tiles)
 
     def get_name(self):
-        return self.player.get_name
+        return self.player.get_name()
 
     def is_tile_owned(self, curr_tile):
         for tile in self.tiles_owned:

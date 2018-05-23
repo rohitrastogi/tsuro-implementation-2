@@ -21,14 +21,13 @@ if __name__ == "__main__":
         s.register_player(player_3)
         game_over = s.play_game()
 
-        if not isinstance(game_over, bool):
-            for player in game_over:
-                if player.get_name() == 'Upasna':
-                    r += 1
-                if player.get_name() == 'Amulya':
-                    least += 1
-                if player.get_name() == 'Rohit':
-                    most += 1
+        for player in game_over:
+            if player.get_name() == 'Upasna':
+                r += 1
+            if player.get_name() == 'Amulya':
+                least += 1
+            if player.get_name() == 'Rohit':
+                most += 1
         print ("Who won?: ", game_over)
 
     print ("Least: ", least)
