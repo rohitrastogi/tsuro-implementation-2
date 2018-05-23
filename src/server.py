@@ -19,9 +19,16 @@ class Server:
         curr_players = self.board.get_current_players()
         elim_players = self.board.get_eliminated_players()
         while not self.game_over:
+            administrator.validate_hand(curr_players, self.draw_pile, self.board)
             acting_player = curr_players[0]
             player = acting_player.player
             current_tile = player.play_turn(self.board, acting_player.tiles_owned, len(self.draw_pile))
+            if not administrator.legal_play(acting_player, self.board, current_tile):
+                print(acting_player.get_name() + " attempted to cheat by playing an illegal move!")
+                acting_player.replace_with_random_player()
+                current_tile = player.play_turn(self.board, acting_player.tiles_owned, len(self.draw_pile))
+                if not administrator.legal_play(acting_player, self.board, current_tile):
+                    raise RuntimeError("Received illegal move from Random Player!")
             acting_player.remove_tile_from_hand(current_tile)
             self.draw_pile, curr_players, elim_players, self.board, self.game_over = administrator.play_a_turn(self.draw_pile, curr_players, elim_players, self.board, current_tile)
         return self.game_over

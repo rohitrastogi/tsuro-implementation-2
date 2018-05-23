@@ -1,4 +1,3 @@
-from sPlayer import SPlayer
 from board import Board
 from tile import Tile
 import copy
@@ -28,7 +27,7 @@ def legal_play(player, board, tile):
 	# If there is another legal move, just check whether this tile causes elimination or not
 	# If there is not another legal move, then this tile can be played provided it belongs to the player
 	if another_legal:
-		return legal_play_helper(player.position, board, tile)
+		return legal_play_helper(player, board, tile)
 	else:
 		return player.is_tile_owned(tile)
 
@@ -75,13 +74,9 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 				   A list of players if there are multiple winners, in the case that all tiles are played or all remaining
 				   players get eliminated in the same turn.
 	"""
-
-	# TODO: if such a thing happens then you must boot the player and replace with random player
-	# if not legal_play(players[0], board, curr_tile):
-	# 	raise RuntimeError("This player is insisting on playing an incorrect tile.")
-	validate_hand(players, draw_pile)
 	curr_player = players.pop(0)
 	players.append(curr_player)
+	print(len(curr_player.tiles_owned))
 	curr_player_color = curr_player.color
 
 	original_square = curr_player.position.get_next_board_square()
@@ -215,14 +210,14 @@ def players_draw_tiles(players, draw_pile, curr_player_color):
 
 		i = (i+1)%len(players)
 
-def validate_hand(players, draw_pile):
+#TODO maybe put this in server class
+def validate_hand(players, draw_pile, board):
 	#check if acting player hand is in draw pile
 	acting_player_hand = players[0].tiles_owned
 	draw_pile_ids = set([tile.identifier for tile in draw_pile])
 	for tile in acting_player_hand:
 		if tile.identifier in draw_pile_ids:
 			raise RuntimeError(players[0].color + " has tiles in the draw pile!")
-
 
 	#check if acting player hand has tiles in other player hands
 	player_tile_ids = []
@@ -231,6 +226,18 @@ def validate_hand(players, draw_pile):
 	for idx, tile in enumerate(acting_player_hand):
 		if tile.identifier in player_tile_ids:
 			raise RuntimeError(players[0].color + " has same tiles as another player!")
+
+	#check if acting player hand is of size 0
+	if len(acting_player_hand) == 0:
+		raise RuntimeError("This player has no tiles to play!")
+
+	#check if acting player hand is less than or equal to 3
+	if len(acting_player_hand) > constants.HAND_SIZE:
+		raise RuntimeError("A player cannot have more than 3 tiles in their hand.")
+
+	#check if tiles in acting players hand are not already played and on the board
+	if board.check_if_tiles_on_board(acting_player_hand):
+		raise RuntimeError("This player has a tile that is already on the board.")
 
 
 def create_draw_pile():

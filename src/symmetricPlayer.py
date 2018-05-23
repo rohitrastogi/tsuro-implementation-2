@@ -25,14 +25,14 @@ class SymmetricPlayer(MPlayer):
             raise RuntimeError("The pawn must be placed before the player can play a turn!")
 
         #self.tiles_owned = tiles
-        #self.validate_hand(board)
         tiles.sort(key=lambda x: x.symmetry(), reverse=self.reverse)
         for idx, tile in enumerate(tiles):
             for i in range(constants.NUMBER_OF_ROTATIONS):
+                tile.rotate_tile()
                 if self.legal_play(board, tile, tiles):
                     return tile
-                tile.rotate_tile()
 
         self.played_turn = True
         random.shuffle(tiles)
-        return tiles[0]
+        to_play = tiles[0]
+        return to_play

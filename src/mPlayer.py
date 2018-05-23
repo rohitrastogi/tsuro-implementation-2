@@ -8,13 +8,14 @@ class MPlayer(implements(IPlayer)):
     """ data structure that contains player metadata """
 
     def __init__(self, name=''):
-        self.position = None #TODO
-        self.color = None #TODO
+        self.position = None 
+        self.color = None 
         self.name = name 
         self.initialized = False
         self.placed_pawn = False
         self.played_turn = False
         self.game_ended = True
+        self.other_colors = None 
 
     def get_name(self):
         return self.name

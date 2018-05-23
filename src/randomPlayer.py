@@ -27,15 +27,11 @@ class RandomPlayer(MPlayer):
                 if self.legal_play(board, tile, tiles):
                     legal_plays.append((idx, i))
         
-        if not legal_plays:
-             tile_index = random.randint(0,len(tiles) - 1)
-             rotation_index = random.randint(0, constants.NUMBER_OF_ROTATIONS - 1)
-        else:
-            tile_index, rotation_index = legal_plays[random.randint(0, len(legal_plays) - 1)]
+        tile_index, rotation_index = legal_plays[random.randint(0, len(legal_plays) - 1)]
 
         self.played_turn = True
 
         to_play = tiles[tile_index]
-        to_play.rotate_tile_variable(rotation_index)
+        to_play.rotate_tile_variable(rotation_index + 1)
 
         return to_play

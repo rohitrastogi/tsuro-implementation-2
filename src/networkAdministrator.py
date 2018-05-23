@@ -1,6 +1,6 @@
 from xml2obj import interpret
 
-class NetworkAdministrator(imp:
+class NetworkAdministrator:
 
     def __init__(self, player):
         self.player = player

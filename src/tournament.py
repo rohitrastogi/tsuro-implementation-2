@@ -15,7 +15,10 @@ if __name__ == "__main__":
     most = 0
     r = 0
 
-    while True:
+    num_games = 1000
+
+    while num_games > 0:
+        num_games -= 1
         s = Server()
         player_1 = RandomPlayer('Upasna')
         player_2 = LeastSymmetricPlayer('Amulya')
