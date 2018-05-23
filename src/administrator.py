@@ -74,7 +74,7 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 				   A list of players if there are multiple winners, in the case that all tiles are played or all remaining
 				   players get eliminated in the same turn.
 	"""
-
+	# validate_hand(players, draw_pile, board)
 	curr_player = players.pop(0)
 	players.append(curr_player)
 	curr_player_color = curr_player.color
@@ -161,7 +161,9 @@ def eliminated_players_cleanup(players, eliminated, draw_pile):
 	for i in range(len(players)):
 		if players[i].eliminated:
 			eliminated.append(players[i])
+			print ("player loses tiles")
 			players[i].lose_tiles(draw_pile)
+			print ("draw_pile in lose tiles: ", draw_pile)
 			players[i].dragon_held = False
 
 	players = [x for x in players if not x.eliminated]
@@ -223,7 +225,9 @@ def validate_hand(players, draw_pile, board):
 	player_tile_ids = []
 	for i in range(1, len(players)):
 		player_tile_ids.extend([tile.identifier for tile in players[i].tiles_owned])
+	print (player_tile_ids)
 	for idx, tile in enumerate(acting_player_hand):
+		print (tile.identifier)
 		if tile.identifier in player_tile_ids:
 			raise RuntimeError(players[0].color + " has same tiles as another player!")
 
