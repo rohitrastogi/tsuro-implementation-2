@@ -8,13 +8,13 @@ if __name__ == "__main__":
     most = 0
     r = 0
 
-    num_games = 1000
+    num_games = 1
 
     while num_games > 0:
         num_games -= 1
         s = Server()
         player_1 = RandomPlayer('Upasna')
-        player_2 = LeastSymmetricPlayer('Amulya')
+        player_2 = LeastSymmetricPlayer('Obama')
         player_3 = MostSymmetricPlayer("Rohit")
         s.register_player(player_1)
         s.register_player(player_2)
@@ -24,7 +24,7 @@ if __name__ == "__main__":
         for player in game_over:
             if player.get_name() == 'Upasna':
                 r += 1
-            if player.get_name() == 'Amulya':
+            if player.get_name() == 'Obama':
                 least += 1
             if player.get_name() == 'Rohit':
                 most += 1

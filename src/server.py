@@ -2,6 +2,7 @@ import administrator
 from sPlayer import SPlayer
 from board import Board
 import gameConstants as constants
+import random
 
 class Server:
     def __init__(self, board = None):
@@ -9,6 +10,7 @@ class Server:
         self.draw_pile = administrator.create_draw_pile()
         self.game_over = False
         self.num_players = 0
+        random.shuffle(self.draw_pile)
 
     def do_networking_stuff(self):
         #setup sockets and servers somehow
@@ -18,11 +20,30 @@ class Server:
         self.initialize_players()
         curr_players = self.board.get_current_players()
         elim_players = self.board.get_eliminated_players()
+
+        print ("Number of players in the game: ", len(curr_players))
+
         while not self.game_over:
             administrator.validate_hand(curr_players, self.draw_pile, self.board)
             acting_player = curr_players[0]
             player = acting_player.player
             current_tile = player.play_turn(self.board, acting_player.tiles_owned, len(self.draw_pile))
+
+
+            print ('\n**********   State of the Game   **********')
+            print ("Current player: ", acting_player.get_name())
+            print ("Current player's tiles: ", [tile.identifier for tile in acting_player.tiles_owned])
+            print ("Eliminated players: ", [p.get_name() for p in elim_players])
+            print ("Length of draw pile: ", len(self.draw_pile))
+            print ("Active players' positions: ")
+            for p in curr_players:
+                print("     ", p.get_name(), 'is at', p.position.x, p.position.y, 'and has', len(p.tiles_owned), 'tiles.')
+            for p in curr_players:
+                if p.dragon_held:
+                    print (p.get_name(), 'has the dragon tile!')
+            print ("Tile being played: ", current_tile.identifier, current_tile.paths)
+
+
             if not administrator.legal_play(acting_player, self.board, current_tile):
                 print(acting_player.get_name() + " attempted to cheat by playing an illegal move!")
                 acting_player.replace_with_random_player()
@@ -31,6 +52,8 @@ class Server:
                     raise RuntimeError("Received illegal move from Random Player!")
             acting_player.remove_tile_from_hand(current_tile)
             self.draw_pile, curr_players, elim_players, self.board, self.game_over = administrator.play_a_turn(self.draw_pile, curr_players, elim_players, self.board, current_tile)
+
+            print ("Current player's tiles after turn is played: ", [tile.identifier for tile in acting_player.tiles_owned])
 
         return self.game_over
 
