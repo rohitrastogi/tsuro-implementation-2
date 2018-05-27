@@ -3,7 +3,7 @@ from position import Position
 from IPlayer import IPlayer
 import random
 import gameConstants as constants
-froms state import State
+from state import State
 
 class MPlayer(implements(IPlayer)):
     """ data structure that contains player metadata """

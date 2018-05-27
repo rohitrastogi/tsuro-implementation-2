@@ -21,7 +21,7 @@ class NetworkedPlayer(implements(IPlayer)):
     def get_name(self):
         to_send = obj2xml.create_get_name_xml()
         name_xml = self.send_and_receive(to_send)
-        return xml2obj.construct_player_name_obj(name_xml))
+        return xml2obj.construct_player_name_obj(name_xml)
 
     def initialize(self, color, other_colors):
         self.state.update_state("initalize")

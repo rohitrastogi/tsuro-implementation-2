@@ -22,8 +22,7 @@ class SymmetricPlayer(MPlayer):
         """
 
         self.update_player_position(board)
-        if not self.placed_pawn:
-            raise RuntimeError("The pawn must be placed before the player can play a turn!")
+        self.state.update_state('play_turn')
 
         #self.tiles_owned = tiles
         tiles.sort(key=lambda x: x.symmetry(), reverse=self.reverse)
@@ -33,6 +32,5 @@ class SymmetricPlayer(MPlayer):
                 if self.legal_play(board, tile, tiles):
                     return tile
 
-        self.played_turn = True
         random.shuffle(tiles)
         return tiles[0]

@@ -18,9 +18,8 @@ class RandomPlayer(MPlayer):
         """
 
         self.update_player_position(board)
-        if not self.placed_pawn:
-            raise RuntimeError("The pawn must be placed before the player can play a turn!")
-
+        self.state.update_state('play_turn')
+    
         legal_plays = []
         for idx, tile in enumerate(tiles):
             for i in range(constants.NUMBER_OF_ROTATIONS):
@@ -29,8 +28,6 @@ class RandomPlayer(MPlayer):
                     legal_plays.append((idx, i))
         
         tile_index, rotation_index = legal_plays[random.randint(0, len(legal_plays) - 1)]
-
-        self.played_turn = True
 
         to_play = tiles[tile_index]
         to_play.rotate_tile_variable(rotation_index + 1)
