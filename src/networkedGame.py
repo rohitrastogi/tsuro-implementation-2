@@ -8,6 +8,6 @@ if __name__ == "__main__":
     networked_players = s.getNetworkedPlayers()
     for player in networked_players:
         s.register(player)
-        game_over = s.play_game()
+    game_over = s.play_game()
     
     print ("Who won?: ", game_over)
