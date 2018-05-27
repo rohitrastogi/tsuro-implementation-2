@@ -4,6 +4,7 @@ from networkedPlayer import NetworkedPlayer
 from board import Board
 import gameConstants as constants
 import random
+import socket
 
 class Server:
     def __init__(self, board = None, networked = True):
@@ -12,14 +13,26 @@ class Server:
         self.game_over = False
         self.num_players = 0
         random.shuffle(self.draw_pile)
+
         if networked:
             self.setup_networked_server()
 
     def setup_networked_server(self):
-        pass
+        max_connections = 3
+        host = 'localhost'
+        port = 9000
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.bind((host, port))
+        sock.listen(max_connections)
+        self.connections = []
+        while len(self.connections) < max_connections:
+            client_socket, addr = sock.accept()
+            player = NetworkedPlayer(client_socket)
+            player.name = player.get_name()
+            self.connections.append(player)
 
     def get_networked_players(self):
-        pass
+        return self.connections
 
     def play_game(self):
         self.initialize_players()

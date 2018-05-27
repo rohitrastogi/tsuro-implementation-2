@@ -18,9 +18,9 @@ def create_get_name_xml():
     top.text = ' '
     return top
 
-def create_player_name_xml(player):
+def create_player_name_xml(name):
     player_name = Element('player_name')
-    player_name.text = player.name
+    player_name.text = name
     return player_name
 
 def create_initialize_xml(color, list_of_colors):
@@ -160,6 +160,19 @@ def create_list_of_splayers_xml(list_of_splayers):
 
 def create_maybe_list_of_splayers_sml(maybe_list_of_splayers):
     pass
+
+def interpret_output(func, output):
+    if func == "end-game" or func == "initialize":
+        return create_void_xml()
+    elif func == "get-name":
+        return create_player_name_xml(output)
+    elif func == "place-pawn":
+        return create_pawn_loc_xml(output)
+    elif func == "play-turn":
+        return create_tile_xml(output)
+    else:
+        raise RuntimeError("Invalid XML Message!")
+
 
 # Tests
 # n = create_natural_number_xml(3)
