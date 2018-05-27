@@ -3,47 +3,36 @@ from position import Position
 from IPlayer import IPlayer
 import random
 import gameConstants as constants
+froms state import State
 
 class MPlayer(implements(IPlayer)):
     """ data structure that contains player metadata """
 
     def __init__(self, name=''):
+        self.name = name 
+        self.state = State()
         self.position = None 
         self.color = None 
-        self.name = name 
-        self.initialized = False
-        self.placed_pawn = False
-        self.played_turn = False
-        self.game_ended = True
         self.other_colors = None 
 
     def get_name(self):
         return self.name
 
     def initialize(self, color, other_colors):
-        if self.initialized:
-            raise RuntimeError("This player has already been initialized!")
-        if not self.game_ended:
-            raise RuntimeError("Do not reinitialize player without finishing the game!")
+        self.state.update_state("initialize")
         if color not in constants.Colors.values():
             raise ValueError("Not a valid color for a player!")
         for c in other_colors:
             if c not in constants.Colors.values():
                 raise ValueError("Not a valid color for another player!")
-
         self.color = color
         self.other_colors = other_colors
-        self.game_ended = False
-        self.initialized = True
 
     def place_pawn(self, board):
         """
         For now it is randomly going to pick a location not picked by another player
         """
-        if not self.initialized:
-            raise RuntimeError("Player must be initialized first!")
-        if self.placed_pawn:
-            raise RuntimeError("The pawn has already been placed!")
+        self.state.update_state("place_pawn")
 
         collision = True
         while collision:
@@ -63,18 +52,13 @@ class MPlayer(implements(IPlayer)):
                             collision = True
 
         self.position = Position(x, y)
-        self.placed_pawn = True
 
     def play_turn(self, board, tiles, remaining_in_pile):
         #update position field
         pass
 
     def end_game(self, board, colors):
-        self.game_ended = True
-        self.initialized = False
-        self.placed_pawn = False
-        self.played_turn = False
-        pass
+        self.state.update_state("end_game")
 
     def is_tile_owned(self, curr_tile, tiles):
         for tile in tiles:

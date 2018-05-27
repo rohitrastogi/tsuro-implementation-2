@@ -7,8 +7,7 @@ TODO
 * decide whether movePlayers should be a board function or an admin function
 * Contract to check if the square corresponds to the position
 * Contract for specific phantom tile in position
-* networking library to fill in blacks with pseudocode
+* networking library to fill in blanks with pseudocode
 * thorough testing of marshalling library
-* update broken tests as a result of refactoring
 
 

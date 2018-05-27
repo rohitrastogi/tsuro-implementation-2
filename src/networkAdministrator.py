@@ -10,11 +10,11 @@ class NetworkAdministrator:
     def __init__(self, player, host, port):
         self.player = player
         self.command_handler = {
-            "get-name" : player.getName,
+            "get-name" : player.get_name,
             "initialize" : player.initialize,
             "place-pawn" : player.place_pawn,
             "play-turn" : player.play_turn,
-            "end-game" : player.endgame
+            "end-game" : player.end_game
         }
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as self.sock:
             self.sock.connect((host, port))
