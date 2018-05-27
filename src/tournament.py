@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     while num_games > 0:
         num_games -= 1
-        s = Server()
+        s = Server(networked = False)
         player_1 = RandomPlayer('Upasna')
         player_2 = LeastSymmetricPlayer('Obama')
         player_3 = MostSymmetricPlayer("Rohit")

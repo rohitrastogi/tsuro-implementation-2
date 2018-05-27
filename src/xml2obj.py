@@ -9,7 +9,6 @@ from square import Square
 import gameConstants as constants
 import administrator
 
-#TODO find the correct place to add paths and hashing (maybe sever?)
 def create_path_hash(paths):
     path_hashes = []
     for path in paths:
@@ -28,8 +27,6 @@ def create_board_obj(board):
 
     tile_entries = [child for child in board[0]]
     pawn_entries = [child for child in board[1]]
-    print(tile_entries)
-    print(pawn_entries)
 
     for tile_entry in tile_entries:
         (square_obj, tile_obj) = create_tile_obj(tile_entry)
@@ -37,7 +34,6 @@ def create_board_obj(board):
 
     for pawn_entry in pawn_entries:
         (color_obj, position_obj) = create_player_locs(pawn_entry)
-        #TODO need to fix tile order somehow
         board_obj.add_player(SPlayer(color_obj, position_obj))
 
     return board_obj
@@ -50,7 +46,6 @@ def create_tile_obj(tile_entry):
 def create_square_obj(xy):
     x = xy[0].text
     y = xy[1].text
-    print(convert_y_representation(int(y)))
     return Square(int(x), convert_y_representation(int(y)))
 
 def convert_y_representation(y):
@@ -76,18 +71,19 @@ def create_player_locs(pawn_entry):
     return (color_obj, position_obj)
 
 def create_color_obj(color):
-    enum_index = [c.name for c in constants.Colors].index(color.text)
-    return constants.Colors(enum_index)
+    if color.text in constants.Colors.values():
+        return color.text
+    raise RuntimeError("Invalid Color Specified in XML!")
 
 def create_position_obj(pawn_loc):
-    # TODO is there a function that cna do this dynamically
+    # TODO is there a function that can do this dynamically
     mapping = {0:17, 1:16, 2:14, 3:13, 4:11, 5:10, 6:8, 7:7, 8:5, 9:4, 10:2, 11:1}
     if pawn_loc[0].tag == "v":
-        y = constants.END_WALL - int(pawn_loc[1].text)*3
-        x = mapping[int(pawn_loc[2].text)]
-    else:
         y = mapping[int(pawn_loc[2].text)]
-        x = constants.END_WALL - int(pawn_loc[1].text) * 3
+        x = int(pawn_loc[1].text) * 3
+    else:
+        y = constants.END_WALL - int(pawn_loc[1].text) * 3
+        x = constants.END_WALL - 1 - mapping[int(pawn_loc[2].text)]
     return Position(x, y, Square(x//3, y//3))
 
 def create_list_of_color_obj(list_of_color):
@@ -111,10 +107,10 @@ def interpret_command(command):
         return command.tag, create_board_obj(command[0])
 
     elif command.tag == "play-turn":
-        return command.tag, create_board_obj(command[0]), create_list_of_tile_obj(command[1]), int(command[2])
+        return command.tag, create_board_obj(command[0]), create_list_of_tile_obj(command[1]), int(command[2].text)
 
     elif command.tag == "end-game":
-        return command.tag, create_board_obj(command[1]), create_list_of_color_obj(command[2])
+        return command.tag, create_board_obj(command[0]), create_list_of_color_obj(command[1])
 
     else:
         raise RuntimeError("Invalid XML Messsage!")

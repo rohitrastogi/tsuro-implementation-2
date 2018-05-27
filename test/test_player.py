@@ -116,7 +116,8 @@ def test_RandomPlayer_playTurn():
 
     hand = [tile_1, tile_2]
     player_1.tiles_owned = hand
-    assert player_1.play_turn(board, hand, 33).identifier == 1 or player_1.play_turn(board, hand, 33).identifier == 2
+    just_played_id = player_1.play_turn(board, hand, 33).identifier
+    assert (just_played_id == 1 or just_played_id == 2)
 
     # tile_3 in its current orientation will cause elimination, but after one rotation will be legal
     tile_3 = Tile(3, [[0, 7],[1,2], [3,6], [4,5]])

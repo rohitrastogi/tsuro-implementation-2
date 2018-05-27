@@ -155,6 +155,12 @@ def create_natural_number_xml(number):
     n.text = str(number)
     return n
 
+def create_list_of_splayers_xml(list_of_splayers):
+    pass
+
+def create_maybe_list_of_splayers_sml(maybe_list_of_splayers):
+    pass
+
 # Tests
 # n = create_natural_number_xml(3)
 # print (prettify(n))

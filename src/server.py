@@ -1,19 +1,24 @@
 import administrator
 from sPlayer import SPlayer
+from networkedPlayer import NetworkedPlayer
 from board import Board
 import gameConstants as constants
 import random
 
 class Server:
-    def __init__(self, board = None):
+    def __init__(self, board = None, networked = True):
         self.board = Board(players = [])
         self.draw_pile = administrator.create_draw_pile()
         self.game_over = False
         self.num_players = 0
         random.shuffle(self.draw_pile)
+        if networked:
+            self.setup_networked_server()
 
-    def do_networking_stuff(self):
-        #setup sockets and servers somehow
+    def setup_networked_server(self):
+        pass
+
+    def get_networked_players(self):
         pass
 
     def play_game(self):

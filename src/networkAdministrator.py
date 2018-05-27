@@ -1,8 +1,15 @@
-from xml2obj import interpret
+import xml2obj
+import obj2xml
+import socket
+import sys
+from randomPlayer import RandomPlayer
+from xml.etree.ElementTree import fromstring
+
+
 
 class NetworkAdministrator:
 
-    def __init__(self, player):
+    def __init__(self, player, host, port):
         self.player = player
         self.command_handler = {
             "get-name" : player.getName,
@@ -11,16 +18,37 @@ class NetworkAdministrator:
             "play-turn" : player.play_turn,
             "end-game" : player.endgame
         }
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as self.sock:
+            self.sock.connect((host, port))
+            print("Connected to server at (host, port): " + (host, port))
+        
 
     def do_work(self):
-        while True: #? or until endgame message is received?
-            data_in = "" #recv from socket and convert bytes to xml
-            interpreted_command = xml2obj.interpret(data_in)
-            func, args = (data_in[0], data_in[1:])
-            res = self.command_handler[func](*args)
-            data_out = obj2xml.interpret(res) #and convert to bytes
-            #send data_out to socket
+        end_game = False
+        while True: 
+            received = str(self.sock.recv(4096), "utf-8")
+            received_xml = fromstring(received)
+            print("Received XML: " + received_xml)
+            interpreted_command = xml2obj.interpret(received_xml)
+            func, args = (interpreted_command[0], interpreted_command[1:])
+            if func == "end-game":
+                end_game = True
+            to_send = self.command_handler[func](*args)
+            to_send_xml = obj2xml.interpret(func, to_send) #and convert to bytes
+            print("Sent XML: " + to_send_xml)
+            self.sock.send(bytes(to_send_xml, "utf-8"))
+            if end_game:
+                self.end_connection()
+                break
+
+    def end_connection(self):
+        print("Game Over - Disconnecting Socket!")
+        self.sock.shutdown(socket.SHUT_WR)
+        self.sock.close()
 
 
-
-
+def main(argv):
+    #connect to server
+    rohit = RandomPlayer('Rohit')
+    rohit_admin = NetworkAdministrator(rohit, sys.argv[0], int(sys.argv[1]))
+    rohit_admin.do_work()
