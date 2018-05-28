@@ -86,6 +86,27 @@ def create_position_obj(pawn_loc):
         x = constants.END_WALL - 1 - mapping[int(pawn_loc[2].text)]
     return Position(x, y, Square(x//3, y//3))
 
+def create_list_of_splayer_obj(list_of_splayer):
+    list_of_splayers = [create_splayer_obj(splayer) for splayer in list_of_splayer]
+    return list_of_splayers
+
+def create_maybe_list_of_splayer_obj(maybe_list_of_splayers):
+    if maybe_list_of_splayers.tag == 'false':
+        return False
+    list_of_splayers = [create_splayer_obj(splayer) for splayer in maybe_list_of_splayers]
+    return list_of_splayers
+
+def create_splayer_obj(splayer):
+    sPlayer_obj = SPlayer()
+    sPlayer_obj.color = create_color_obj(splayer[0])
+    sPlayer_obj.tiles_owned = create_list_of_tile_obj(splayer[1])
+    if splayer.tag == "splayer-dragon":
+        sPlayer_obj.dragon_held = True
+    else:
+        sPlayer_obj.dragon_held = False
+
+    return sPlayer_obj
+
 def create_list_of_color_obj(list_of_color):
     return [create_color_obj(child) for child in list_of_color]
 
@@ -96,7 +117,7 @@ def construct_player_name_obj(player_name):
     return player_name.text
 
 def interpret_command(command):
-    #TODO: use enum or the like to amke this modular
+    #TODO: use enum or the like to make this modular
     if command.tag == "get-name":
         return command.tag
 

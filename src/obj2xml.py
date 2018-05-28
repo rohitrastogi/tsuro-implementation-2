@@ -77,6 +77,29 @@ def create_board_xml(board):
     board_node.append(create_pawns_xml(board))
     return board_node
 
+def create_splayer_xml(sPlayer):
+    if sPlayer.dragon_held:
+        root = Element('splayer-dragon')
+    else:
+        root = Element('splayer-nodragon')
+    root.append(create_color_xml(sPlayer.color))
+    root.append(create_set_of_tiles_xml(sPlayer.tiles_owned))
+    return root
+
+def create_list_of_splayers_xml(list_of_splayers):
+    root = Element('list')
+    for sPlayer in list_of_splayers:
+        root.append(create_splayer_xml(sPlayer))
+    return root
+
+def create_maybe_list_of_splayers_xml(maybe_list_of_splayers):
+    if maybe_list_of_splayers == False:
+        root = Element('false')
+        root.text = ' '
+    else:
+        root = create_list_of_splayers_xml(maybe_list_of_splayers)
+    return root
+
 def create_list_of_tiles_xml(list_of_tiles):
     list_node = Element('list')
     for tile in list_of_tiles:
@@ -154,12 +177,6 @@ def create_natural_number_xml(number):
     n = Element('n')
     n.text = str(number)
     return n
-
-def create_list_of_splayers_xml(list_of_splayers):
-    pass
-
-def create_maybe_list_of_splayers_sml(maybe_list_of_splayers):
-    pass
 
 def interpret_output(func, output):
     if func == "end-game" or func == "initialize":
