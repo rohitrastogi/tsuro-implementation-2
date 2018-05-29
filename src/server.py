@@ -25,7 +25,7 @@ class Server:
         sock.bind((host, port))
         sock.listen(max_connections)
         self.connections = []
-        while len(self.connections) < max_connections:
+        while len(self.connections) < 1:
             client_socket, addr = sock.accept()
             player = NetworkedPlayer(client_socket)
             player.name = player.get_name()

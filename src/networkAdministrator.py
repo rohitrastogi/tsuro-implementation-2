@@ -18,12 +18,12 @@ class NetworkAdministrator:
         }
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as self.sock:
             self.sock.connect((host, port))
-            print("Connected to server at (host, port): " + (host, port))
-        
+            print("Connected to server at (host, port): ", host, port)
+
 
     def listen(self):
         end_game = False
-        while True: 
+        while True:
             received = str(self.sock.recv(4096), "utf-8")
             received_xml = fromstring(received)
             print("Received XML: " + received_xml)
@@ -32,7 +32,7 @@ class NetworkAdministrator:
             if func == "end-game":
                 end_game = True
             to_send = self.command_handler[func](*args)
-            to_send_xml = obj2xml.interpret_output(func, to_send) 
+            to_send_xml = obj2xml.interpret_output(func, to_send)
             print("Sent XML: " + to_send_xml)
             self.sock.send(bytes(to_send_xml, "utf-8"))
             if end_game:
@@ -45,10 +45,8 @@ class NetworkAdministrator:
         self.sock.close()
 
 
-def main():
+if __name__ == "__main__":
     #connect to server
     rohit = RandomPlayer('Rohit')
-    rohit_admin = NetworkAdministrator(rohit, sys.argv[0], int(sys.argv[1]))
+    rohit_admin = NetworkAdministrator(rohit, sys.argv[1], int(sys.argv[2]))
     rohit_admin.listen()
-
-

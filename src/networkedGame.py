@@ -7,7 +7,9 @@ if __name__ == "__main__":
     s = Server(networked = True)
     networked_players = s.getNetworkedPlayers()
     for player in networked_players:
-        s.register(player)
+        s.register_player(player)
+    local_player = LeastSymmetricPlayer('Obama')
+    s.register_player(local_player)
     game_over = s.play_game()
-    
+
     print ("Who won?: ", game_over)

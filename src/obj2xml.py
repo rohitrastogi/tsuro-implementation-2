@@ -190,7 +190,6 @@ def interpret_output(func, output):
     else:
         raise RuntimeError("Invalid XML Message!")
 
-
 # Tests
 # n = create_natural_number_xml(3)
 # print (prettify(n))

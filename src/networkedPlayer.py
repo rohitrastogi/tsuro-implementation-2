@@ -9,15 +9,15 @@ from state import State
 from xml.etree.ElementTree import fromstring
 
 class NetworkedPlayer(implements(IPlayer)):
-    def __init__(self, socket): 
-        self.socket = socket
+    def __init__(self, socket):
+        self.sock = socket
         self.state = State()
         self.name = None
 
     def send_and_receive(self, to_send):
         self.sock.send(bytes(to_send, 'utf-8'))
         return fromstring(self.sock.recv(4096))
-    
+
     def get_name(self):
         to_send = obj2xml.create_get_name_xml()
         name_xml = self.send_and_receive(to_send)
@@ -45,4 +45,3 @@ class NetworkedPlayer(implements(IPlayer)):
         to_send = obj2xml.create_end_game_xml(color, other_colors)
         void_xml = self.send_and_receive(to_send)
         #TODO close socket?
-
