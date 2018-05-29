@@ -5,7 +5,7 @@ from server import Server
 
 if __name__ == "__main__":
     s = Server(networked = True)
-    networked_players = s.getNetworkedPlayers()
+    networked_players = s.get_networked_players()
     for player in networked_players:
         s.register_player(player)
     local_player = LeastSymmetricPlayer('Obama')

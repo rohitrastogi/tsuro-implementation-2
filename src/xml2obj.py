@@ -119,19 +119,19 @@ def construct_player_name_obj(player_name):
 def interpret_command(command):
     #TODO: use enum or the like to make this modular
     if command.tag == "get-name":
-        return command.tag
+        return [command.tag]
 
     elif command.tag == "initialize":
-        return command.tag, create_color_obj(command[0]), create_list_of_color_obj(command[1])
+        return [command.tag, create_color_obj(command[0]), create_list_of_color_obj(command[1])]
 
     elif command.tag == "place-pawn":
-        return command.tag, create_board_obj(command[0])
+        return [command.tag, create_board_obj(command[0])]
 
     elif command.tag == "play-turn":
-        return command.tag, create_board_obj(command[0]), create_list_of_tile_obj(command[1]), int(command[2].text)
+        return [command.tag, create_board_obj(command[0]), create_list_of_tile_obj(command[1]), int(command[2].text)]
 
     elif command.tag == "end-game":
-        return command.tag, create_board_obj(command[0]), create_list_of_color_obj(command[1])
+        return [command.tag, create_board_obj(command[0]), create_list_of_color_obj(command[1])]
 
     else:
         raise RuntimeError("Invalid XML Messsage!")

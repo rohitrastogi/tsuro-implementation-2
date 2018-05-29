@@ -6,7 +6,7 @@ import administrator
 import obj2xml
 import xml2obj
 from state import State
-from xml.etree.ElementTree import fromstring
+from xml.etree.ElementTree import fromstring, tostring
 
 class NetworkedPlayer(implements(IPlayer)):
     def __init__(self, socket):
@@ -15,7 +15,8 @@ class NetworkedPlayer(implements(IPlayer)):
         self.name = None
 
     def send_and_receive(self, to_send):
-        self.sock.send(bytes(to_send, 'utf-8'))
+        print(tostring(to_send))
+        self.sock.send(tostring(to_send))
         return fromstring(self.sock.recv(4096))
 
     def get_name(self):

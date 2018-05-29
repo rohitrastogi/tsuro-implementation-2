@@ -14,12 +14,12 @@ def prettify(element):
     return reparsed.toprettyxml(indent="  ")
 
 def create_get_name_xml():
-    top = Element('get_name')
+    top = Element('get-name')
     top.text = ' '
     return top
 
 def create_player_name_xml(name):
-    player_name = Element('player_name')
+    player_name = Element('player-name')
     player_name.text = name
     return player_name
 
@@ -35,7 +35,7 @@ def create_void_xml():
     return void
 
 def create_place_pawn_xml(board):
-    place_pawn = Element('place_pawn')
+    place_pawn = Element('place-pawn')
     place_pawn.append(create_board_xml(board))
     return place_pawn
 
@@ -53,7 +53,7 @@ def create_pawn_loc_xml(position):
     return pawn_loc
 
 def create_play_turn_xml(board, tiles, number):
-    play_turn = Element('play_turn')
+    play_turn = Element('play-turn')
     play_turn.append(create_board_xml(board))
     play_turn.append(create_set_of_tiles_xml(tiles))
     play_turn.append(create_natural_number_xml(number))
@@ -66,7 +66,7 @@ def create_tile_xml(tile):
     return tile_root
 
 def create_end_game_xml(board, winners):
-    end_game_node = Element('end_game')
+    end_game_node = Element('end-game')
     end_game_node.append(create_board_xml(board))
     end_game_node.append(create_set_of_colors_xml(winners))
     return end_game_node
