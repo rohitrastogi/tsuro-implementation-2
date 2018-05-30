@@ -52,6 +52,7 @@ class MPlayer(implements(IPlayer)):
                             collision = True
 
         self.position = Position(x, y)
+        return self.position
 
     def play_turn(self, board, tiles, remaining_in_pile):
         #update position field

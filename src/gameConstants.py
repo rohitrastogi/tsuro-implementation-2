@@ -12,7 +12,7 @@ from enum import Enum
 Colors = {0: 'blue', 1: 'red', 2: 'green', 3: 'orange', 4: 'sienna', 5: 'hotpink', 6: 'darkgreen', 7: 'purple'}
 
 class GameState(Enum):
-    unitialized = 0
+    uninitialized = 0
     initialized = 1
     pawn_placed = 2
     turn_played = 3

@@ -35,6 +35,7 @@ class NetworkAdministrator:
             if func == "end-game":
                 end_game = True
             to_send = self.command_handler[func](*args)
+            print("Output:", to_send)
             to_send_xml = tostring(obj2xml.interpret_output(func, to_send))
             print("Sent XML: ", to_send_xml)
             self.sock.send(to_send_xml)

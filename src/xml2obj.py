@@ -76,14 +76,17 @@ def create_color_obj(color):
     raise RuntimeError("Invalid Color Specified in XML!")
 
 def create_position_obj(pawn_loc):
+    print("XML2OBJ")
+    print("Converted ", (pawn_loc[0][0].tag, pawn_loc[1].text, pawn_loc[2].text))
     # TODO is there a function that can do this dynamically
     mapping = {0:17, 1:16, 2:14, 3:13, 4:11, 5:10, 6:8, 7:7, 8:5, 9:4, 10:2, 11:1}
-    if pawn_loc[0].tag == "v":
+    if pawn_loc[0][0].tag == "v":
         y = mapping[int(pawn_loc[2].text)]
         x = int(pawn_loc[1].text) * 3
     else:
         y = constants.END_WALL - int(pawn_loc[1].text) * 3
         x = constants.END_WALL - 1 - mapping[int(pawn_loc[2].text)]
+    print("TO", (x, y))
     return Position(x, y, Square(x//3, y//3))
 
 def create_list_of_splayer_obj(list_of_splayer):

@@ -2,10 +2,10 @@ from gameConstants import GameState
 
 class State:
     def __init__(self):
-        self.state = GameState.unitialized
+        self.state = GameState.uninitialized
 
     def update_state(self, method):
-        if self.state == GameState.unitialized and method == "initialize":
+        if self.state == GameState.uninitialized and method == "initialize":
             self.state = GameState.initialized
 
         elif self.state == GameState.initialized and method == "place_pawn":
