@@ -42,19 +42,18 @@ def create_place_pawn_xml(board):
 def create_pawn_loc_xml(position):
     x = position.x
     y = position.y
-    print("OBJ2XML")
-    print("Converted", (x, y))
+
     dict_mapping = {17:0, 16:1, 14:2, 13:3, 11:4, 10:5, 8:6, 7:7, 5:8, 4:9, 2:10, 1:11}
     pawn_loc = Element('pawn-loc')
     if x%3 == 0:
         pawn_loc.append(create_hv_xml('v'))
+        pawn_loc.append(create_natural_number_xml(x//3))
+        pawn_loc.append(create_natural_number_xml(dict_mapping[y]))
     else:
         pawn_loc.append(create_hv_xml('h'))
-    pawn_loc.append(create_natural_number_xml(x//3))
-    #pawn_loc.append(create_natural_number_xml(12 - y + y//3))
-    pawn_loc.append(create_natural_number_xml(dict_mapping[y]))
-    direction = "v" if x%3 ==0 else "h"
-    print("TO", (direction, x//3, dict_mapping[y]))
+        pawn_loc.append(create_natural_number_xml(constants.BOARD_DIMENSION - y//3))
+        pawn_loc.append(create_natural_number_xml(11 - dict_mapping[x]))
+
     return pawn_loc
 
 def create_play_turn_xml(board, tiles, number):
@@ -126,7 +125,7 @@ def create_tiles_xml(board):
                 ent.append(create_xy_xml(i, constants.BOARD_DIMENSION - j - 1))
                 ent.append(create_tile_xml(board.tiles[i][j]))
                 map_node.append(ent)
-    map_node.text = ' '    
+    map_node.text = ' '
     return map_node
 
 def create_pawns_xml(board):
@@ -141,13 +140,8 @@ def create_pawns_xml(board):
     return map_node
 
 def create_hv_xml(option):
-    hv = Element('hv')
-    if option == 'h':
-        h = SubElement(hv, 'h')
-        h.text = ' '
-    if option == 'v':
-        v = SubElement(hv, 'v')
-        v.text = ' '
+    hv = Element(option)
+    hv.text = ' '
     return hv
 
 def create_xy_xml(x_num, y_num):

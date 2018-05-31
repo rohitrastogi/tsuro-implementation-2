@@ -1,7 +1,9 @@
 import xml2obj
+from board import Board
+from square import Square
+from tile import Tile
 from xml.etree.ElementTree import fromstring
 import pytest
-
 
 def test_create_square_obj():
     square_xml_1 = "<xy><x>4</x><y>1</y></xy>"
@@ -34,15 +36,19 @@ def test_create_color_obj():
         color_2 = xml2obj.create_color_obj(color_parse_2)
 
 def test_create_pawn_loc():
+    board_1 = Board()
+    board_1.place_tile(Square(0,5), Tile(0, [[0, 1], [2, 3], [4, 5], [6, 7]]))
     posn_xml_1 = "<pawn-loc><v></v><n>1</n><n>1</n></pawn-loc>"
     posn_parse_1 = fromstring(posn_xml_1)
-    posn_1 = xml2obj.create_position_obj(posn_parse_1)
+    posn_1 = xml2obj.create_position_obj(posn_parse_1, board_1)
     assert(posn_1.x == 3 and posn_1.y == 16)
 
+    board_2 = Board()
+    board_2.place_tile(Square(0,3), Tile(0, [[0, 1], [2, 3], [4, 5], [6, 7]]))
     posn_xml_2 = "<pawn-loc><h></h><n>1</n><n>1</n></pawn-loc>"
     posn_parse_2 = fromstring(posn_xml_2)
-    posn_2 = xml2obj.create_position_obj(posn_parse_2)
-    assert(posn_2.x == 1 and posn_2.y == 15)
+    posn_2 = xml2obj.create_position_obj(posn_parse_2, board_2)
+    assert(posn_2.x == 2 and posn_2.y == 15)
 
 def test_create_board():
     board_xml_1 = "<board><map><ent><xy><x>0</x><y>0</y></xy><tile><connect><n>0</n><n>1</n></connect><connect><n>2</n><n>4</n></connect><connect><n>3</n><n>6</n></connect><connect><n>5</n><n>7</n></connect></tile></ent></map><map><ent><color>red</color><pawn-loc><v></v><n>1</n><n>1</n></pawn-loc></ent></map></board>"
@@ -108,7 +114,7 @@ def test_intepret_get_name():
     get_name_xml = "<get-name></get-name>"
     get_name_parse = fromstring(get_name_xml)
     command_1 = xml2obj.interpret_command(get_name_parse)
-    assert command_1 == "get-name"
+    assert command_1[0] == "get-name"
 
 def test_interpret_play_turn():
     end_game_xml = "<play-turn><board><map><ent><xy><x>0</x><y>0</y></xy><tile><connect><n>0</n><n>1</n></connect><connect><n>2</n><n>4</n></connect><connect><n>3</n><n>6</n></connect><connect><n>5</n><n>7</n></connect></tile></ent></map><map><ent><color>red</color><pawn-loc><v></v><n>1</n><n>1</n></pawn-loc></ent></map></board><set><tile><connect><n>0</n><n>5</n></connect><connect><n>1</n><n>3</n></connect><connect><n>2</n><n>6</n></connect><connect><n>4</n><n>7</n></connect></tile></set><n>3</n></play-turn>"

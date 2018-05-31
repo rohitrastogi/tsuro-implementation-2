@@ -16,7 +16,12 @@ def create_path_hash(paths):
     return '-'.join(path_hashes)
 
 tiles = administrator.create_draw_pile()
-tile_tups = [(create_path_hash(tile.paths), tile.identifier) for tile in tiles]
+tile_tups = []
+for tile in tiles:
+    for i in range(4):
+        tile_tups.append((create_path_hash(tile.paths), tile.identifier))
+        tile.rotate_tile()
+
 path_id_map = {k:v for (k, v) in tile_tups}
 
 def get_identifier(path_hash):
@@ -29,16 +34,16 @@ def create_board_obj(board):
     pawn_entries = [child for child in board[1]]
 
     for tile_entry in tile_entries:
-        (square_obj, tile_obj) = create_tile_obj(tile_entry)
+        (square_obj, tile_obj) = create_tiles_obj(tile_entry)
         board_obj.place_tile(square_obj, tile_obj)
 
     for pawn_entry in pawn_entries:
-        (color_obj, position_obj) = create_player_locs(pawn_entry)
+        (color_obj, position_obj) = create_player_locs(pawn_entry, board_obj)
         board_obj.add_player(SPlayer(color_obj, position_obj))
 
     return board_obj
 
-def create_tile_obj(tile_entry):
+def create_tiles_obj(tile_entry):
     xy = tile_entry[0]
     tile = tile_entry[1]
     return (create_square_obj(xy), create_tile_obj_helper(tile))
@@ -65,9 +70,9 @@ def create_tile_obj_helper(tile):
 def create_path_object(connection):
     return [int(connection[0].text), int(connection[1].text)]
 
-def create_player_locs(pawn_entry):
+def create_player_locs(pawn_entry, board_obj):
     color_obj = create_color_obj(pawn_entry[0])
-    position_obj = create_position_obj(pawn_entry[1])
+    position_obj = create_position_obj(pawn_entry[1], board_obj)
     return (color_obj, position_obj)
 
 def create_color_obj(color):
@@ -75,19 +80,30 @@ def create_color_obj(color):
         return color.text
     raise RuntimeError("Invalid Color Specified in XML!")
 
-def create_position_obj(pawn_loc):
-    print("XML2OBJ")
-    print("Converted ", (pawn_loc[0][0].tag, pawn_loc[1].text, pawn_loc[2].text))
+def create_position_obj(pawn_loc, board_obj):
+    # print("XML2OBJ")
+    # print("Converted ", (pawn_loc[0][0].tag, pawn_loc[1].text, pawn_loc[2].text))
     # TODO is there a function that can do this dynamically
     mapping = {0:17, 1:16, 2:14, 3:13, 4:11, 5:10, 6:8, 7:7, 8:5, 9:4, 10:2, 11:1}
-    if pawn_loc[0][0].tag == "v":
-        y = mapping[int(pawn_loc[2].text)]
+    if pawn_loc[0].tag == "v":
         x = int(pawn_loc[1].text) * 3
+        y = mapping[int(pawn_loc[2].text)]
+        square = None
+        if board_obj.get_tile(Square(x//3, y//3)):
+            square = Square(x//3, y//3)
+        if board_obj.get_tile(Square(x//3 - 1, y//3)):
+            square = Square(x//3 - 1, y//3)
     else:
+        x = constants.END_WALL - mapping[int(pawn_loc[2].text)]
         y = constants.END_WALL - int(pawn_loc[1].text) * 3
-        x = constants.END_WALL - 1 - mapping[int(pawn_loc[2].text)]
-    print("TO", (x, y))
-    return Position(x, y, Square(x//3, y//3))
+        square = None
+        if board_obj.get_tile(Square(x//3, y//3)):
+            square = Square(x//3, y//3)
+        if board_obj.get_tile(Square(x//3, y//3 - 1)):
+            square = Square(x//3, y//3 - 1)
+
+    # print("TO", (x, y))
+    return Position(x, y, square)
 
 def create_list_of_splayer_obj(list_of_splayer):
     list_of_splayers = [create_splayer_obj(splayer) for splayer in list_of_splayer]

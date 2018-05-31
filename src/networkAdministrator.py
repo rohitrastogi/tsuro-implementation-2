@@ -19,31 +19,25 @@ class NetworkAdministrator:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((host, port))
         print("Connected to server at (host, port): ", host, port)
-        
-
 
     def listen(self):
         end_game = False
         while True:
-            received = self.sock.recv(4096).decode('utf-8')
-            print("Received XML: ", received)
+            received = self.sock.recv(8192).decode('utf-8')
             received_xml = fromstring(received)
             interpreted_command = xml2obj.interpret_command(received_xml)
             func, args = (interpreted_command[0], interpreted_command[1:])
-            print("func: ", func)
-            print("args: " , args)
             if func == "end-game":
                 end_game = True
             to_send = self.command_handler[func](*args)
-            print("Output:", to_send)
             to_send_xml = tostring(obj2xml.interpret_output(func, to_send))
-            print("Sent XML: ", to_send_xml)
             self.sock.send(to_send_xml)
             if end_game:
-                self.end_connection()
+                self.end_connection(args)
                 break
 
-    def end_connection(self):
+    def end_connection(self, args):
+        print ("The winner(s) are: ", args[1])
         print("Game Over - Disconnecting Socket!")
         self.sock.shutdown(socket.SHUT_WR)
         self.sock.close()
@@ -51,6 +45,9 @@ class NetworkAdministrator:
 
 if __name__ == "__main__":
     #connect to server
-    rohit = RandomPlayer('Rohit')
-    rohit_admin = NetworkAdministrator(rohit, sys.argv[1], int(sys.argv[2]))
-    rohit_admin.listen()
+    # arg 1 is name
+    # arg 2 is localhost
+    # arg 3 is port number
+    n_player = RandomPlayer(sys.argv[1])
+    player_admin = NetworkAdministrator(n_player, sys.argv[2], int(sys.argv[3]))
+    player_admin.listen()

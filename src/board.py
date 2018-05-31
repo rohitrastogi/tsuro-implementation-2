@@ -25,6 +25,8 @@ class Board:
         self.num_tiles += 1
 
     def get_tile(self, square):
+        if square.x == -1 or square.x == constants.BOARD_DIMENSION or square.y == -1 or square.y == constants.BOARD_DIMENSION:
+            return None
         return self.tiles[square.x][square.y]
 
     def move_across_board(self, position, curr_tile):

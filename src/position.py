@@ -48,6 +48,7 @@ class Position:
         Given a player's position and the square they are currently on returns the square they will next place the tile on.
         """
         square = self.square
+
         if self.x%3 == 0:
             if self.x == square.x*3:
                 return Square(square.x-1, square.y)

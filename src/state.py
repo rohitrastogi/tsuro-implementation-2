@@ -14,9 +14,12 @@ class State:
         elif (self.state == GameState.pawn_placed or self.state == GameState.turn_played) and method == "play_turn":
             self.state = GameState.turn_played
 
-        #TODO does turn_player have to occur before game_over
-        elif self.state == GameState.turn_played and method == "game_over":
+        elif self.state == GameState.pawn_placed and method == "end_game":
             self.state = GameState.game_over
-        
+
+        #TODO does turn_player have to occur before game_over
+        elif self.state == GameState.turn_played and method == "end_game":
+            self.state = GameState.game_over
+
         else:
             raise RuntimeError("Invalid Sequence Contract! State is: " + self.state.name + " and method is: " + method)

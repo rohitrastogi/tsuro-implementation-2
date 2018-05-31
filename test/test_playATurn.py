@@ -29,7 +29,6 @@ def test_playATurn_1():
     player_1.tiles_owned = [Tile(15, [[0, 1], [2, 4], [3, 6], [5, 7]]), Tile(16, [[0, 6], [1, 5], [2, 4], [3, 7]])]
     tile_1 = Tile(0, [[0, 1], [2, 3], [4, 5], [6, 7]])
     draw_pile, players, eliminated, board, game_over = administrator.play_a_turn(draw_pile, board.all_players, [], board, tile_1)
-    print (eliminated[0].tiles_owned)
     assert len(eliminated) == 1
     assert len(draw_pile) == 3
     assert len(players) == 3
@@ -420,7 +419,6 @@ def test_playATurn_17():
     assert len(eliminated) == 2
     assert len(players) == 2
     assert len(draw_pile) == 1
-    print(board.tiles[0][0].identifier, tile.identifier)
     assert board.tiles[0][0] == tile
     assert not game_over
     for player in players:

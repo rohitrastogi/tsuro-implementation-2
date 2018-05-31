@@ -1,5 +1,6 @@
 from board import Board
 from tile import Tile
+from sPlayer import SPlayer
 import copy
 import gameConstants as constants
 
@@ -81,7 +82,7 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 
 	original_square = curr_player.position.get_next_board_square()
 	original_square_coordinates = original_square.get_coordinates()
-	original_players = copy.deepcopy(players)
+	original_players = copy_players(players)
 
 	board.place_tile(original_square, curr_tile)
 	board.move_players(players, original_square_coordinates, curr_tile)
@@ -239,6 +240,20 @@ def validate_hand(players, draw_pile, board):
 	if board.check_if_tiles_on_board(acting_player_hand):
 		raise RuntimeError("This player has a tile that is already on the board.")
 
+def copy_players(players):
+	original_splayers = []
+	for p in players:
+		splayer = SPlayer()
+		splayer.player = p.player
+		splayer.color = p.color
+		splayer.position = p.position
+		splayer.dragon_held = False
+		splayer.tiles_owned = p.tiles_owned
+		splayer.eliminated = False
+		splayer.other_colors = p.other_colors
+		original_splayers.append(splayer)
+
+	return original_splayers
 
 def create_draw_pile():
 	"""

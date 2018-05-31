@@ -25,7 +25,7 @@ class Server:
         sock.bind((host, port))
         sock.listen(max_connections)
         self.connections = []
-        while len(self.connections) < 1:
+        while len(self.connections) < 2:
             client_socket, addr = sock.accept()
             player = NetworkedPlayer(client_socket)
             player.name = player.get_name()
@@ -72,6 +72,11 @@ class Server:
             self.draw_pile, curr_players, elim_players, self.board, self.game_over = administrator.play_a_turn(self.draw_pile, curr_players, elim_players, self.board, current_tile)
 
             print ("Current player's tiles after turn is played: ", [tile.identifier for tile in acting_player.tiles_owned])
+
+        for p in curr_players:
+            p.player.end_game(self.board, [winner.color for winner in self.game_over])
+        for p in elim_players:
+            p.player.end_game(self.board, [winner.color for winner in self.game_over])
 
         return self.game_over
 

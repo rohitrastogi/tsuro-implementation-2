@@ -18,10 +18,10 @@ class NetworkedPlayer(implements(IPlayer)):
         self.other_colors = None
 
     def send_and_receive(self, to_send):
-        print("XML Sent: ", tostring(to_send))
+        # print("XML Sent: ", tostring(to_send))
         self.sock.send(tostring(to_send))
-        received = self.sock.recv(4096)
-        print("XML Received: ", received)
+        received = self.sock.recv(8192)
+        # print("XML Received: ", received)
         return fromstring(received)
 
     def get_name(self):
@@ -41,17 +41,17 @@ class NetworkedPlayer(implements(IPlayer)):
         self.state.update_state("place_pawn")
         to_send = obj2xml.create_place_pawn_xml(board)
         position_xml = self.send_and_receive(to_send)
-        self.position = xml2obj.create_position_obj(position_xml)
+        self.position = xml2obj.create_position_obj(position_xml, board)
         return self.position
 
     def play_turn(self, board, tiles, remaining_in_pile):
         self.state.update_state("play_turn")
         to_send = obj2xml.create_play_turn_xml(board, tiles, remaining_in_pile)
         tile_xml = self.send_and_receive(to_send)
-        return xml2obj.construct_tile_object(tile_xml)
+        return xml2obj.create_tile_obj_helper(tile_xml)
 
     def end_game(self, board, colors):
         self.state.update_state("end_game")
         to_send = obj2xml.create_end_game_xml(board, colors)
         void_xml = self.send_and_receive(to_send)
-        #TODO close socket?
+        self.sock.close()
