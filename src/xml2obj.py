@@ -28,7 +28,7 @@ def get_identifier(path_hash):
     return path_id_map[path_hash]
 
 def create_board_obj(board):
-    board_obj = Board()
+    board_obj = Board(players = [])
 
     tile_entries = [child for child in board[0]]
     pawn_entries = [child for child in board[1]]
@@ -105,8 +105,22 @@ def create_position_obj(pawn_loc, board_obj):
     # print("TO", (x, y))
     return Position(x, y, square)
 
-def create_list_of_splayer_obj(list_of_splayer):
+def create_list_of_current_splayer_obj(list_of_splayer, board_xml):
     list_of_splayers = [create_splayer_obj(splayer) for splayer in list_of_splayer]
+    board = create_board_obj(board_xml)
+    color_position_dict = {player.color:player.position for player in board.current_players}
+    for sp in list_of_splayers:
+        sp.position = color_position_dict[sp.color]
+        sp.eliminated = False
+    return list_of_splayers
+
+def create_list_of_eliminated_splayer_obj(list_of_splayer, board_xml):
+    list_of_splayers = [create_splayer_obj(splayer) for splayer in list_of_splayer]
+    board = create_board_obj(board_xml)
+    color_position_dict = {player.color:player.position for player in board.eliminated_players}
+    for sp in list_of_splayers:
+        sp.position = color_position_dict[sp.color]
+        sp.eliminated = True
     return list_of_splayers
 
 def create_maybe_list_of_splayer_obj(maybe_list_of_splayers):

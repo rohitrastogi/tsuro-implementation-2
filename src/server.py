@@ -36,8 +36,8 @@ class Server:
 
     def play_game(self):
         self.initialize_players()
-        curr_players = self.board.get_current_players()
-        elim_players = self.board.get_eliminated_players()
+        curr_players = self.board.current_players
+        elim_players = self.board.eliminated_players
 
         print ("Number of players in the game: ", len(curr_players))
 
@@ -90,7 +90,7 @@ class Server:
 
     def initialize_players(self):
         colors = [constants.Colors[i] for i in range(self.num_players)]
-        for splayer in self.board.get_current_players():
+        for splayer in self.board.current_players:
             player = splayer.player
             player.initialize(splayer.color, colors[1:])
             player.place_pawn(self.board)

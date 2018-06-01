@@ -4,9 +4,10 @@ class Board:
     """ data structure that contains board metadata """
 
     def __init__(self, players = []):
-        self.all_players = players
         self.num_tiles = 0
         self.tiles = []
+        self.current_players = players
+        self.eliminated_players = []
 
         for i in range(constants.BOARD_DIMENSION):
             temp = []
@@ -15,7 +16,7 @@ class Board:
             self.tiles.append(temp)
 
     def add_player(self, player):
-        self.all_players.append(player)
+        self.current_players.append(player)
 
     def is_square_vacant(self, square):
         return self.tiles[square.x][square.y] == None
@@ -79,9 +80,3 @@ class Board:
                     player.update_position(end_position)
                     if hit_a_wall:
                         player.eliminated = True
-
-    def get_eliminated_players(self):
-        return [x for x in self.all_players if x.eliminated]
-
-    def get_current_players(self):
-        return [x for x in self.all_players if not x.eliminated]

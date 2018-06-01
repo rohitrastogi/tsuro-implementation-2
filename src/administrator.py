@@ -91,6 +91,8 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 	players_draw_tiles(players, draw_pile, curr_player_color)
 
 	game_over = check_game_state(players, original_players, board)
+	board.current_players = players
+	board.eliminated_players = eliminated
 
 	return draw_pile, players, eliminated, board, game_over
 

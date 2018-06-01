@@ -55,8 +55,18 @@ def test_create_board():
     board_parse_1 = fromstring(board_xml_1)
     board_1 = xml2obj.create_board_obj(board_parse_1)
     assert board_1.num_tiles == 1
-    assert board_1.all_players[0].color == "red"
+    assert board_1.current_players[0].color == "red"
     assert board_1.tiles[0][5].identifier == 1
+
+def test_create_board_2():
+    board_xml_1 = "<board><map></map><map><ent><color>orange</color><pawn-loc><v></v><n>0</n><n>11</n></pawn-loc></ent><ent><color>red</color><pawn-loc><h></h><n>6</n><n>11</n></pawn-loc></ent><ent><color>sienna</color><pawn-loc><v></v><n>0</n><n>5</n></pawn-loc></ent><ent><color>blue</color><pawn-loc><h></h><n>0</n><n>0</n></pawn-loc></ent><ent><color>hotpink</color><pawn-loc><h></h><n>6</n><n>5</n></pawn-loc></ent><ent><color>green</color><pawn-loc><v></v><n>6</n><n>0</n></pawn-loc></ent></map></board>"
+    board_parse_1 = fromstring(board_xml_1)
+    board_1 = xml2obj.create_board_obj(board_parse_1)
+    assert board_1.num_tiles == 0
+    for p in board_1.current_players:
+        print ("board color: ", p.color)
+    assert len(board_1.current_players) == 6
+
 
 def test_create_splayer():
     splayer_xml_1 = "<splayer-dragon><color>blue</color><set><tile><connect><n>0</n><n>5</n></connect><connect><n>1</n><n>3</n></connect><connect><n>2</n><n>6</n></connect><connect><n>4</n><n>7</n></connect></tile></set></splayer-dragon>"
@@ -66,17 +76,17 @@ def test_create_splayer():
     assert splayer.dragon_held
     assert len(splayer.tiles_owned) == 1
 
-def test_create_list_of_splayer_obj():
-    list_splayer_xml_1 = "<list><splayer-dragon><color>blue</color><set><tile><connect><n>0</n><n>5</n></connect><connect><n>1</n><n>3</n></connect><connect><n>2</n><n>6</n></connect><connect><n>4</n><n>7</n></connect></tile></set></splayer-dragon><splayer-nodragon><color>red</color><set><tile><connect><n>0</n><n>1</n></connect><connect><n>2</n><n>3</n></connect><connect><n>4</n><n>5</n></connect><connect><n>6</n><n>7</n></connect></tile></set></splayer-nodragon></list>"
-    list_splayer_parse_1 = fromstring(list_splayer_xml_1)
-    list_of_splayer = xml2obj.create_list_of_splayer_obj(list_splayer_parse_1)
-    assert len(list_of_splayer) == 2
-    assert list_of_splayer[0].color == 'blue'
-    assert list_of_splayer[1].color == 'red'
-    assert list_of_splayer[0].dragon_held
-    assert not list_of_splayer[1].dragon_held
-    assert len(list_of_splayer[0].tiles_owned) == 1
-    assert len(list_of_splayer[1].tiles_owned) == 1
+# def test_create_list_of_splayer_obj():
+#     list_splayer_xml_1 = "<list><splayer-dragon><color>blue</color><set><tile><connect><n>0</n><n>5</n></connect><connect><n>1</n><n>3</n></connect><connect><n>2</n><n>6</n></connect><connect><n>4</n><n>7</n></connect></tile></set></splayer-dragon><splayer-nodragon><color>red</color><set><tile><connect><n>0</n><n>1</n></connect><connect><n>2</n><n>3</n></connect><connect><n>4</n><n>5</n></connect><connect><n>6</n><n>7</n></connect></tile></set></splayer-nodragon></list>"
+#     list_splayer_parse_1 = fromstring(list_splayer_xml_1)
+#     list_of_splayer = xml2obj.create_list_of_current_splayer_obj(list_splayer_parse_1)
+#     assert len(list_of_splayer) == 2
+#     assert list_of_splayer[0].color == 'blue'
+#     assert list_of_splayer[1].color == 'red'
+#     assert list_of_splayer[0].dragon_held
+#     assert not list_of_splayer[1].dragon_held
+#     assert len(list_of_splayer[0].tiles_owned) == 1
+#     assert len(list_of_splayer[1].tiles_owned) == 1
 
 def test_interpret_place_pawn():
     place_pawn_xml = "<place-pawn><board><map><ent><xy><x>0</x><y>0</y></xy><tile><connect><n>0</n><n>1</n></connect><connect><n>2</n><n>4</n></connect><connect><n>3</n><n>6</n></connect><connect><n>5</n><n>7</n></connect></tile></ent></map><map><ent><color>red</color><pawn-loc><v></v><n>1</n><n>1</n></pawn-loc></ent></map></board></place-pawn>"
@@ -85,7 +95,7 @@ def test_interpret_place_pawn():
     board_1 = xml2obj.interpret_command(place_pawn_parse)[1]
     assert command_1 == "place-pawn"
     assert board_1.num_tiles == 1
-    assert board_1.all_players[0].color == "red"
+    assert board_1.current_players[0].color == "red"
     assert board_1.tiles[0][5].identifier == 1
 
 def test_intepret_initialize():
@@ -106,7 +116,7 @@ def test_intepret_end_game():
     set_of_colors = xml2obj.interpret_command(end_game_parse)[2]
     assert command_1 == "end-game"
     assert board_1.num_tiles == 1
-    assert board_1.all_players[0].color == "red"
+    assert board_1.current_players[0].color == "red"
     assert board_1.tiles[0][5].identifier == 1
     assert set_of_colors == ["red"]
 
@@ -125,7 +135,7 @@ def test_interpret_play_turn():
     num_tiles_left = xml2obj.interpret_command(end_game_parse)[3]
     assert command_1 == "play-turn"
     assert board_1.num_tiles == 1
-    assert board_1.all_players[0].color == "red"
+    assert board_1.current_players[0].color == "red"
     assert board_1.tiles[0][5].identifier == 1
     assert set_of_tiles[0].identifier == 34
     assert int(num_tiles_left) == 3

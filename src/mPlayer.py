@@ -9,11 +9,11 @@ class MPlayer(implements(IPlayer)):
     """ data structure that contains player metadata """
 
     def __init__(self, name=''):
-        self.name = name 
+        self.name = name
         self.state = State()
-        self.position = None 
-        self.color = None 
-        self.other_colors = None 
+        self.position = None
+        self.color = None
+        self.other_colors = None
 
     def get_name(self):
         return self.name
@@ -45,7 +45,7 @@ class MPlayer(implements(IPlayer)):
                 y = random.choice([constants.START_WALL, constants.END_WALL])
                 x = random.choice([i for i in range(constants.END_WALL + 1) if i%3!=0])
 
-            for a_player in board.all_players:
+            for a_player in board.current_players:
                 if a_player.color in self.other_colors:
                     if a_player.position:
                         if (x,y) == a_player.get_coordinates():
@@ -118,6 +118,6 @@ class MPlayer(implements(IPlayer)):
 
     #call in play-turn
     def update_player_position(self, board):
-        for splayer in board.all_players:
+        for splayer in board.current_players:
             if splayer.color == self.color:
                 self.position = splayer.position

@@ -15,7 +15,7 @@ def prettify(element):
 
 def create_get_name_xml():
     top = Element('get-name')
-    top.text = ' '
+    # top.text = ' '
     return top
 
 def create_player_name_xml(name):
@@ -31,7 +31,7 @@ def create_initialize_xml(color, list_of_colors):
 
 def create_void_xml():
     void = Element('void')
-    void.text = ' '
+    # void.text = ' '
     return void
 
 def create_place_pawn_xml(board):
@@ -99,7 +99,7 @@ def create_list_of_splayers_xml(list_of_splayers):
 def create_maybe_list_of_splayers_xml(maybe_list_of_splayers):
     if maybe_list_of_splayers == False:
         root = Element('false')
-        root.text = ' '
+        # root.text = ' '
     else:
         root = create_list_of_splayers_xml(maybe_list_of_splayers)
     return root
@@ -125,23 +125,23 @@ def create_tiles_xml(board):
                 ent.append(create_xy_xml(i, constants.BOARD_DIMENSION - j - 1))
                 ent.append(create_tile_xml(board.tiles[i][j]))
                 map_node.append(ent)
-    map_node.text = ' '
+    # map_node.text = ' '
     return map_node
 
 def create_pawns_xml(board):
     map_node = Element('map')
-    for player in board.all_players:
+    for player in board.current_players:
         if player.position:
             ent = Element('ent')
             ent.append(create_color_xml(player.color))
             ent.append(create_pawn_loc_xml(player.position))
             map_node.append(ent)
-    map_node.text = ' '
+    # map_node.text = ' '
     return map_node
 
 def create_hv_xml(option):
     hv = Element(option)
-    hv.text = ' '
+    # hv.text = ' '
     return hv
 
 def create_xy_xml(x_num, y_num):
