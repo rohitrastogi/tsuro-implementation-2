@@ -27,9 +27,14 @@ class RandomPlayer(MPlayer):
                 if self.legal_play(board, tile, tiles):
                     legal_plays.append((idx, i))
         
-        tile_index, rotation_index = legal_plays[random.randint(0, len(legal_plays) - 1)]
+        if legal_plays:
+            random.shuffle(legal_plays)
+            tile_index, rotation_index = legal_plays[0]
+            to_play = tiles[tile_index]
+            to_play.rotate_tile_variable(rotation_index + 1)
+            return to_play
 
-        to_play = tiles[tile_index]
-        to_play.rotate_tile_variable(rotation_index + 1)
-
-        return to_play
+        else:
+            random.shuffle(tiles)
+            print("PLAYING ELIMINATION MOVE RIP")
+            return tiles[0]

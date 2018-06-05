@@ -19,7 +19,7 @@ class NetworkedPlayer(implements(IPlayer)):
 
     def send_and_receive(self, to_send):
         # print("XML Sent: ", tostring(to_send))
-        self.sock.send(tostring(to_send, short_empty_elements=False))
+        self.sock.sendall(tostring(to_send, short_empty_elements=False))
         received = self.sock.recv(8192)
         # print("XML Received: ", received)
         return fromstring(received)

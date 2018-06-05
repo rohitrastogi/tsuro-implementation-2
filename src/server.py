@@ -7,11 +7,15 @@ import random
 import socket
 
 class Server:
-    def __init__(self, board = None, networked = True):
+    def __init__(self, board = None, networked = True, port = None):
         self.board = Board(players = [])
         self.draw_pile = administrator.create_draw_pile()
         self.game_over = False
         self.num_players = 0
+        if not port:
+            self.port = 12345
+        else:
+            self.port = port
         random.shuffle(self.draw_pile)
 
         if networked:
@@ -20,9 +24,8 @@ class Server:
     def setup_networked_server(self):
         max_connections = 3
         host = 'localhost'
-        port = 9000
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.bind((host, port))
+        sock.bind((host, self.port))
         sock.listen(max_connections)
         self.connections = []
         while len(self.connections) < 2:
