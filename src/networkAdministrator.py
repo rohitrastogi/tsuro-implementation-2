@@ -10,16 +10,20 @@ class NetworkAdministrator:
     def __init__(self, player, host, port):
         self.buffer_size = 512
         self.player = player
-        self.command_handler = {
+        self.command_handler = self.set_command_handler()
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.connect((host, port))
+        print("Connecting to server at (host, port): ", host, port)
+
+
+    def set_command_handler(self):
+        return {
             "get-name" : self.player.get_name,
             "initialize" : self.player.initialize,
             "place-pawn" : self.player.place_pawn,
             "play-turn" : self.player.play_turn,
             "end-game" : self.player.end_game
         }
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.connect((host, port))
-        print("Connecting to server at (host, port): ", host, port)
 
     def recv_all(self):
         received = ""
@@ -31,7 +35,6 @@ class NetworkAdministrator:
                 break
             except:
                 self.buffer_size *= 2
-                print("EXCEPT")
         print("Received: ", received)
         return interpreted_command
 
@@ -43,6 +46,7 @@ class NetworkAdministrator:
             # received_xml = fromstring(received)
             interpreted_command = self.recv_all()#xml2obj.interpret_command(received_xml)
             func, args = (interpreted_command[0], interpreted_command[1:])
+            print(func)
             if func == "end-game":
                 end_game = True
             to_send = self.command_handler[func](*args)
@@ -50,8 +54,20 @@ class NetworkAdministrator:
             print("Will send: ", to_send_xml)
             self.sock.sendall(to_send_xml)
             if end_game:
-                self.end_connection(args)
-                break
+                self.resetNetworkAdmin()
+                print("RESETTING NETWORK ADMIN")
+                end_game = False
+                # self.end_connection(args)
+                # break
+
+    def resetNetworkAdmin(self):
+        # color = self.player.color
+        # other_colors = self.player.other_colors
+        self.player = RandomPlayer(sys.argv[1])
+        self.command_handler = self.set_command_handler()
+        # self.player.state.update_state("initialize")
+        # self.player.color = color
+        # self.player.other_colors = other_colors
 
     def end_connection(self, args):
         print ("The winner(s) are: ", args[1])

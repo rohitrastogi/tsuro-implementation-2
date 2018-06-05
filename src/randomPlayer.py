@@ -28,6 +28,7 @@ class RandomPlayer(MPlayer):
                     legal_plays.append((idx, i))
         
         if legal_plays:
+            print("PICKING RANDOMLY FROM LIST OF VALID MOVES")
             random.shuffle(legal_plays)
             tile_index, rotation_index = legal_plays[0]
             to_play = tiles[tile_index]
