@@ -136,6 +136,12 @@ def create_pawns_xml(board):
             ent.append(create_color_xml(player.color))
             ent.append(create_pawn_loc_xml(player.position))
             map_node.append(ent)
+    for player in board.eliminated_players:
+        if player.position:
+            ent = Element('ent')
+            ent.append(create_color_xml(player.color))
+            ent.append(create_pawn_loc_xml(player.position))
+            map_node.append(ent)
     # map_node.text = ' '
     return map_node
 

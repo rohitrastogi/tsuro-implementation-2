@@ -27,11 +27,11 @@ path_id_map = {k:v for (k, v) in tile_tups}
 def get_identifier(path_hash):
     return path_id_map[path_hash]
 
-def create_board_obj(board):
+def create_board_obj(board_xml):
     board_obj = Board(players = [])
 
-    tile_entries = [child for child in board[0]]
-    pawn_entries = [child for child in board[1]]
+    tile_entries = [child for child in board_xml[0]]
+    pawn_entries = [child for child in board_xml[1]]
 
     for tile_entry in tile_entries:
         (square_obj, tile_obj) = create_tiles_obj(tile_entry)
@@ -39,7 +39,12 @@ def create_board_obj(board):
 
     for pawn_entry in pawn_entries:
         (color_obj, position_obj) = create_player_locs(pawn_entry, board_obj)
-        board_obj.add_player(SPlayer(color_obj, position_obj))
+        if position_obj.hit_a_wall() and board_obj.get_tile(position_obj.square):
+            p = SPlayer(color_obj, position_obj)
+            p.eliminated = True
+            board_obj.add_player_to_eliminated(p)
+        else:
+            board_obj.add_player(SPlayer(color_obj, position_obj))
 
     return board_obj
 
@@ -81,7 +86,6 @@ def create_color_obj(color):
     raise RuntimeError("Invalid Color Specified in XML!")
 
 def create_position_obj(pawn_loc, board_obj):
-    # TODO is there a function that can do this dynamically
     mapping = {0:17, 1:16, 2:14, 3:13, 4:11, 5:10, 6:8, 7:7, 8:5, 9:4, 10:2, 11:1}
     if pawn_loc[0].tag == "v":
         x = int(pawn_loc[1].text) * 3

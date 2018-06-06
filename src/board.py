@@ -18,6 +18,10 @@ class Board:
     def add_player(self, player):
         self.current_players.append(player)
 
+    def add_player_to_eliminated(self, player):
+        player.eliminated = True
+        self.eliminated_players.append(player)
+
     def is_square_vacant(self, square):
         return self.tiles[square.x][square.y] == None
 
