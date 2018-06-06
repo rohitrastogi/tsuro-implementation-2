@@ -91,17 +91,8 @@ class MPlayer(implements(IPlayer)):
         # If there is another legal move, just check whether this tile causes elimination or not
         # If there is not another legal move, then this tile can be played provided it belongs to the player
         if another_legal:
-            # if self.legal_play_helper(board, tile, tiles):
-            #     print("Have other legal moves - curr tile is not an elimination move")
-            # else:
-            #     print("Have other legal moves - curr tile is an elimination move")
             return self.legal_play_helper(board, tile, tiles)
         else:
-            # if self.is_tile_owned(tile, tiles):
-            #     print("No other legal moves - own tile")
-            # else:
-            #     print("No other legal moves - don't own tile")
-
             return self.is_tile_owned(tile, tiles)
 
     def legal_play_helper(self, board, tile, tiles):
@@ -118,7 +109,10 @@ class MPlayer(implements(IPlayer)):
         """
 
         # Player position is returned by the move_across_board function, but is not updated.
+
+        board.place_tile(self.position.get_next_board_square(), tile)
         player_final_position, hit_a_wall = board.move_across_board(self.position, tile)
+        board.remove_tile(self.position.get_next_board_square())
 
         # If player hits a wall, this tile causes elimination and is therefore, not legal.
         if hit_a_wall:

@@ -16,26 +16,23 @@ class RandomPlayer(MPlayer):
         """
         Random: This player picks randomly from all of the legal moves.
         """
-
         self.update_player_position(board)
         self.state.update_state('play_turn')
     
         legal_plays = []
         for idx, tile in enumerate(tiles):
             for i in range(constants.NUMBER_OF_ROTATIONS):
-                tile.rotate_tile()
-                if self.legal_play(board, tile, tiles):
+                if self.legal_play_helper(board, tile, tiles):
                     legal_plays.append((idx, i))
+                tile.rotate_tile()
         
         if legal_plays:
-            print("PICKING RANDOMLY FROM LIST OF VALID MOVES")
             random.shuffle(legal_plays)
             tile_index, rotation_index = legal_plays[0]
             to_play = tiles[tile_index]
-            to_play.rotate_tile_variable(rotation_index + 1)
+            to_play.rotate_tile_variable(rotation_index)
             return to_play
 
         else:
             random.shuffle(tiles)
-            print("PLAYING ELIMINATION MOVE RIP")
             return tiles[0]

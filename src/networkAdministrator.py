@@ -3,7 +3,9 @@ import obj2xml
 import socket
 import sys
 from randomPlayer import RandomPlayer
+from mostSymmetricPlayer import MostSymmetricPlayer
 from xml.etree.ElementTree import fromstring, tostring
+import math
 
 class NetworkAdministrator:
 
@@ -26,54 +28,40 @@ class NetworkAdministrator:
         }
 
     def recv_all(self):
+
+        def round_to_power(number):
+            power = int(math.log2(number)) + 1
+            return int(pow(2, power))
+
         received = ""
         while True:
+            received += self.sock.recv(self.buffer_size).decode('utf-8')
             try:
-                received += self.sock.recv(self.buffer_size).decode('utf-8')
                 received_xml = fromstring(received)
                 interpreted_command = xml2obj.interpret_command(received_xml)
                 break
             except:
-                self.buffer_size *= 2
-        print("Received: ", received)
+                self.buffer_size = round_to_power(len(received))
         return interpreted_command
+
 
     def listen(self):
         end_game = False
         while True:
-            # received = self.sock.recv(self.buffer_size).decode('utf-8')
-            # print("Received: ", received)
-            # received_xml = fromstring(received)
-            interpreted_command = self.recv_all()#xml2obj.interpret_command(received_xml)
+            interpreted_command = self.recv_all() #xml2obj.interpret_command(received_xml)
             func, args = (interpreted_command[0], interpreted_command[1:])
-            print(func)
             if func == "end-game":
                 end_game = True
             to_send = self.command_handler[func](*args)
             to_send_xml = tostring(obj2xml.interpret_output(func, to_send), short_empty_elements=False) + b'\n'
-            print("Will send: ", to_send_xml)
             self.sock.sendall(to_send_xml)
             if end_game:
                 self.resetNetworkAdmin()
-                print("RESETTING NETWORK ADMIN")
                 end_game = False
-                # self.end_connection(args)
-                # break
 
     def resetNetworkAdmin(self):
-        # color = self.player.color
-        # other_colors = self.player.other_colors
         self.player = RandomPlayer(sys.argv[1])
         self.command_handler = self.set_command_handler()
-        # self.player.state.update_state("initialize")
-        # self.player.color = color
-        # self.player.other_colors = other_colors
-
-    def end_connection(self, args):
-        print ("The winner(s) are: ", args[1])
-        # print("Game Over - Disconnecting Socket!")
-        # self.sock.shutdown(socket.SHUT_WR)
-        # self.sock.close()
 
 
 if __name__ == "__main__":
