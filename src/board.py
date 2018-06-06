@@ -89,5 +89,3 @@ class Board:
                     player.update_position(end_position)
                     if hit_a_wall:
                         player.eliminated = True
-
-

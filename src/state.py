@@ -17,7 +17,6 @@ class State:
         elif self.state == GameState.pawn_placed and method == "end_game":
             self.state = GameState.game_over
 
-        #TODO does turn_player have to occur before game_over
         elif self.state == GameState.turn_played and method == "end_game":
             self.state = GameState.game_over
 

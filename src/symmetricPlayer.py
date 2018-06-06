@@ -24,7 +24,6 @@ class SymmetricPlayer(MPlayer):
         self.update_player_position(board)
         self.state.update_state('play_turn')
 
-        #self.tiles_owned = tiles
         tiles.sort(key=lambda x: x.symmetry(), reverse=self.reverse)
         for idx, tile in enumerate(tiles):
             for i in range(constants.NUMBER_OF_ROTATIONS):
