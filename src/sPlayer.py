@@ -48,7 +48,6 @@ class SPlayer():
             if tile.identifier == current_tile.identifier:
                 del self.tiles_owned[idx]
 
-    #client check
     def validate_hand(self, board):
         """
         Checks to make sure the hand is valid.

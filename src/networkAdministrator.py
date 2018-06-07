@@ -35,12 +35,15 @@ class NetworkAdministrator:
 
         received = ""
         while True:
+            #note: can only guarantee that recv receives (0, buffer_size) bytes 
             received += self.sock.recv(self.buffer_size).decode('utf-8')
             try:
-                received_xml = fromstring(received)
+                #fromstring throws an exception if received is malformed xml
+                received_xml = fromstring(received) 
                 interpreted_command = xml2obj.interpret_command(received_xml)
                 break
             except:
+                #tracks the size of the received number of bytes (does not double infinitely)
                 self.buffer_size = round_to_power(len(received))
         return interpreted_command
 
@@ -48,7 +51,7 @@ class NetworkAdministrator:
     def listen(self):
         end_game = False
         while True:
-            interpreted_command = self.recv_all() #xml2obj.interpret_command(received_xml)
+            interpreted_command = self.recv_all() 
             func, args = (interpreted_command[0], interpreted_command[1:])
             if func == "end-game":
                 end_game = True
@@ -56,10 +59,10 @@ class NetworkAdministrator:
             to_send_xml = tostring(obj2xml.interpret_output(func, to_send), short_empty_elements=False) + b'\n'
             self.sock.sendall(to_send_xml)
             if end_game:
-                self.resetNetworkAdmin()
+                self.reset_network_admin()
                 end_game = False
 
-    def resetNetworkAdmin(self):
+    def reset_network_admin(self):
         self.player = RandomPlayer(sys.argv[1])
         self.command_handler = self.set_command_handler()
 

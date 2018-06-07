@@ -478,72 +478,72 @@ def test_playATurn_19():
     assert player_1.position.square == Square(0,1)
 
 
-# def test_validateHand_1():
-#     """
-#     server checks whether hand validation does not throw exception when hands are valid
-#     """
-#     draw_pile = administrator.create_draw_pile()
-#
-#     player_1 = SPlayer(color = 'blue', position = Position(0, 1))
-#     player_2 = SPlayer(color = 'red', position = Position(0, 11))
-#     player_3 = SPlayer(color = 'sienna', position = Position(0, 5))
-#
-#     player_1.tiles_owned = draw_pile[:2]
-#     player_2.tiles_owned = draw_pile[2:5]
-#     player_3.tiles_owned = draw_pile[5:8]
-#     to_play_tile = draw_pile[8]
-#
-#     draw_pile = draw_pile[9:]
-#
-#     players = [player_1, player_2, player_3]
-#     board = Board(players)
-#
-#     #should not throw exception
-#     new_draw_pile, new_players, eliminated, new_board, game_over = administrator.play_a_turn(draw_pile, board.current_players, [], board, to_play_tile)
-#
-# def test_validateHand_2():
-#     """
-#     server checks whether hand validation throws exception when current player owns a tile in the draw pile
-#     """
-#     draw_pile = administrator.create_draw_pile()
-#
-#     player_1 = SPlayer(color = 'blue', position = Position(0, 1))
-#     player_2 = SPlayer(color = 'red', position = Position(0, 11))
-#     player_3 = SPlayer(color = 'sienna', position = Position(0, 5))
-#
-#     player_1.tiles_owned = draw_pile[:2]
-#     dup_tile = player_1.tiles_owned[0]
-#     player_2.tiles_owned = draw_pile[2:5]
-#     player_3.tiles_owned = draw_pile[5:8]
-#     to_play_tile = draw_pile[8]
-#
-#     draw_pile = draw_pile[9:].append(dup_tile)
-#
-#     players = [player_1, player_2, player_3]
-#     board = Board(players)
-#
-#     with pytest.raises(Exception):
-#         new_draw_pile, new_players, eliminated, new_board, game_over = administrator.play_a_turn(draw_pile, board.current_players, [], board, to_play_tile)
-#
-# def test_validateHand_3():
-#     """
-#     server checks whether hand validation throws exception when current player owns a tile in another player's hands
-#     """
-#     draw_pile = administrator.create_draw_pile()
-#
-#     player_1 = SPlayer(color = 'blue', position = Position(0, 1))
-#     player_2 = SPlayer(color = 'red', position = Position(0, 11))
-#     player_3 = SPlayer(color = 'sienna', position = Position(0, 5))
-#
-#     player_1.tiles_owned = draw_pile[:2]
-#     player_2.tiles_owned = draw_pile[1:4]
-#     player_3.tiles_owned = draw_pile[4:7]
-#     to_play_tile = draw_pile[7]
-#
-#     draw_pile = draw_pile[8:]
-#
-#     players = [player_1, player_2, player_3]
-#     board = Board(players)
-#
-#     with pytest.raises(Exception):
-#         new_draw_pile, new_players, eliminated, new_board, game_over = administrator.play_a_turn(draw_pile, board.current_players, [], board, to_play_tile)
+def test_validateHand_1():
+    """
+    server checks whether hand validation does not throw exception when hands are valid
+    """
+    draw_pile = administrator.create_draw_pile()
+
+    player_1 = SPlayer(color = 'blue', position = Position(0, 1))
+    player_2 = SPlayer(color = 'red', position = Position(0, 11))
+    player_3 = SPlayer(color = 'sienna', position = Position(0, 5))
+
+    player_1.tiles_owned = draw_pile[:2]
+    player_2.tiles_owned = draw_pile[2:5]
+    player_3.tiles_owned = draw_pile[5:8]
+    to_play_tile = draw_pile[8]
+
+    draw_pile = draw_pile[9:]
+
+    players = [player_1, player_2, player_3]
+    board = Board(players)
+
+    #should not throw exception
+    new_draw_pile, new_players, eliminated, new_board, game_over = administrator.play_a_turn(draw_pile, board.current_players, [], board, to_play_tile)
+
+def test_validateHand_2():
+    """
+    server checks whether hand validation throws exception when current player owns a tile in the draw pile
+    """
+    draw_pile = administrator.create_draw_pile()
+
+    player_1 = SPlayer(color = 'blue', position = Position(0, 1))
+    player_2 = SPlayer(color = 'red', position = Position(0, 11))
+    player_3 = SPlayer(color = 'sienna', position = Position(0, 5))
+
+    player_1.tiles_owned = draw_pile[:2]
+    dup_tile = player_1.tiles_owned[0]
+    player_2.tiles_owned = draw_pile[2:5]
+    player_3.tiles_owned = draw_pile[5:8]
+    to_play_tile = draw_pile[8]
+
+    draw_pile = draw_pile[9:].append(dup_tile)
+
+    players = [player_1, player_2, player_3]
+    board = Board(players)
+
+    with pytest.raises(Exception):
+        new_draw_pile, new_players, eliminated, new_board, game_over = administrator.play_a_turn(draw_pile, board.current_players, [], board, to_play_tile)
+
+def test_validateHand_3():
+    """
+    server checks whether hand validation throws exception when current player owns a tile in another player's hands
+    """
+    draw_pile = administrator.create_draw_pile()
+
+    player_1 = SPlayer(color = 'blue', position = Position(0, 1))
+    player_2 = SPlayer(color = 'red', position = Position(0, 11))
+    player_3 = SPlayer(color = 'sienna', position = Position(0, 5))
+
+    player_1.tiles_owned = draw_pile[:2]
+    player_2.tiles_owned = draw_pile[1:4]
+    player_3.tiles_owned = draw_pile[4:7]
+    to_play_tile = draw_pile[7]
+
+    draw_pile = draw_pile[8:]
+
+    players = [player_1, player_2, player_3]
+    board = Board(players)
+
+    with pytest.raises(Exception):
+        new_draw_pile, new_players, eliminated, new_board, game_over = administrator.play_a_turn(draw_pile, board.current_players, [], board, to_play_tile)

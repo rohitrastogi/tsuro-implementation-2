@@ -18,7 +18,7 @@ def create_path_hash(paths):
 tiles = administrator.create_draw_pile()
 tile_tups = []
 for tile in tiles:
-    for i in range(4):
+    for i in range(constants.NUMBER_OF_ROTATIONS):
         tile_tups.append((create_path_hash(tile.paths), tile.identifier))
         tile.rotate_tile()
 

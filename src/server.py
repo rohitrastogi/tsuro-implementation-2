@@ -22,13 +22,13 @@ class Server:
             self.setup_networked_server()
 
     def setup_networked_server(self):
-        max_connections = 3
+        max_connections = 8
         host = 'localhost'
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.bind((host, self.port))
         sock.listen(max_connections)
         self.connections = []
-        while len(self.connections) < 2:
+        while len(self.connections) < 6: #game currently has 2 'local' players
             client_socket, addr = sock.accept()
             player = NetworkedPlayer(client_socket)
             player.name = player.get_name()
