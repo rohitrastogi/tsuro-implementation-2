@@ -48,7 +48,7 @@ class Tile:
 	def symmetry(self):
 		original_paths = deepcopy(self.paths)
 		rotated_paths = [original_paths]
-		for i in range(3):
+		for i in range(constants.NUMBER_OF_ROTATIONS - 1):
 			self.rotate_tile()
 			if self.paths not in rotated_paths:
 				rotated_paths.append(deepcopy(self.paths))

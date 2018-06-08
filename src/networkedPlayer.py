@@ -52,4 +52,3 @@ class NetworkedPlayer(implements(IPlayer)):
         self.state.update_state("end_game")
         to_send = obj2xml.create_end_game_xml(board, colors)
         void_xml = self.send_and_receive(to_send)
-        self.sock.close()

@@ -52,6 +52,7 @@ class Server:
 
 
             print ('\n**********   State of the Game   **********')
+            print ("Num tiles on board: ", self.board.num_tiles)
             print ("Current player: ", acting_player.get_name())
             print ("Current player's tiles: ", [tile.identifier for tile in acting_player.tiles_owned])
             print ("Eliminated players: ", [p.get_name() for p in elim_players])

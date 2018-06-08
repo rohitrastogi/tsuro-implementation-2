@@ -4,6 +4,7 @@ import socket
 import sys
 from randomPlayer import RandomPlayer
 from mostSymmetricPlayer import MostSymmetricPlayer
+from leastSymmetricPlayer import LeastSymmetricPlayer
 from xml.etree.ElementTree import fromstring, tostring
 import math
 
@@ -69,6 +70,6 @@ if __name__ == "__main__":
     # arg 1 is name
     # arg 2 is localhost
     # arg 3 is port number
-    n_player = RandomPlayer(sys.argv[1])
+    n_player = LeastSymmetricPlayer(sys.argv[1])
     player_admin = NetworkAdministrator(n_player, sys.argv[2], int(sys.argv[3]))
     player_admin.listen()

@@ -8,7 +8,7 @@ if __name__ == "__main__":
     most = 0
     r = 0
 
-    num_games = 1
+    num_games = 1000
 
     while num_games > 0:
         num_games -= 1
@@ -28,7 +28,8 @@ if __name__ == "__main__":
                 least += 1
             if player.get_name() == 'Rohit':
                 most += 1
-        print ("Who won?: ", game_over)
+        winner_names = [player.player.name for player in game_over]
+        print ("Who won?: ", winner_names)
 
     print ("Least: ", least)
     print ("Most: ", most)

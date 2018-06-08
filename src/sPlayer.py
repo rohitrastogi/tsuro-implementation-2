@@ -48,19 +48,11 @@ class SPlayer():
             if tile.identifier == current_tile.identifier:
                 del self.tiles_owned[idx]
 
-    #client check
-    def validate_hand(self, board):
-        """
-        Checks to make sure the hand is valid.
-        A valid hand does not have more than 3 tiles, has tiles that are unique from each other,
-        and none of the tiles are already on the board.
-        """
-
-        if len(self.tiles_owned) == 0:
-            raise RuntimeError("This player has no tiles to play!")
-
-        if len(self.tiles_owned) > constants.HAND_SIZE:
-            raise RuntimeError("A player cannot have more than 3 tiles in their hand.")
-
-        if board.check_if_tiles_on_board(self.tiles_owned):
-            raise RuntimeError("This player has a tile that is already on the board.")
+    def replace_with_random_player(self):
+        from randomPlayer import RandomPlayer
+        old_player = self.player
+        self.player = RandomPlayer(old_player.name)
+        self.player.color = old_player.color
+        self.player.other_colors = old_player.other_colors
+        self.player.initialized = old_player.state
+ 

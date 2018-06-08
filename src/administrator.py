@@ -46,7 +46,9 @@ def legal_play_helper(player, board, tile):
 	"""
 
 	# Player position is returned by the move_across_board function, but is not updated.
+	board.place_tile(player.position.get_next_board_square(), tile)
 	player_final_position, hit_a_wall = board.move_across_board(player.position, tile)
+	board.remove_tile(player.position.get_next_board_square())
 
 	# If player hits a wall, this tile causes elimination and is therefore, not legal.
 	if hit_a_wall:
@@ -75,7 +77,6 @@ def play_a_turn(draw_pile, players, eliminated, board, curr_tile):
 				   A list of players if there are multiple winners, in the case that all tiles are played or all remaining
 				   players get eliminated in the same turn.
 	"""
-	# validate_hand(players, draw_pile, board)
 	curr_player = players.pop(0)
 	players.append(curr_player)
 	curr_player_color = curr_player.color
