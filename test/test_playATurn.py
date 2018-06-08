@@ -7,6 +7,7 @@ from square import Square
 from randomPlayer import RandomPlayer
 from leastSymmetricPlayer import LeastSymmetricPlayer
 from mostSymmetricPlayer import MostSymmetricPlayer
+import gameConstants as constants 
 import administrator
 import pytest
 
@@ -233,9 +234,9 @@ def test_playATurn_9():
     tile_1 = Tile(1, [[0, 1], [2, 4], [3, 6], [5, 7]])
     tile_temp = Tile(0, [[0, 1], [2, 3], [4, 5], [6, 7]])
     board.tiles = []
-    for i in range(6):
+    for i in range(constants.BOARD_DIMENSION):
         temp = []
-        for j in range(6):
+        for j in range(constants.BOARD_DIMENSION):
             temp.append(tile_temp)
         board.tiles.append(temp)
     board.tiles[0][0] = None

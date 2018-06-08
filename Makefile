@@ -1,4 +1,6 @@
 .PHONY: test
+setup:
+	@pip install --requirement=requirements.txt	
 
 test:
 	@pip install --quiet --requirement=requirements.txt
