@@ -9,7 +9,7 @@ It includes two main things:
 * A **game server** that accepts connections by game players at a specified port. This server executes legal game play by identifiying valid moves, maintaining and updating the state of the game, and removing cheating players.
 * Simple heuristic based **automated players** that can connect to the server and select various moves. 
 
-The server and automated players commmunicate with eachother via paired XML messages encoded as bytes sent over the socket connection. The XML grammar used to define messages sent over the wire was specified by the instructor. When a message is sent from one entity to the other, the other entity must receive the full message, decode the XML message and convert the data to Python data structures, update the data structures, and select and construct a valid XML message to send back. Most of this work happens in `obj2xml.py' and 'xml2obj.py' in /src.
+The server and automated players commmunicate with eachother via paired XML messages encoded as bytes sent over the socket connection. The XML grammar used to define messages sent over the wire was specified by the instructor. When a message is sent from one entity to the other, the other entity must receive the full message, decode the XML message and convert the data to Python data structures, update the data structures, and select and construct a valid XML message to send back. Most of this work happens in `obj2xml.py` and `xml2obj.py` in /src.
 
 * To install necessary requirements, type `make setup`
 * To run tests, type `make test`
