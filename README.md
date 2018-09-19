@@ -15,8 +15,9 @@ The server and automated players commmunicate with eachother via paired XML mess
 * To run tests, type `make test`
 * To run a Tsuro tournament locally (not over the wire) with automated players, type `make tournament`
 
-To connect our automated player implementation to another Tsuro server programmed to communicate with XML over a socket connnection, cd into src and run `python3 networkAdministrator [name-of-player] [host] [port]`.
-To run our tournament server and accept connections from other automated players, cd into src and run 'python3 networkedGame [port]'
+To connect our automated player implementation to another Tsuro server programmed to communicate with XML over a socket connnection, cd into src and run `python3 networkAdministrator [name-of-player] [host] [port]`
+
+To run our tournament server and accept connections from other automated players, cd into src and run `python3 networkedGame [port]`
 
 ## Todos:
 * add a GUI and support for a human input
